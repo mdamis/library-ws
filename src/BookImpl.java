@@ -53,4 +53,13 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 		this.currentPatron = currentPatron;
 	}
 
+	@Override
+	public String details() {
+		if (available) {
+			return title + " written by " + author + " is available";
+		} else {
+			return title + " written by " + author + " is not available";
+		}
+	}
+
 }

@@ -14,17 +14,24 @@ public class LibraryClient {
 
 			List<Book> books = library.getAllBooks();
 			System.out.println(books.size());
-
 			library.delete("0460005251");
-
 			books = library.getAllBooks();
+			System.out.println(books.size());
+
+			for (Book book : books) {
+				System.out.println(book.details());
+			}
 
 			library.borrowBook("1906141010", "mdamis");
+
+			books = library.getAllBooks();
+			for (Book book : books) {
+				System.out.println(book.details());
+			}
+
 			library.borrowBook("1906141010", "bcrochez");
 			library.returnBook("1906141010");
 			library.borrowBook("1906141010", "bcrochez");
-
-			System.out.println(books.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
