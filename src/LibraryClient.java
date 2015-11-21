@@ -18,6 +18,12 @@ public class LibraryClient {
 			library.delete("0460005251");
 
 			books = library.getAllBooks();
+
+			library.borrowBook("1906141010", "mdamis");
+			library.borrowBook("1906141010", "bcrochez");
+			library.returnBook("1906141010");
+			library.borrowBook("1906141010", "bcrochez");
+
 			System.out.println(books.size());
 		} catch (Exception e) {
 			e.printStackTrace();

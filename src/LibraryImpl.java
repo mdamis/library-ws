@@ -32,4 +32,27 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 		return new ArrayList<>(books.values());
 	}
 
+	@Override
+	public void borrowBook(String isbn, String user) throws RemoteException {
+		if (books.containsKey(isbn)) {
+			Book book = books.get(isbn);
+			if (book.isAvailable()) {
+				book.setAvailable(false);
+				book.setCurrentPatron(user);
+			} else {
+				System.out.println("Book not available");
+				// TODO Add a queue
+			}
+		}
+	}
+
+	@Override
+	public void returnBook(String isbn) throws RemoteException {
+		if (books.containsKey(isbn)) {
+			Book book = books.get(isbn);
+			book.setAvailable(true);
+			book.setCurrentPatron("");
+		}
+	}
+
 }

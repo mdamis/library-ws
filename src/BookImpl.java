@@ -8,6 +8,8 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	private final String isbn;
 	private final String title;
 	private final String author;
+	private boolean available = true;
+	private String currentPatron = "";
 
 	public BookImpl(String isbn, String title, String author) throws RemoteException {
 		super();
@@ -29,6 +31,26 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	@Override
 	public String getAuthor() {
 		return author;
+	}
+
+	@Override
+	public boolean isAvailable() throws RemoteException {
+		return available;
+	}
+
+	@Override
+	public void setAvailable(boolean available) throws RemoteException {
+		this.available = available;
+	}
+
+	@Override
+	public String getCurrentPatron() throws RemoteException {
+		return currentPatron;
+	}
+
+	@Override
+	public void setCurrentPatron(String currentPatron) throws RemoteException {
+		this.currentPatron = currentPatron;
 	}
 
 }
