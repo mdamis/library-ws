@@ -1,5 +1,6 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 public class BookImpl extends UnicastRemoteObject implements Book {
 
@@ -10,6 +11,8 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	private final String author;
 	private boolean available = true;
 	private String currentPatron = "";
+	private String summary = "No summary available";
+	private final ArrayList<String> reviews = new ArrayList<>();
 
 	public BookImpl(String isbn, String title, String author) throws RemoteException {
 		super();
@@ -60,6 +63,37 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 		} else {
 			return title + " written by " + author + " is not available";
 		}
+	}
+
+	@Override
+	public String getSummary() throws RemoteException {
+		return summary;
+	}
+
+	@Override
+	public void setSummary(String summary) throws RemoteException {
+		this.summary = summary;
+	}
+
+	@Override
+	public String getReviews() throws RemoteException {
+		if(reviews.size() == 0) {
+			return "No reviews for : " + title;
+		}
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("Reviews for ").append(title).append(" : \n");
+
+		for(String review : reviews) {
+			sb.append(review).append("\n");
+		}
+
+		return sb.toString();
+	}
+
+	@Override
+	public void addReview(String review) throws RemoteException {
+		reviews.add(review);
 	}
 
 }

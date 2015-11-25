@@ -20,18 +20,31 @@ public class LibraryClient {
 
 			for (Book book : books) {
 				System.out.println(book.details());
+				System.out.println(book.getSummary());
 			}
+
+			Book firstBook = books.get(0);
+			firstBook.setSummary("Summary available");
+			firstBook.addReview("Very good !");
+			firstBook.addReview("Totally love it <3");
+			firstBook.addReview("meh");
 
 			library.borrowBook("1906141010", "mdamis");
 
 			books = library.getAllBooks();
 			for (Book book : books) {
 				System.out.println(book.details());
+				System.out.println(book.getSummary());
 			}
 
 			library.borrowBook("1906141010", "bcrochez");
 			library.returnBook("1906141010");
 			library.borrowBook("1906141010", "bcrochez");
+
+			books = library.getAllBooks();
+			for (Book book : books) {
+				System.out.println(book.getReviews());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

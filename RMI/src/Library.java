@@ -12,4 +12,5 @@ public interface Library extends Remote {
 	public void borrowBook(String isbn, String user) throws RemoteException;
 
 	public void returnBook(String isbn) throws RemoteException;
+
 }

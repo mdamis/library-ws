@@ -17,4 +17,12 @@ public interface Book extends Remote {
 	public void setCurrentPatron(String currentPatron) throws RemoteException;
 
 	public String details() throws RemoteException;
+
+	public String getSummary() throws RemoteException;
+
+	public void setSummary(String summary) throws RemoteException;
+
+	public String getReviews() throws RemoteException;
+
+	public void addReview(String review) throws RemoteException;
 }
