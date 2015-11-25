@@ -33,25 +33,39 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 	}
 
 	@Override
-	public void borrowBook(String isbn, String user) throws RemoteException {
+	public String borrowBook(String isbn, Observer obs) throws RemoteException {
+		System.out.println(obs.getUser() +" is requesting book "+isbn);
 		if (books.containsKey(isbn)) {
 			Book book = books.get(isbn);
+			String user = obs.getUser();
 			if (book.isAvailable()) {
 				book.setAvailable(false);
 				book.setCurrentPatron(user);
+				return "Book borrowed";
 			} else {
-				System.out.println("Book not available");
-				// TODO Add a queue
+				if(book.getCurrentPatron().equals(user)) {
+					return "You already borrowed that book!";
+				}
+				book.addToQueue(obs);
+				return "You are in the waiting queue";
 			}
 		}
+		return "This book does not exists";
 	}
 
 	@Override
 	public void returnBook(String isbn) throws RemoteException {
+		// TODO give user as parameter to test who gives the book back
 		if (books.containsKey(isbn)) {
 			Book book = books.get(isbn);
-			book.setAvailable(true);
-			book.setCurrentPatron("");
+			System.out.println(book.getCurrentPatron()+" is returning book "+isbn);
+			book.setCurrentPatron();
+			if(book.getCurrentPatron().equals("")) {
+				book.setAvailable(true);
+			} else {
+				book.setAvailable(false);
+			}
+			System.out.println("new patron is "+book.getCurrentPatron());
 		}
 	}
 

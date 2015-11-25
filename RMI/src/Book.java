@@ -14,6 +14,8 @@ public interface Book extends Remote {
 
 	public String getCurrentPatron() throws RemoteException;
 
+	public void setCurrentPatron() throws RemoteException;
+
 	public void setCurrentPatron(String currentPatron) throws RemoteException;
 
 	public String details() throws RemoteException;
@@ -25,4 +27,7 @@ public interface Book extends Remote {
 	public String getReviews() throws RemoteException;
 
 	public void addReview(String review) throws RemoteException;
+
+	public void addToQueue(Observer obs) throws RemoteException;
+
 }

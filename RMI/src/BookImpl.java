@@ -13,6 +13,7 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	private String currentPatron = "";
 	private String summary = "No summary available";
 	private final ArrayList<String> reviews = new ArrayList<>();
+	private final ArrayList<Observer> borrowList = new ArrayList<>();
 
 	public BookImpl(String isbn, String title, String author) throws RemoteException {
 		super();
@@ -94,6 +95,24 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	@Override
 	public void addReview(String review) throws RemoteException {
 		reviews.add(review);
+	}
+
+	@Override
+	public void addToQueue(Observer obs) throws RemoteException {
+		System.out.println(obs.getUser() +" add to queue");
+		borrowList.add(obs);
+	}
+
+	@Override
+	public void setCurrentPatron() throws RemoteException {
+		if(!borrowList.isEmpty()) {
+			System.out.println("borrow list is not empty");
+			Observer obs = borrowList.remove(0);
+			currentPatron = obs.getUser();
+			obs.bookBorrowed(this);
+		} else {
+			currentPatron = "";
+		}
 	}
 
 }

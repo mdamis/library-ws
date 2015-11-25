@@ -6,7 +6,12 @@ public class LibraryClient {
 	public static void main(String[] args) {
 		try {
 			Library library = (Library) Naming.lookup("LibraryService");
-
+			
+			// some little users
+			Observer me = new ObserverImpl("bcrochez");
+			Observer you = new ObserverImpl("mdamis");
+			
+			// add some little books
 			library.add("0451524934", "1984", "George Orwell");
 			library.add("8806203797", "1Q84", "Haruki Murakami");
 			library.add("0460005251", "War and Peace", "Leo Tolstoy");
@@ -22,14 +27,16 @@ public class LibraryClient {
 				System.out.println(book.details());
 				System.out.println(book.getSummary());
 			}
+			System.out.println("");
 
+			// add some little reviews
 			Book firstBook = books.get(0);
 			firstBook.setSummary("Summary available");
 			firstBook.addReview("Very good !");
 			firstBook.addReview("Totally love it <3");
 			firstBook.addReview("meh");
 
-			library.borrowBook("1906141010", "mdamis");
+			System.out.println(library.borrowBook("1906141010", you));
 
 			books = library.getAllBooks();
 			for (Book book : books) {
@@ -37,9 +44,9 @@ public class LibraryClient {
 				System.out.println(book.getSummary());
 			}
 
-			library.borrowBook("1906141010", "bcrochez");
+			System.out.println(library.borrowBook("1906141010", me));
 			library.returnBook("1906141010");
-			library.borrowBook("1906141010", "bcrochez");
+			System.out.println(library.borrowBook("1906141010", me));
 
 			books = library.getAllBooks();
 			for (Book book : books) {
