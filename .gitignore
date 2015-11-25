@@ -86,6 +86,7 @@ tmp/
 *~.nib
 local.properties
 .settings/
+.recommenders/
 .loadpath
 
 # Eclipse Core
