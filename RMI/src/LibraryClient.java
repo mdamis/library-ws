@@ -1,19 +1,21 @@
 import java.rmi.Naming;
 import java.util.List;
 
+import javafx.application.Application;
+
 public class LibraryClient {
 
 	public static void main(String[] args) {
 		try {
-			if(args.length == 0) {
+			/*if(args.length == 0) {
 				System.err.println("usage: java LibraryClient username\n");
 				return;
-			}
+			}*/
 			Library library = (Library) Naming.lookup("LibraryService");
-			
+			Application.launch(GUI.class, args);
 			// some little users
-			Observer me = new ObserverImpl(args[0]);
-			//Observer me = new ObserverImpl("bcrochez");
+			//Observer me = new ObserverImpl(args[0]);
+			Observer me = new ObserverImpl("bcrochez");
 			//Observer you = new ObserverImpl("mdamis");
 			
 			// add some little books
