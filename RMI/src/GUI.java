@@ -1,4 +1,12 @@
 import static javafx.geometry.HPos.RIGHT;
+
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,6 +25,7 @@ import javafx.stage.Stage;
 public class GUI extends Application {
 	private final static int WIDTH = 600;
 	private final static int HEIGHT = 400;
+	private Library library;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -93,12 +102,42 @@ public class GUI extends Application {
 	}
 
 	private Scene createIndexPage(String user, Stage primaryStage) {
+		try {
+			library = (Library) Naming.lookup("LibraryService");
+		} catch (MalformedURLException | RemoteException
+				| NotBoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		List<Book> books;
+		try {
+			books = library.getAllBooks();
+		} catch (RemoteException e) {
+			books = new ArrayList<Book>();
+			e.printStackTrace();
+		}
+		
 		GridPane grid = createGrid();
-
+		
 		Text sceneTitle = new Text("Connected as " + user);
 		sceneTitle.setId("user-name");
 		grid.add(sceneTitle, 0, 0);
 
+		if(books.size() == 0) {
+			Text availableBook = new Text("No book in the library");
+			grid.add(availableBook, 0,1);
+		} else {
+			int position = 2;
+			for(Book book: books) {
+				try {
+					Text bookText = new Text(book.getTitle()+" by "+book.getAuthor());
+					grid.add(bookText, 0, position++, 2, 1);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		Button button = new Button("Quit");
 		grid.add(button, 5, 5);
 		button.setOnAction(new EventHandler<ActionEvent>() {

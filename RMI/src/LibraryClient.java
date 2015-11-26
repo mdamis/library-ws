@@ -12,7 +12,7 @@ public class LibraryClient {
 				return;
 			}*/
 			Library library = (Library) Naming.lookup("LibraryService");
-			Application.launch(GUI.class, args);
+			
 			// some little users
 			//Observer me = new ObserverImpl(args[0]);
 			Observer me = new ObserverImpl("bcrochez");
@@ -60,6 +60,8 @@ public class LibraryClient {
 			for (Book book : books) {
 				System.out.println(book.getReviews());
 			}
+			
+			Application.launch(GUI.class, args);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
