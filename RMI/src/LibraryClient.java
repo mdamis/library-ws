@@ -5,11 +5,16 @@ public class LibraryClient {
 
 	public static void main(String[] args) {
 		try {
+			if(args.length == 0) {
+				System.err.println("usage: java LibraryClient username\n");
+				return;
+			}
 			Library library = (Library) Naming.lookup("LibraryService");
 			
 			// some little users
-			Observer me = new ObserverImpl("bcrochez");
-			Observer you = new ObserverImpl("mdamis");
+			Observer me = new ObserverImpl(args[0]);
+			//Observer me = new ObserverImpl("bcrochez");
+			//Observer you = new ObserverImpl("mdamis");
 			
 			// add some little books
 			library.add("0451524934", "1984", "George Orwell");
@@ -36,7 +41,7 @@ public class LibraryClient {
 			firstBook.addReview("Totally love it <3");
 			firstBook.addReview("meh");
 
-			System.out.println(library.borrowBook("1906141010", you));
+			//System.out.println(library.borrowBook("1906141010", you));
 
 			books = library.getAllBooks();
 			for (Book book : books) {
@@ -47,7 +52,7 @@ public class LibraryClient {
 			System.out.println(library.borrowBook("1906141010", me));
 			library.returnBook("1906141010", me);
 			System.out.println(library.borrowBook("1906141010", me));
-			library.returnBook("1906141010", you);
+			//library.returnBook("1906141010", you);
 
 			books = library.getAllBooks();
 			for (Book book : books) {
