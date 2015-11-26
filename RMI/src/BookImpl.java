@@ -99,7 +99,13 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 
 	@Override
 	public void addToQueue(Observer obs) throws RemoteException {
-		System.out.println(obs.getUser() +" add to queue");
+		for(Observer observer : borrowList) {
+			if(observer.getUser().equals(obs.getUser())) {
+				System.out.println(obs.getUser() +" already in the queue");
+				return;
+			}
+		}
+		System.out.println(obs.getUser() +" added to the queue");
 		borrowList.add(obs);
 	}
 

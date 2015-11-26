@@ -54,10 +54,13 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 	}
 
 	@Override
-	public void returnBook(String isbn) throws RemoteException {
-		// TODO give user as parameter to test who gives the book back
+	public boolean returnBook(String isbn, Observer obs) throws RemoteException {
+		System.out.println(obs.getUser() + " is trying to return the book " + isbn);
 		if (books.containsKey(isbn)) {
 			Book book = books.get(isbn);
+			if(!obs.getUser().equals(book.getCurrentPatron())) {
+				return false;
+			}
 			System.out.println(book.getCurrentPatron()+" is returning book "+isbn);
 			book.setCurrentPatron();
 			if(book.getCurrentPatron().equals("")) {
@@ -66,7 +69,9 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 				book.setAvailable(false);
 			}
 			System.out.println("new patron is "+book.getCurrentPatron());
+			return true;
 		}
+		return false;
 	}
 
 }

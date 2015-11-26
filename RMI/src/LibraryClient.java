@@ -45,8 +45,9 @@ public class LibraryClient {
 			}
 
 			System.out.println(library.borrowBook("1906141010", me));
-			library.returnBook("1906141010");
+			library.returnBook("1906141010", me);
 			System.out.println(library.borrowBook("1906141010", me));
+			library.returnBook("1906141010", you);
 
 			books = library.getAllBooks();
 			for (Book book : books) {
