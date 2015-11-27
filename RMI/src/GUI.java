@@ -1,7 +1,6 @@
 import static javafx.geometry.HPos.RIGHT;
 
 import java.net.MalformedURLException;
-import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -14,15 +13,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -35,8 +37,7 @@ public class GUI extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("MLV Library");
 		Scene scene = createSignInPage(primaryStage);
-		primaryStage.setScene(scene);
-		primaryStage.show();
+		showScene(primaryStage, scene);
 	}
 
 	private Scene createSignInPage(Stage primaryStage) {
@@ -47,7 +48,7 @@ public class GUI extends Application {
 		grid.add(scenetitle, 0, 0, 2, 1);
 
 		TextField userTextField = addTextField(grid, "User name:", 0, 1);
-
+		
 		/*
 		 * Label pw = new Label("Password:"); grid.add(pw, 0, 2); PasswordField
 		 * pwBox = new PasswordField(); grid.add(pwBox, 1, 2);
@@ -67,25 +68,16 @@ public class GUI extends Application {
 		actiontarget.setId("actiontarget");
 
 		btn.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent e) {
-				String user = userTextField.getText();
-				System.out.println("user: "+user);
-				if (user.equals("")) {
-					actiontarget.setFill(Color.FIREBRICK);
-					actiontarget.setText("Enter a valid user name");
-				} else {
-					try {
-						library = new LibraryClient(user, "LibraryService");
-					} catch (MalformedURLException | RemoteException
-							| NotBoundException e1) {
-						e1.printStackTrace();
-						// TODO create an error connection page
-					}
-					Scene scene = createIndexPage(primaryStage);
-					primaryStage.setScene(scene);
-					primaryStage.show();
+				connetionHandler(primaryStage, userTextField, actiontarget);
+			}
+		});
+		userTextField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode() == KeyCode.ENTER) {
+					connetionHandler(primaryStage, userTextField, actiontarget);
 				}
 			}
 		});
@@ -94,6 +86,26 @@ public class GUI extends Application {
 		scene.getStylesheets().add(
 				GUI.class.getResource("style.css").toExternalForm());
 		return scene;
+	}
+	
+	private void connetionHandler(Stage primaryStage,
+			TextField userTextField, final Text actiontarget) {
+		String user = userTextField.getText();
+		System.out.println("user: "+user);
+		if (user.equals("")) {
+			actiontarget.setFill(Color.FIREBRICK);
+			actiontarget.setText("Enter a valid user name");
+		} else {
+			try {
+				library = new LibraryClient(user, "LibraryService");
+			} catch (MalformedURLException | RemoteException
+					| NotBoundException e1) {
+				e1.printStackTrace();
+				// TODO create an error connection page
+			}
+			Scene scene = createIndexPage(primaryStage);
+			showScene(primaryStage, scene);
+		}
 	}
 
 	private GridPane createGrid() {
@@ -152,7 +164,8 @@ public class GUI extends Application {
 		grid.add(btnRefresh, 0, 1);
 		btnRefresh.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				createIndexPage(stage);
+				Scene scene = createIndexPage(stage);
+				showScene(stage, scene);
 			}
 		});
 		
@@ -162,8 +175,7 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				Scene scene = createAddBookPage(stage);
-				stage.setScene(scene);
-				stage.show();
+				showScene(stage, scene);
 			}
 		});
 		
@@ -180,7 +192,6 @@ public class GUI extends Application {
 
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
 		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
-
 		return scene;
 	}
 
@@ -205,11 +216,11 @@ public class GUI extends Application {
 				String author = authorField.getText();
 				if(isbn.equals("") || title.equals("") || author.equals("")) {
 					// TODO show error
+					System.err.println("invalid book");
 				} else {
 					library.addBook(isbn, title, author);
 					Scene scene = createIndexPage(stage);
-					stage.setScene(scene);
-					stage.show();
+					showScene(stage, scene);
 				}
 			}
 		});
@@ -226,5 +237,10 @@ public class GUI extends Application {
 		TextField textField = new TextField();
 		grid.add(textField, col+1, row);
 		return textField;
+	}
+
+	private void showScene(Stage stage, Scene scene) {
+		stage.setScene(scene);
+		stage.show();
 	}
 }
