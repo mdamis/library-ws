@@ -8,17 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -75,7 +79,7 @@ public class GUI extends Application {
 					actiontarget.setFill(Color.FIREBRICK);
 					actiontarget.setText("Enter a valid user name");
 				} else {
-					Scene scene = createIndexPage(user, primaryStage);
+					Scene scene = createIndexPage(primaryStage, user);
 					primaryStage.setScene(scene);
 					primaryStage.show();
 				}
@@ -101,55 +105,64 @@ public class GUI extends Application {
 		return grid;
 	}
 
-	private Scene createIndexPage(String user, Stage primaryStage) {
+	private Scene createIndexPage(Stage stage, String user) {
+		//Connection with the Library
 		try {
 			library = (Library) Naming.lookup("LibraryService");
-		} catch (MalformedURLException | RemoteException
-				| NotBoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			e.printStackTrace();
 		}
-		List<Book> books;
+
+		//Get Books from the Library
+		List<Book> books = new ArrayList<>();
 		try {
 			books = library.getAllBooks();
 		} catch (RemoteException e) {
-			books = new ArrayList<Book>();
 			e.printStackTrace();
 		}
-		
+
+		//Create an ObservableList from the ArrayList
+		ObservableList<Book> observableBooks = FXCollections.observableArrayList(books);
+
+		//Create table
+		TableView tableView = new TableView();
+		tableView.setEditable(false);
+		//Create columns
+		TableColumn isbnColumn = new TableColumn("ISBN");
+		TableColumn titleColumn = new TableColumn("Title");
+		TableColumn authorColumn = new TableColumn("author");
+		//Link columns to the corresponding BookImpl properties
+		isbnColumn.setCellValueFactory(new PropertyValueFactory<BookImpl, String>("ISBN"));
+		titleColumn.setCellValueFactory(new PropertyValueFactory<BookImpl, String>("title"));
+		authorColumn.setCellValueFactory(new PropertyValueFactory<BookImpl, String>("author"));
+
+		tableView.setItems(observableBooks);
+		tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn);
+		//Customize the TableView
+		tableView.setPrefWidth(500);
+		tableView.setPrefHeight(400);
+		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+		//Create the grid
 		GridPane grid = createGrid();
-		
+
 		Text sceneTitle = new Text("Connected as " + user);
 		sceneTitle.setId("user-name");
 		grid.add(sceneTitle, 0, 0);
+		grid.add(tableView, 0, 1);
 
-		if(books.size() == 0) {
-			Text availableBook = new Text("No book in the library");
-			grid.add(availableBook, 0,1);
-		} else {
-			int position = 2;
-			for(Book book: books) {
-				try {
-					Text bookText = new Text(book.getTitle()+" by "+book.getAuthor());
-					grid.add(bookText, 0, position++, 2, 1);
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
 		Button button = new Button("Quit");
-		grid.add(button, 5, 5);
+		grid.add(button, 0, 2);
 		button.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent event) {
-				primaryStage.close();
+				stage.close();
 			}
 		});
-		
+
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
 		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+
 		return scene;
 	}
 
