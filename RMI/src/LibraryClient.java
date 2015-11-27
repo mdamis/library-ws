@@ -1,9 +1,19 @@
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.List;
 
 import javafx.application.Application;
 
 public class LibraryClient {
+	private final Library library;
+	private final Observer observer;
+	
+	public LibraryClient(String user, String serviceName) throws MalformedURLException, RemoteException, NotBoundException {
+		library = (Library) Naming.lookup(serviceName);
+		observer = new ObserverImpl(user);
+	}
 
 	public static void main(String[] args) {
 		try {
@@ -63,6 +73,26 @@ public class LibraryClient {
 			
 			Application.launch(GUI.class, args);
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public List<Book> getAllBooks() throws RemoteException {
+		return library.getAllBooks();
+	}
+
+	public String getUser() {
+		try {
+			return observer.getUser();
+		} catch (RemoteException e) {
+			return "LOGIN ERROR";
+		}
+	}
+
+	public void addBook(String isbn, String title, String author) {
+		try {
+			library.add(isbn, title, author);
+		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 	}

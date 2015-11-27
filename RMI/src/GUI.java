@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 public class GUI extends Application {
 	private final static int WIDTH = 600;
 	private final static int HEIGHT = 400;
-	private Library library;
+	private LibraryClient library;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -46,10 +46,7 @@ public class GUI extends Application {
 		scenetitle.setId("welcome-text");
 		grid.add(scenetitle, 0, 0, 2, 1);
 
-		Label userName = new Label("User Name:");
-		grid.add(userName, 0, 1);
-		TextField userTextField = new TextField();
-		grid.add(userTextField, 1, 1);
+		TextField userTextField = addTextField(grid, "User name:", 0, 1);
 
 		/*
 		 * Label pw = new Label("Password:"); grid.add(pw, 0, 2); PasswordField
@@ -79,7 +76,14 @@ public class GUI extends Application {
 					actiontarget.setFill(Color.FIREBRICK);
 					actiontarget.setText("Enter a valid user name");
 				} else {
-					Scene scene = createIndexPage(primaryStage, user);
+					try {
+						library = new LibraryClient(user, "LibraryService");
+					} catch (MalformedURLException | RemoteException
+							| NotBoundException e1) {
+						e1.printStackTrace();
+						// TODO create an error connection page
+					}
+					Scene scene = createIndexPage(primaryStage);
 					primaryStage.setScene(scene);
 					primaryStage.show();
 				}
@@ -105,13 +109,7 @@ public class GUI extends Application {
 		return grid;
 	}
 
-	private Scene createIndexPage(Stage stage, String user) {
-		//Connection with the Library
-		try {
-			library = (Library) Naming.lookup("LibraryService");
-		} catch (MalformedURLException | RemoteException | NotBoundException e) {
-			e.printStackTrace();
-		}
+	private Scene createIndexPage(Stage stage) {
 
 		//Get Books from the Library
 		List<Book> books = new ArrayList<>();
@@ -130,7 +128,7 @@ public class GUI extends Application {
 		//Create columns
 		TableColumn isbnColumn = new TableColumn("ISBN");
 		TableColumn titleColumn = new TableColumn("Title");
-		TableColumn authorColumn = new TableColumn("author");
+		TableColumn authorColumn = new TableColumn("Author");
 		//Link columns to the corresponding BookImpl properties
 		isbnColumn.setCellValueFactory(new PropertyValueFactory<BookImpl, String>("ISBN"));
 		titleColumn.setCellValueFactory(new PropertyValueFactory<BookImpl, String>("title"));
@@ -146,14 +144,34 @@ public class GUI extends Application {
 		//Create the grid
 		GridPane grid = createGrid();
 
-		Text sceneTitle = new Text("Connected as " + user);
+		Text sceneTitle = new Text("Connected as " + library.getUser());
 		sceneTitle.setId("user-name");
 		grid.add(sceneTitle, 0, 0);
-		grid.add(tableView, 0, 1);
+		
+		Button btnRefresh = new Button("Refresh");
+		grid.add(btnRefresh, 0, 1);
+		btnRefresh.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				createIndexPage(stage);
+			}
+		});
+		
+		Button btnAddBook = new Button("Add a book");
+		grid.add(btnAddBook, 1, 1);
+		btnAddBook.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Scene scene = createAddBookPage(stage);
+				stage.setScene(scene);
+				stage.show();
+			}
+		});
+		
+		grid.add(tableView, 0, 2, 3, 1);
 
-		Button button = new Button("Quit");
-		grid.add(button, 0, 2);
-		button.setOnAction(new EventHandler<ActionEvent>() {
+		Button btnQuit = new Button("Quit");
+		grid.add(btnQuit, 0, 3);
+		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				stage.close();
@@ -166,4 +184,47 @@ public class GUI extends Application {
 		return scene;
 	}
 
+	private Scene createAddBookPage(Stage stage) {
+		GridPane grid = createGrid();
+		
+		Text sceneTitle = new Text("Add a book");
+		sceneTitle.setId("welcome-text");
+		grid.add(sceneTitle, 0, 0);
+		
+		TextField isbnField = addTextField(grid, "ISBN:", 0, 1);
+		TextField titleField = addTextField(grid, "Title:", 0, 2);
+		TextField authorField = addTextField(grid, "Author:", 0, 3);
+		
+		Button btnSend = new Button("OK");
+		grid.add(btnSend, 0, 5);
+		btnSend.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String isbn = isbnField.getText();
+				String title = titleField.getText();
+				String author = authorField.getText();
+				if(isbn.equals("") || title.equals("") || author.equals("")) {
+					// TODO show error
+				} else {
+					library.addBook(isbn, title, author);
+					Scene scene = createIndexPage(stage);
+					stage.setScene(scene);
+					stage.show();
+				}
+			}
+		});
+		
+		Scene scene = new Scene(grid, WIDTH, HEIGHT);
+		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+
+		return scene;
+	}
+
+	private TextField addTextField(GridPane grid, String label, int col, int row) {
+		Label lab = new Label(label);
+		grid.add(lab, col, row);
+		TextField textField = new TextField();
+		grid.add(textField, col+1, row);
+		return textField;
+	}
 }
