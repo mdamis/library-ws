@@ -14,11 +14,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -135,16 +131,16 @@ public class GUI extends Application {
 		ObservableList<Book> observableBooks = FXCollections.observableArrayList(books);
 
 		//Create table
-		TableView tableView = new TableView();
+		TableView<Book> tableView = new TableView<>();
 		tableView.setEditable(false);
 		//Create columns
-		TableColumn isbnColumn = new TableColumn("ISBN");
-		TableColumn titleColumn = new TableColumn("Title");
-		TableColumn authorColumn = new TableColumn("Author");
+		TableColumn<Book, String> isbnColumn = new TableColumn<>("ISBN");
+		TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
+		TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
 		//Link columns to the corresponding BookImpl properties
-		isbnColumn.setCellValueFactory(new PropertyValueFactory<BookImpl, String>("ISBN"));
-		titleColumn.setCellValueFactory(new PropertyValueFactory<BookImpl, String>("title"));
-		authorColumn.setCellValueFactory(new PropertyValueFactory<BookImpl, String>("author"));
+		isbnColumn.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
+		titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+		authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
 
 		tableView.setItems(observableBooks);
 		tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn);
@@ -152,6 +148,19 @@ public class GUI extends Application {
 		tableView.setPrefWidth(500);
 		tableView.setPrefHeight(400);
 		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+		//Handle double click on a table row
+		tableView.setRowFactory(tv -> {
+			TableRow<Book> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if(event.getClickCount() == 2 && (!row.isEmpty())) {
+					Book book = row.getItem();
+					Scene scene = createBookDetailsPage(stage, book);
+					showScene(stage, scene);
+				}
+			});
+			return row;
+		});
 
 		//Create the grid
 		GridPane grid = createGrid();
@@ -192,6 +201,38 @@ public class GUI extends Application {
 
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
 		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		return scene;
+	}
+
+	private Scene createBookDetailsPage(Stage stage, Book book) {
+		GridPane grid = createGrid();
+
+		try {
+			grid.add(new Text(book.getTitle()), 0, 0);
+			grid.add(new Text("ISBN : " + book.getISBN()), 0, 1);
+			grid.add(new Text("Author : " + book.getAuthor()), 0, 2);
+			grid.add(new Text("Summary :\n" + book.getSummary()), 1, 0);
+			grid.add(new Text("Available : " + book.isAvailable()), 0, 3);
+			if(!book.isAvailable()) {
+				grid.add(new Text("Patron : " + book.getCurrentPatron()), 1, 3);
+			}
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
+		Button backButton = new Button("Back");
+		grid.add(backButton, 0, 5);
+		backButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Scene scene = createIndexPage(stage);
+				showScene(stage, scene);
+			}
+		});
+
+		Scene scene = new Scene(grid, WIDTH, HEIGHT);
+		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+
 		return scene;
 	}
 
