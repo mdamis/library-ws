@@ -72,6 +72,12 @@ public class LibraryClient {
 			System.out.println(library.borrowBook("1906141010", me));
 			//library.returnBook("1906141010", you);
 
+			List<Book> borrowedBooks = library.getBorrowedBooks(me);
+			for(Book book : borrowedBooks) {
+				System.out.println("Books borrowed by " + me.getUser());
+				System.out.println(book.details());
+			}
+
 			//books = library.getAllBooks();
 			for (Book book : books) {
 				System.out.println(book.getReviews());

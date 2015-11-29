@@ -74,4 +74,16 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 		return false;
 	}
 
+	@Override
+	public List<Book> getBorrowedBooks(Observer obs) throws RemoteException {
+		ArrayList<Book> borrowedBooks = new ArrayList<>();
+		for(String key : books.keySet()) {
+			Book book = books.get(key);
+			if (book.getCurrentPatron().equals(obs.getUser())) {
+				borrowedBooks.add(book);
+			}
+		}
+		return borrowedBooks;
+	}
+
 }

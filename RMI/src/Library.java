@@ -13,4 +13,6 @@ public interface Library extends Remote {
 
 	public boolean returnBook(String isbn, Observer obs) throws RemoteException;
 
+	public List<Book> getBorrowedBooks(Observer obs) throws RemoteException;
+
 }
