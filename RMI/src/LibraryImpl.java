@@ -15,8 +15,8 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 	}
 
 	@Override
-	public void add(String isbn, String title, String author) throws RemoteException {
-		Book book = new BookImpl(isbn, title, author);
+	public void add(String isbn, String title, String author, String introductionDate) throws RemoteException {
+		Book book = BookImpl.create(isbn, title, author, introductionDate);
 		books.put(isbn, book);
 	}
 
@@ -37,6 +37,7 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 		System.out.println(obs.getUser() +" is requesting book "+isbn);
 		if (books.containsKey(isbn)) {
 			Book book = books.get(isbn);
+			book.setHasBeenBorrowed(true);
 			String user = obs.getUser();
 			if (book.isAvailable()) {
 				book.setAvailable(false);

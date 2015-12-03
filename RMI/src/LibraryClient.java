@@ -1,10 +1,10 @@
+import javafx.application.Application;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
-
-import javafx.application.Application;
 
 public class LibraryClient {
 	private final Library library;
@@ -30,7 +30,15 @@ public class LibraryClient {
 
 	public void addBook(String isbn, String title, String author) {
 		try {
-			library.add(isbn, title, author);
+			library.add(isbn, title, author, "now");
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addBook(String isbn, String title, String author, String introductionDate) {
+		try {
+			library.add(isbn, title, author, introductionDate);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -56,6 +64,11 @@ public class LibraryClient {
 			for (Book book : books) {
 				System.out.println(book.details());
 				System.out.println(book.getSummary());
+				if(book.isSaleable()) {
+					System.out.println(book.getTitle() + " is saleable.");
+				} else {
+					System.out.println(book.getTitle() + " is not saleable.");
+				}
 			}
 			System.out.println("");
 
@@ -71,6 +84,15 @@ public class LibraryClient {
 			library.returnBook("1906141010", me);
 			System.out.println(library.borrowBook("1906141010", me));
 			//library.returnBook("1906141010", you);
+
+			books = library.getAllBooks();
+			for (Book book : books) {
+				if(book.isSaleable()) {
+					System.out.println(book.getTitle() + " is saleable.");
+				} else {
+					System.out.println(book.getTitle() + " is not saleable.");
+				}
+			}
 
 			List<Book> borrowedBooks = library.getBorrowedBooks(me);
 			for(Book book : borrowedBooks) {

@@ -18,6 +18,10 @@ public interface Book extends Remote {
 
 	public void setCurrentPatron(String currentPatron) throws RemoteException;
 
+	public void setHasBeenBorrowed(boolean hasBeenBorrowed) throws RemoteException;
+
+	public boolean isSaleable() throws RemoteException;
+
 	public String details() throws RemoteException;
 
 	public String getSummary() throws RemoteException;

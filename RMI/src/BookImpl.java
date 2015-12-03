@@ -1,5 +1,8 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class BookImpl extends UnicastRemoteObject implements Book {
@@ -12,14 +15,28 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	private boolean available = true;
 	private String currentPatron = "";
 	private String summary = "No summary available";
+	private final LocalDate introductionDate;
+	private boolean hasBeenBorrowed = false;
 	private final ArrayList<String> reviews = new ArrayList<>();
 	private final ArrayList<Observer> borrowList = new ArrayList<>();
 
-	public BookImpl(String isbn, String title, String author) throws RemoteException {
+	private BookImpl(String isbn, String title, String author, LocalDate introductionDate) throws RemoteException {
 		super();
 		this.isbn = isbn;
 		this.title = title;
 		this.author = author;
+		this.introductionDate = introductionDate;
+	}
+
+	public static BookImpl create(String isbn, String title, String author, String introductionDate) throws RemoteException {
+		LocalDate date;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		try {
+			date = LocalDate.parse(introductionDate, formatter);
+		} catch(DateTimeParseException e) {
+			date = LocalDate.now();
+		}
+		return new BookImpl(isbn, title, author, date);
 	}
 
 	@Override
@@ -55,6 +72,16 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	@Override
 	public void setCurrentPatron(String currentPatron) throws RemoteException {
 		this.currentPatron = currentPatron;
+	}
+
+	@Override
+	public void setHasBeenBorrowed(boolean hasBeenBorrowed) throws RemoteException {
+		this.hasBeenBorrowed = hasBeenBorrowed;
+	}
+
+	@Override
+	public boolean isSaleable() throws RemoteException {
+		return hasBeenBorrowed && LocalDate.now().getYear() - introductionDate.getYear() >= 2;
 	}
 
 	@Override
