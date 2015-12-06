@@ -117,6 +117,7 @@ public class GUI extends Application {
 		return grid;
 	}
 
+	@SuppressWarnings("unchecked")
 	private Scene createIndexPage(Stage stage) {
 
 		//Get Books from the Library
