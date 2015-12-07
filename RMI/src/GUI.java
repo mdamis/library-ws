@@ -25,9 +25,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GUI extends Application {
-	private final static int WIDTH = 600;
-	private final static int HEIGHT = 400;
-	private LibraryClient library;
+	private final static int WIDTH = 720;
+	private final static int HEIGHT = 480;
+	private LibraryClient client;
+	private List<Book> books = new ArrayList<>();
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -66,14 +67,14 @@ public class GUI extends Application {
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				connetionHandler(primaryStage, userTextField, actiontarget);
+				connectionHandler(primaryStage, userTextField, actiontarget);
 			}
 		});
 		userTextField.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
 				if(event.getCode() == KeyCode.ENTER) {
-					connetionHandler(primaryStage, userTextField, actiontarget);
+					connectionHandler(primaryStage, userTextField, actiontarget);
 				}
 			}
 		});
@@ -84,8 +85,8 @@ public class GUI extends Application {
 		return scene;
 	}
 	
-	private void connetionHandler(Stage primaryStage,
-			TextField userTextField, final Text actiontarget) {
+	private void connectionHandler(Stage primaryStage,
+								   TextField userTextField, final Text actiontarget) {
 		String user = userTextField.getText();
 		System.out.println("user: "+user);
 		if (user.equals("")) {
@@ -93,7 +94,7 @@ public class GUI extends Application {
 			actiontarget.setText("Enter a valid user name");
 		} else {
 			try {
-				library = new LibraryClient(user, "LibraryService");
+				client = new LibraryClient(user, "LibraryService");
 			} catch (MalformedURLException | RemoteException
 					| NotBoundException e1) {
 				e1.printStackTrace();
@@ -121,9 +122,9 @@ public class GUI extends Application {
 	private Scene createIndexPage(Stage stage) {
 
 		//Get Books from the Library
-		List<Book> books = new ArrayList<>();
+
 		try {
-			books = library.getAllBooks();
+			books = client.getAllBooks();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -166,7 +167,7 @@ public class GUI extends Application {
 		//Create the grid
 		GridPane grid = createGrid();
 
-		Text sceneTitle = new Text("Connected as " + library.getUser());
+		Text sceneTitle = new Text("Connected as " + client.getUser());
 		sceneTitle.setId("user-name");
 		grid.add(sceneTitle, 0, 0);
 		
@@ -178,9 +179,35 @@ public class GUI extends Application {
 				showScene(stage, scene);
 			}
 		});
+
+		Button btnSwitchBorrowed = new Button("Borrowed Book(s)");
+		grid.add(btnSwitchBorrowed, 1, 1);
+		btnSwitchBorrowed.setOnAction(new EventHandler<ActionEvent>() {
+			private boolean isActive = false;
+
+			@Override
+			public void handle(ActionEvent event) {
+				if(!isActive) {
+					try {
+						books = client.getLibrary().getBorrowedBooks(client.getObserver());
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						books = client.getAllBooks();
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+				}
+				observableBooks.clear();
+				observableBooks.addAll(books);
+				isActive = !isActive;
+			}
+		});
 		
 		Button btnAddBook = new Button("Add a book");
-		grid.add(btnAddBook, 1, 1);
+		grid.add(btnAddBook, 2, 1);
 		btnAddBook.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -260,7 +287,7 @@ public class GUI extends Application {
 					// TODO show error
 					System.err.println("invalid book");
 				} else {
-					library.addBook(isbn, title, author);
+					client.addBook(isbn, title, author);
 					Scene scene = createIndexPage(stage);
 					showScene(stage, scene);
 				}

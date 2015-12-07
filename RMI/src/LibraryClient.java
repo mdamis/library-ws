@@ -15,6 +15,14 @@ public class LibraryClient {
 		observer = new ObserverImpl(user);
 	}
 
+	public Library getLibrary() {
+		return library;
+	}
+
+	public Observer getObserver() {
+		return observer;
+	}
+
 	public List<Book> getAllBooks() throws RemoteException {
 		return library.getAllBooks();
 	}
