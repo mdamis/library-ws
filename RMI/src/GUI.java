@@ -167,7 +167,7 @@ public class GUI extends Application {
 		//Create the grid
 		GridPane grid = createGrid();
 
-		Text sceneTitle = new Text("Connected as " + client.getUser());
+		Text sceneTitle = new Text("Connected as " + client.getUsername());
 		sceneTitle.setId("user-name");
 		grid.add(sceneTitle, 0, 0);
 		
@@ -189,7 +189,7 @@ public class GUI extends Application {
 			public void handle(ActionEvent event) {
 				if(!isActive) {
 					try {
-						books = client.getLibrary().getBorrowedBooks(client.getObserver());
+						books = client.getLibrary().getBorrowedBooks(client.getUser());
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}

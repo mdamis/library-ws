@@ -8,28 +8,28 @@ import java.util.List;
 
 public class LibraryClient {
 	private final Library library;
-	private final Observer observer;
+	private final User user;
 	
 	public LibraryClient(String user, String serviceName) throws MalformedURLException, RemoteException, NotBoundException {
 		library = (Library) Naming.lookup(serviceName);
-		observer = new ObserverImpl(user);
+		this.user = new UserImpl(user);
 	}
 
 	public Library getLibrary() {
 		return library;
 	}
 
-	public Observer getObserver() {
-		return observer;
-	}
-
 	public List<Book> getAllBooks() throws RemoteException {
 		return library.getAllBooks();
 	}
+	
+	public User getUser() {
+		return user;
+	}
 
-	public String getUser() {
+	public String getUsername() {
 		try {
-			return observer.getUser();
+			return user.getUser();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return "LOGIN ERROR";
@@ -57,9 +57,9 @@ public class LibraryClient {
 			Library library = (Library) Naming.lookup("LibraryService");
 			
 			// some little users
-			//Observer me = new ObserverImpl(args[0]);
-			Observer me = new ObserverImpl("bcrochez");
-			//Observer you = new ObserverImpl("mdamis");
+			//User me = new UserImpl(args[0]);
+			User me = new UserImpl("bcrochez");
+			//User you = new UserImpl("mdamis");
 			
 			
 

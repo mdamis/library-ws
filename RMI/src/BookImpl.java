@@ -18,7 +18,7 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	private final LocalDate introductionDate;
 	private boolean hasBeenBorrowed = false;
 	private final ArrayList<String> reviews = new ArrayList<>();
-	private final ArrayList<Observer> borrowList = new ArrayList<>();
+	private final ArrayList<User> borrowList = new ArrayList<>();
 
 	private BookImpl(String isbn, String title, String author, LocalDate introductionDate) throws RemoteException {
 		super();
@@ -125,9 +125,9 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	}
 
 	@Override
-	public void addToQueue(Observer obs) throws RemoteException {
-		for(Observer observer : borrowList) {
-			if(observer.getUser().equals(obs.getUser())) {
+	public void addToQueue(User obs) throws RemoteException {
+		for(User user : borrowList) {
+			if(user.getUser().equals(obs.getUser())) {
 				System.out.println(obs.getUser() +" already in the queue");
 				return;
 			}
@@ -140,7 +140,7 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	public void setCurrentPatron() throws RemoteException {
 		if(!borrowList.isEmpty()) {
 			System.out.println("borrow list is not empty");
-			Observer obs = borrowList.remove(0);
+			User obs = borrowList.remove(0);
 			currentPatron = obs.getUser();
 			obs.bookBorrowed(this);
 		} else {

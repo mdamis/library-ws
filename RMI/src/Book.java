@@ -32,6 +32,6 @@ public interface Book extends Remote {
 
 	public void addReview(String review) throws RemoteException;
 
-	public void addToQueue(Observer obs) throws RemoteException;
+	public void addToQueue(User obs) throws RemoteException;
 
 }

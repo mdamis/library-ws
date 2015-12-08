@@ -6,12 +6,12 @@ import java.rmi.server.UnicastRemoteObject;
  * @author bcrochez
  *
  */
-public class ObserverImpl extends UnicastRemoteObject implements Observer {
+public class UserImpl extends UnicastRemoteObject implements User {
 	
 	private static final long serialVersionUID = -1706698189361413223L;
 	private final String user;
 
-	protected ObserverImpl(String user) throws RemoteException {
+	protected UserImpl(String user) throws RemoteException {
 		super();
 		this.user = user;
 	}

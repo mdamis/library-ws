@@ -33,7 +33,7 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 	}
 
 	@Override
-	public String borrowBook(String isbn, Observer obs) throws RemoteException {
+	public String borrowBook(String isbn, User obs) throws RemoteException {
 		System.out.println(obs.getUser() +" is requesting book "+isbn);
 		if (books.containsKey(isbn)) {
 			Book book = books.get(isbn);
@@ -55,7 +55,7 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 	}
 
 	@Override
-	public boolean returnBook(String isbn, Observer obs) throws RemoteException {
+	public boolean returnBook(String isbn, User obs) throws RemoteException {
 		System.out.println(obs.getUser() + " is trying to return the book " + isbn);
 		if (books.containsKey(isbn)) {
 			Book book = books.get(isbn);
@@ -76,7 +76,7 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 	}
 
 	@Override
-	public List<Book> getBorrowedBooks(Observer obs) throws RemoteException {
+	public List<Book> getBorrowedBooks(User obs) throws RemoteException {
 		ArrayList<Book> borrowedBooks = new ArrayList<>();
 		for(String key : books.keySet()) {
 			Book book = books.get(key);

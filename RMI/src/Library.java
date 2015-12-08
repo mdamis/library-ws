@@ -9,10 +9,10 @@ public interface Library extends Remote {
 
 	public List<Book> getAllBooks() throws RemoteException;
 
-	public String borrowBook(String isbn, Observer obs) throws RemoteException;
+	public String borrowBook(String isbn, User obs) throws RemoteException;
 
-	public boolean returnBook(String isbn, Observer obs) throws RemoteException;
+	public boolean returnBook(String isbn, User obs) throws RemoteException;
 
-	public List<Book> getBorrowedBooks(Observer obs) throws RemoteException;
+	public List<Book> getBorrowedBooks(User obs) throws RemoteException;
 
 }
