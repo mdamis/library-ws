@@ -14,7 +14,12 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -65,7 +70,7 @@ public class GUI extends Application {
 
 		final Text actiontarget = new Text();
 		actiontarget.setId("actiontarget");
-		grid.add(actiontarget, 1, 1);
+		grid.add(actiontarget, 0, 4);
 		GridPane.setColumnSpan(actiontarget, 2);
 		GridPane.setHalignment(actiontarget, RIGHT);
 		actiontarget.setId("actiontarget");
@@ -148,15 +153,17 @@ public class GUI extends Application {
 		TableColumn<Book, String> isbnColumn = new TableColumn<>("ISBN");
 		TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
 		TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
+		TableColumn<Book, String> patronColumn = new TableColumn<>("Patron");
 		// Link columns to the corresponding BookImpl properties
 		isbnColumn.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
 		titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
 		authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
+		patronColumn.setCellValueFactory(new PropertyValueFactory<>("patronUsername"));
 
 		tableView.setItems(observableBooks);
-		tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn);
+		tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn, patronColumn);
 		// Customize the TableView
-		tableView.setPrefWidth(500);
+		tableView.setPrefWidth(600);
 		tableView.setPrefHeight(400);
 		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
@@ -225,10 +232,38 @@ public class GUI extends Application {
 			}
 		});
 
+		Button btnBorrow = new Button("Borrow");
+		grid.add(btnBorrow, 5, 0);
+		btnBorrow.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Book book = tableView.getSelectionModel().getSelectedItem();
+				try {
+					client.getLibrary().borrowBook(book, client.getUser());
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		Button btnReturn = new Button("Return");
+		grid.add(btnReturn, 5, 1);
+		btnReturn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Book book = tableView.getSelectionModel().getSelectedItem();
+				try {
+					client.getLibrary().returnBook(book, client.getUser());
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
 		grid.add(tableView, 0, 2, 3, 1);
 
 		Button btnQuit = new Button("Quit");
-		grid.add(btnQuit, 0, 3);
+		grid.add(btnQuit, 5, 3);
 		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {

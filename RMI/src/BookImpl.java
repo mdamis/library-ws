@@ -67,6 +67,11 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	public void setPatron(User patron) throws RemoteException {
 		this.patron = patron;
 	}
+	
+	@Override
+	public String getPatronUsername() throws RemoteException {
+		return patron == null ? "" : patron.getUsername();
+	}
 
 	@Override
 	public void setHasBeenBorrowed(boolean hasBeenBorrowed) throws RemoteException {

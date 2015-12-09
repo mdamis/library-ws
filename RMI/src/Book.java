@@ -13,6 +13,8 @@ public interface Book extends Remote {
 	public User getPatron() throws RemoteException;
 
 	public void setPatron(User patron) throws RemoteException;
+	
+	public String getPatronUsername() throws RemoteException;
 
 	public void setHasBeenBorrowed(boolean hasBeenBorrowed) throws RemoteException;
 
