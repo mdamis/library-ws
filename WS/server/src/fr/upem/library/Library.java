@@ -3,15 +3,16 @@ package fr.upem.library;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.ws.rs.Path;
 
 import fr.upem.book.Book;
-import fr.upem.user.User;
 
-@Path("/User")
 public class Library {
 
 	private final HashMap<String, Book> books = new HashMap<String, Book>();
+	
+	public Library() {
+		//
+	}
 
 	public void add(String isbn, String title, String author, String introductionDate) {
 		Book book = Book.create(isbn, title, author, introductionDate);
@@ -28,7 +29,7 @@ public class Library {
 		return new ArrayList<Book>(books.values());
 	}
 
-	public String borrowBook(String isbn, User requester) {
+	/*public String borrowBook(String isbn, User requester) {
 		System.out.println(requester.getUser() +" is requesting book "+isbn);
 		if (books.containsKey(isbn)) {
 			Book book = books.get(isbn);
@@ -47,9 +48,9 @@ public class Library {
 			}
 		}
 		return "This book does not exists";
-	}
+	}*/
 
-	public boolean returnBook(String isbn, User user) {
+	/*public boolean returnBook(String isbn, User user) {
 		System.out.println(user.getUser() + " is trying to return the book " + isbn);
 		if (books.containsKey(isbn)) {
 			Book book = books.get(isbn);
@@ -67,9 +68,9 @@ public class Library {
 			return true;
 		}
 		return false;
-	}
+	}*/
 
-	public List<Book> getBorrowedBooks(User user) {
+	/*public List<Book> getBorrowedBooks(User user) {
 		ArrayList<Book> borrowedBooks = new ArrayList<Book>();
 		for(String key : books.keySet()) {
 			Book book = books.get(key);
@@ -78,6 +79,6 @@ public class Library {
 			}
 		}
 		return borrowedBooks;
-	}
+	}*/
 
 }

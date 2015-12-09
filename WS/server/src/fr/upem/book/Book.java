@@ -5,20 +5,19 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
-import fr.upem.user.User;
-
 public class Book {
 
 	private final String isbn;
 	private final String title;
 	private final String author;
 	private boolean available = true;
-	private String currentPatron = "";
+	private int nbExemplary = 0;
+	//private String currentPatron = "";
 	private String summary = "No summary available";
 	private final LocalDate introductionDate;
-	private boolean hasBeenBorrowed = false;
+	//private boolean hasBeenBorrowed = false;
 	private final ArrayList<String> reviews = new ArrayList<String>();
-	private final ArrayList<User> borrowList = new ArrayList<User>();
+	//private final ArrayList<User> borrowList = new ArrayList<User>();
 
 	private Book(String isbn, String title, String author, LocalDate introductionDate) {
 		this.isbn = isbn;
@@ -49,29 +48,38 @@ public class Book {
 	public String getAuthor() {
 		return author;
 	}
+	
+	public void addOneExemplary() {
+		nbExemplary++;
+	}
+	
+	public void removeOneExemplary() {
+		nbExemplary--;
+	}
 
 	public boolean isAvailable() {
-		return available;
+		//return available;
+		return nbExemplary > 0;
 	}
 
 	public void setAvailable(boolean available) {
 		this.available = available;
 	}
 
-	public String getCurrentPatron() {
+	/*public String getCurrentPatron() {
 		return currentPatron;
-	}
+	}*/
 
-	public void setCurrentPatron(String currentPatron) {
+	/*public void setCurrentPatron(String currentPatron) {
 		this.currentPatron = currentPatron;
-	}
+	}*/
 
-	public void setHasBeenBorrowed(boolean hasBeenBorrowed) {
+	/*public void setHasBeenBorrowed(boolean hasBeenBorrowed) {
 		this.hasBeenBorrowed = hasBeenBorrowed;
-	}
+	}*/
 
 	public boolean isSaleable() {
-		return hasBeenBorrowed && LocalDate.now().getYear() - introductionDate.getYear() >= 2;
+		return /*hasBeenBorrowed && LocalDate.now().getYear() -*/ introductionDate.getYear() >= 2;
 	}
 
 	public String details() {
@@ -109,7 +117,7 @@ public class Book {
 		reviews.add(review);
 	}
 
-	public void addToQueue(User requester) {
+	/*public void addToQueue(User requester) {
 		for(User user : borrowList) {
 			if(user.getUser().equals(requester.getUser())) {
 				System.out.println(requester.getUser() +" already in the queue");
@@ -118,9 +126,9 @@ public class Book {
 		}
 		System.out.println(requester.getUser() +" added to the queue");
 		borrowList.add(requester);
-	}
+	}*/
 
-	public void setCurrentPatron() {
+	/*public void setCurrentPatron() {
 		if(!borrowList.isEmpty()) {
 			System.out.println("borrow list is not empty");
 			User user = borrowList.remove(0);
@@ -129,6 +137,6 @@ public class Book {
 		} else {
 			currentPatron = "";
 		}
-	}
+	}*/
 
 }
