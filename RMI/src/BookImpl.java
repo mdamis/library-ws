@@ -12,13 +12,11 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	private final String isbn;
 	private final String title;
 	private final String author;
-	private boolean available = true;
-	private String currentPatron = "";
+	private User patron = null;
 	private String summary = "No summary available";
 	private final LocalDate introductionDate;
 	private boolean hasBeenBorrowed = false;
 	private final ArrayList<String> reviews = new ArrayList<>();
-	private final ArrayList<User> borrowList = new ArrayList<>();
 
 	private BookImpl(String isbn, String title, String author, LocalDate introductionDate) throws RemoteException {
 		super();
@@ -28,12 +26,13 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 		this.introductionDate = introductionDate;
 	}
 
-	public static BookImpl create(String isbn, String title, String author, String introductionDate) throws RemoteException {
+	public static BookImpl create(String isbn, String title, String author, String introductionDate)
+			throws RemoteException {
 		LocalDate date;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		try {
 			date = LocalDate.parse(introductionDate, formatter);
-		} catch(DateTimeParseException e) {
+		} catch (DateTimeParseException e) {
 			date = LocalDate.now();
 		}
 		return new BookImpl(isbn, title, author, date);
@@ -56,22 +55,17 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 
 	@Override
 	public boolean isAvailable() throws RemoteException {
-		return available;
+		return patron == null;
 	}
 
 	@Override
-	public void setAvailable(boolean available) throws RemoteException {
-		this.available = available;
+	public User getPatron() throws RemoteException {
+		return patron;
 	}
 
 	@Override
-	public String getCurrentPatron() throws RemoteException {
-		return currentPatron;
-	}
-
-	@Override
-	public void setCurrentPatron(String currentPatron) throws RemoteException {
-		this.currentPatron = currentPatron;
+	public void setPatron(User patron) throws RemoteException {
+		this.patron = patron;
 	}
 
 	@Override
@@ -85,8 +79,8 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	}
 
 	@Override
-	public String details() {
-		if (available) {
+	public String details() throws RemoteException {
+		if (isAvailable()) {
 			return title + " written by " + author + " is available";
 		} else {
 			return title + " written by " + author + " is not available";
@@ -105,14 +99,14 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 
 	@Override
 	public String getReviews() throws RemoteException {
-		if(reviews.size() == 0) {
+		if (reviews.size() == 0) {
 			return "No reviews for : " + title;
 		}
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("Reviews for ").append(title).append(" : \n");
 
-		for(String review : reviews) {
+		for (String review : reviews) {
 			sb.append(review).append("\n");
 		}
 
@@ -125,27 +119,12 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	}
 
 	@Override
-	public void addToQueue(User obs) throws RemoteException {
-		for(User user : borrowList) {
-			if(user.getUser().equals(obs.getUser())) {
-				System.out.println(obs.getUser() +" already in the queue");
-				return;
-			}
+	public boolean equals(Object obj) {
+		if (!(obj instanceof BookImpl)) {
+			return false;
 		}
-		System.out.println(obs.getUser() +" added to the queue");
-		borrowList.add(obs);
-	}
-
-	@Override
-	public void setCurrentPatron() throws RemoteException {
-		if(!borrowList.isEmpty()) {
-			System.out.println("borrow list is not empty");
-			User obs = borrowList.remove(0);
-			currentPatron = obs.getUser();
-			obs.bookBorrowed(this);
-		} else {
-			currentPatron = "";
-		}
+		BookImpl book = (BookImpl) obj;
+		return isbn.equals(book.isbn);
 	}
 
 }

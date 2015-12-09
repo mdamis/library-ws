@@ -10,13 +10,9 @@ public interface Book extends Remote {
 
 	public boolean isAvailable() throws RemoteException;
 
-	public void setAvailable(boolean available) throws RemoteException;
+	public User getPatron() throws RemoteException;
 
-	public String getCurrentPatron() throws RemoteException;
-
-	public void setCurrentPatron() throws RemoteException;
-
-	public void setCurrentPatron(String currentPatron) throws RemoteException;
+	public void setPatron(User patron) throws RemoteException;
 
 	public void setHasBeenBorrowed(boolean hasBeenBorrowed) throws RemoteException;
 
@@ -31,7 +27,5 @@ public interface Book extends Remote {
 	public String getReviews() throws RemoteException;
 
 	public void addReview(String review) throws RemoteException;
-
-	public void addToQueue(User obs) throws RemoteException;
 
 }

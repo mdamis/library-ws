@@ -3,16 +3,14 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public interface Library extends Remote {
-	public void add(String isbn, String title, String author, String introductionDate) throws RemoteException;
+	public void addBook(String isbn, String title, String author, String introductionDate) throws RemoteException;
 
-	public void delete(String isbn) throws RemoteException;
+	public void removeBook(Book book) throws RemoteException;
 
 	public List<Book> getAllBooks() throws RemoteException;
 
-	public String borrowBook(String isbn, User obs) throws RemoteException;
+	public String borrowBook(Book book, User user) throws RemoteException;
 
-	public boolean returnBook(String isbn, User obs) throws RemoteException;
-
-	public List<Book> getBorrowedBooks(User obs) throws RemoteException;
+	public boolean returnBook(Book book, User user) throws RemoteException;
 
 }

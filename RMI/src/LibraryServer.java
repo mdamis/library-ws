@@ -7,10 +7,10 @@ public class LibraryServer {
 			Library library = new LibraryImpl();
 
 			// add some little books
-			library.add("0451524934", "1984", "George Orwell", "2012-03-13");
-			library.add("8806203797", "1Q84", "Haruki Murakami", "2012-03-13");
-			library.add("0460005251", "War and Peace", "Leo Tolstoy", "2012-03-13");
-			library.add("1906141010", "And Then There Were None",
+			library.addBook("0451524934", "1984", "George Orwell", "2012-03-13");
+			library.addBook("8806203797", "1Q84", "Haruki Murakami", "2012-03-13");
+			library.addBook("0460005251", "War and Peace", "Leo Tolstoy", "2012-03-13");
+			library.addBook("1906141010", "And Then There Were None",
 					"Agatha Christie", "2012-03-13");
 		
 			// add some little reviews

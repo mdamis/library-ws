@@ -1,29 +1,54 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class must be instancied to borrow a book
+ * 
  * @author bcrochez
  *
  */
 public class UserImpl extends UnicastRemoteObject implements User {
-	
-	private static final long serialVersionUID = -1706698189361413223L;
-	private final String user;
 
-	protected UserImpl(String user) throws RemoteException {
+	private static final long serialVersionUID = -1706698189361413223L;
+	private final String username;
+	private final ArrayList<Book> borrowedBooks = new ArrayList<>();
+
+	protected UserImpl(String username) throws RemoteException {
 		super();
-		this.user = user;
+		this.username = username;
 	}
 
 	@Override
 	public void bookBorrowed(Book book) throws RemoteException {
-		System.out.println("You got the book "+book.getISBN());
+		borrowedBooks.add(book);
+		System.out.println("You borrowed the book " + book.getISBN());
 	}
-	
+
 	@Override
-	public String getUser()  throws RemoteException {
-		return user;
+	public void bookReturned(Book book) throws RemoteException {
+		borrowedBooks.remove(book);
+		System.out.println("You returned the book " + book.getISBN());
+	}
+
+	@Override
+	public String getUsername() throws RemoteException {
+		return username;
+	}
+
+	@Override
+	public List<Book> getBorrowedBooks() throws RemoteException {
+		return borrowedBooks;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof UserImpl)) {
+			return false;
+		}
+		UserImpl user = (UserImpl) obj;
+		return username.equals(user.username);
 	}
 
 }

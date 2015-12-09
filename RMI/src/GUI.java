@@ -189,7 +189,7 @@ public class GUI extends Application {
 			public void handle(ActionEvent event) {
 				if(!isActive) {
 					try {
-						books = client.getLibrary().getBorrowedBooks(client.getUser());
+						books = client.getUser().getBorrowedBooks();
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}
@@ -242,7 +242,7 @@ public class GUI extends Application {
 			grid.add(new Text("Summary :\n" + book.getSummary()), 1, 0);
 			grid.add(new Text("Available : " + book.isAvailable()), 0, 3);
 			if(!book.isAvailable()) {
-				grid.add(new Text("Patron : " + book.getCurrentPatron()), 1, 3);
+				//grid.add(new Text("Patron : " + book.getPatron().getUsername()), 1, 3);
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();

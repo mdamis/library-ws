@@ -1,30 +1,32 @@
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LibraryImpl extends UnicastRemoteObject implements Library {
 
 	private static final long serialVersionUID = -1744409560851948200L;
 
-	private final HashMap<String, Book> books = new HashMap<>();
+	private final ConcurrentHashMap<String, Book> books = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String, ArrayBlockingQueue<User>> waitingLists = new ConcurrentHashMap<>();
 
 	public LibraryImpl() throws RemoteException {
 		super();
 	}
 
 	@Override
-	public void add(String isbn, String title, String author, String introductionDate) throws RemoteException {
+	public void addBook(String isbn, String title, String author, String introductionDate) throws RemoteException {
 		Book book = BookImpl.create(isbn, title, author, introductionDate);
 		books.put(isbn, book);
+		waitingLists.put(isbn, new ArrayBlockingQueue<>(10));
 	}
 
 	@Override
-	public void delete(String isbn) {
-		if (books.containsKey(isbn)) {
-			books.remove(isbn);
-		}
+	public void removeBook(Book book) throws RemoteException {
+		books.remove(book.getISBN());
+		waitingLists.remove(book.getISBN());
 	}
 
 	@Override
@@ -33,58 +35,73 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 	}
 
 	@Override
-	public String borrowBook(String isbn, User obs) throws RemoteException {
-		System.out.println(obs.getUser() +" is requesting book "+isbn);
-		if (books.containsKey(isbn)) {
-			Book book = books.get(isbn);
+	public String borrowBook(Book requestedBook, User user) throws RemoteException {
+		System.out.println(user.getUsername() + " is requesting book " + requestedBook.getISBN());
+		if (books.containsKey(requestedBook.getISBN())) {
+			Book book = books.get(requestedBook.getISBN());
 			book.setHasBeenBorrowed(true);
-			String user = obs.getUser();
 			if (book.isAvailable()) {
-				book.setAvailable(false);
-				book.setCurrentPatron(user);
+				addToWaitingList(book.getISBN(), user);
+				updatePatron(book);
 				return "Book borrowed";
 			} else {
-				if(book.getCurrentPatron().equals(user)) {
+				if (user.equals(book.getPatron())) {
 					return "You already borrowed that book!";
 				}
-				book.addToQueue(obs);
-				return "You are in the waiting queue";
+				if (isWaiting(book.getISBN(), user)) {
+					return "You already were in the waiting list";
+				} else {
+					if (addToWaitingList(book.getISBN(), user)) {
+						return "You are in the waiting list";
+					} else {
+						return "The waiting list is full, try again later";
+					}
+				}
 			}
 		}
-		return "This book does not exists";
+		return "This book does not exist in our library";
 	}
 
-	@Override
-	public boolean returnBook(String isbn, User obs) throws RemoteException {
-		System.out.println(obs.getUser() + " is trying to return the book " + isbn);
-		if (books.containsKey(isbn)) {
-			Book book = books.get(isbn);
-			if(!obs.getUser().equals(book.getCurrentPatron())) {
-				return false;
-			}
-			System.out.println(book.getCurrentPatron()+" is returning book "+isbn);
-			book.setCurrentPatron();
-			if(book.getCurrentPatron().equals("")) {
-				book.setAvailable(true);
-			} else {
-				book.setAvailable(false);
-			}
-			System.out.println("new patron is "+book.getCurrentPatron());
-			return true;
+	private boolean isWaiting(String isbn, User user) {
+		if (waitingLists.containsKey(isbn)) {
+			ArrayBlockingQueue<User> queue = waitingLists.get(isbn);
+			return queue.contains(user);
 		}
 		return false;
 	}
 
-	@Override
-	public List<Book> getBorrowedBooks(User obs) throws RemoteException {
-		ArrayList<Book> borrowedBooks = new ArrayList<>();
-		for(String key : books.keySet()) {
-			Book book = books.get(key);
-			if (book.getCurrentPatron().equals(obs.getUser())) {
-				borrowedBooks.add(book);
-			}
+	private boolean addToWaitingList(String isbn, User user) {
+		if (!waitingLists.containsKey(isbn)) {
+			waitingLists.put(isbn, new ArrayBlockingQueue<>(10));
 		}
-		return borrowedBooks;
+		ArrayBlockingQueue<User> queue = waitingLists.get(isbn);
+		return queue.add(user);
+	}
+
+	private void updatePatron(Book book) throws RemoteException {
+		if (waitingLists.containsKey(book.getISBN())) {
+			ArrayBlockingQueue<User> queue = waitingLists.get(book.getISBN());
+			User user = queue.poll();
+			book.setPatron(user);
+			user.bookBorrowed(book);
+		}
+	}
+
+	@Override
+	public boolean returnBook(Book borrowedBook, User user) throws RemoteException {
+		System.out.println(user.getUsername() + " is trying to return the book " + borrowedBook.getISBN());
+		if (books.containsKey(borrowedBook.getISBN())) {
+			Book book = books.get(borrowedBook.getISBN());
+			if (!user.equals(book.getPatron())) {
+				return false;
+			}
+			System.out.println(book.getPatron() + " is returning book " + book.getISBN());
+			updatePatron(book);
+			user.bookReturned(book);
+			System.out.println("new patron is " + book.getPatron());
+			return true;
+		}
+		return false;
 	}
 
 }
