@@ -1,13 +1,13 @@
 /**
- * CurrencyConvertorSoapStub.java
+ * BasicHttpBinding_ICurrencyServiceStub.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package NET.webserviceX.www;
+package net.restfulwebservices.www.ServiceContracts._2008._01;
 
-public class CurrencyConvertorSoapStub extends org.apache.axis.client.Stub implements NET.webserviceX.www.CurrencyConvertorSoap {
+public class BasicHttpBinding_ICurrencyServiceStub extends org.apache.axis.client.Stub implements net.restfulwebservices.www.ServiceContracts._2008._01.ICurrencyService {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
     private java.util.Vector cachedSerFactories = new java.util.Vector();
@@ -24,30 +24,38 @@ public class CurrencyConvertorSoapStub extends org.apache.axis.client.Stub imple
         org.apache.axis.description.OperationDesc oper;
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("ConversionRate");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.webserviceX.NET/", "FromCurrency"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.webserviceX.NET/", "Currency"), NET.webserviceX.www.Currency.class, false, false);
+        oper.setName("GetConversionRate");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.restfulwebservices.net/ServiceContracts/2008/01", "FromCurrency"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.restfulwebservices.net/DataContracts/2008/01", "CurrencyCode"), net.restfulwebservices.www.DataContracts._2008._01.CurrencyCode.class, false, false);
+        param.setOmittable(true);
         oper.addParameter(param);
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.webserviceX.NET/", "ToCurrency"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.webserviceX.NET/", "Currency"), NET.webserviceX.www.Currency.class, false, false);
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("http://www.restfulwebservices.net/ServiceContracts/2008/01", "ToCurrency"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.restfulwebservices.net/DataContracts/2008/01", "CurrencyCode"), net.restfulwebservices.www.DataContracts._2008._01.CurrencyCode.class, false, false);
+        param.setOmittable(true);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "double"));
-        oper.setReturnClass(double.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("http://www.webserviceX.NET/", "ConversionRateResult"));
+        oper.setReturnType(new javax.xml.namespace.QName("http://www.restfulwebservices.net/DataContracts/2008/01", "Currency"));
+        oper.setReturnClass(net.restfulwebservices.www.DataContracts._2008._01.Currency.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("http://www.restfulwebservices.net/ServiceContracts/2008/01", "GetConversionRateResult"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        oper.addFault(new org.apache.axis.description.FaultDesc(
+                      new javax.xml.namespace.QName("http://GOTLServices.FaultContracts/2008/01", "DefaultFaultContract"),
+                      "FaultContracts.GOTLServices._2008._01.DefaultFaultContract",
+                      new javax.xml.namespace.QName("http://GOTLServices.FaultContracts/2008/01", "DefaultFaultContract"), 
+                      true
+                     ));
         _operations[0] = oper;
 
     }
 
-    public CurrencyConvertorSoapStub() throws org.apache.axis.AxisFault {
+    public BasicHttpBinding_ICurrencyServiceStub() throws org.apache.axis.AxisFault {
          this(null);
     }
 
-    public CurrencyConvertorSoapStub(java.net.URL endpointURL, javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
+    public BasicHttpBinding_ICurrencyServiceStub(java.net.URL endpointURL, javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
          this(service);
          super.cachedEndpoint = endpointURL;
     }
 
-    public CurrencyConvertorSoapStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
+    public BasicHttpBinding_ICurrencyServiceStub(javax.xml.rpc.Service service) throws org.apache.axis.AxisFault {
         if (service == null) {
             super.service = new org.apache.axis.client.Service();
         } else {
@@ -67,9 +75,30 @@ public class CurrencyConvertorSoapStub extends org.apache.axis.client.Stub imple
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
-            qName = new javax.xml.namespace.QName("http://www.webserviceX.NET/", "Currency");
+            qName = new javax.xml.namespace.QName("http://GOTLServices.FaultContracts/2008/01", "DefaultFaultContract");
             cachedSerQNames.add(qName);
-            cls = NET.webserviceX.www.Currency.class;
+            cls = FaultContracts.GOTLServices._2008._01.DefaultFaultContract.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://schemas.microsoft.com/2003/10/Serialization/", "guid");
+            cachedSerQNames.add(qName);
+            cls = java.lang.String.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(org.apache.axis.encoding.ser.BaseSerializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleSerializerFactory.class, cls, qName));
+            cachedDeserFactories.add(org.apache.axis.encoding.ser.BaseDeserializerFactory.createFactory(org.apache.axis.encoding.ser.SimpleDeserializerFactory.class, cls, qName));
+
+            qName = new javax.xml.namespace.QName("http://www.restfulwebservices.net/DataContracts/2008/01", "Currency");
+            cachedSerQNames.add(qName);
+            cls = net.restfulwebservices.www.DataContracts._2008._01.Currency.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("http://www.restfulwebservices.net/DataContracts/2008/01", "CurrencyCode");
+            cachedSerQNames.add(qName);
+            cls = net.restfulwebservices.www.DataContracts._2008._01.CurrencyCode.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(enumsf);
             cachedDeserFactories.add(enumdf);
@@ -140,19 +169,19 @@ public class CurrencyConvertorSoapStub extends org.apache.axis.client.Stub imple
         }
     }
 
-    public double conversionRate(NET.webserviceX.www.Currency fromCurrency, NET.webserviceX.www.Currency toCurrency) throws java.rmi.RemoteException {
+    public net.restfulwebservices.www.DataContracts._2008._01.Currency getConversionRate(net.restfulwebservices.www.DataContracts._2008._01.CurrencyCode fromCurrency, net.restfulwebservices.www.DataContracts._2008._01.CurrencyCode toCurrency) throws java.rmi.RemoteException, FaultContracts.GOTLServices._2008._01.DefaultFaultContract {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
         _call.setOperation(_operations[0]);
         _call.setUseSOAPAction(true);
-        _call.setSOAPActionURI("http://www.webserviceX.NET/ConversionRate");
+        _call.setSOAPActionURI("GetConversionRate");
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
         _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("http://www.webserviceX.NET/", "ConversionRate"));
+        _call.setOperationName(new javax.xml.namespace.QName("http://www.restfulwebservices.net/ServiceContracts/2008/01", "GetConversionRate"));
 
         setRequestHeaders(_call);
         setAttachments(_call);
@@ -164,12 +193,20 @@ public class CurrencyConvertorSoapStub extends org.apache.axis.client.Stub imple
         else {
             extractAttachments(_call);
             try {
-                return ((java.lang.Double) _resp).doubleValue();
+                return (net.restfulwebservices.www.DataContracts._2008._01.Currency) _resp;
             } catch (java.lang.Exception _exception) {
-                return ((java.lang.Double) org.apache.axis.utils.JavaUtils.convert(_resp, double.class)).doubleValue();
+                return (net.restfulwebservices.www.DataContracts._2008._01.Currency) org.apache.axis.utils.JavaUtils.convert(_resp, net.restfulwebservices.www.DataContracts._2008._01.Currency.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
+    if (axisFaultException.detail != null) {
+        if (axisFaultException.detail instanceof java.rmi.RemoteException) {
+              throw (java.rmi.RemoteException) axisFaultException.detail;
+         }
+        if (axisFaultException.detail instanceof FaultContracts.GOTLServices._2008._01.DefaultFaultContract) {
+              throw (FaultContracts.GOTLServices._2008._01.DefaultFaultContract) axisFaultException.detail;
+         }
+   }
   throw axisFaultException;
 }
     }

@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://bank.upem.fr" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://bank.upem.fr" xmlns:intf="http://bank.upem.fr" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://bank.upem.fr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="isValid">
+    <complexType>
+     <sequence>
+      <element name="number" type="xsd:long"/>
+      <element name="name" type="xsd:string"/>
+      <element name="firstname" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="isValidResponse">
+    <complexType>
+     <sequence>
+      <element name="isValidReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getCurrency">
+    <complexType/>
+   </element>
+   <element name="getCurrencyResponse">
+    <complexType>
+     <sequence>
+      <element name="getCurrencyReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="deposit">
+    <complexType>
+     <sequence>
+      <element name="amount" type="xsd:double"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="depositResponse">
+    <complexType/>
+   </element>
+   <element name="withdrawal">
+    <complexType>
+     <sequence>
+      <element name="amount" type="xsd:double"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="withdrawalResponse">
+    <complexType>
+     <sequence>
+      <element name="withdrawalReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="authorizedPayment">
+    <complexType>
+     <sequence>
+      <element name="amount" type="xsd:double"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="authorizedPaymentResponse">
+    <complexType>
+     <sequence>
+      <element name="authorizedPaymentReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="valueOfBalance">
+    <complexType/>
+   </element>
+   <element name="valueOfBalanceResponse">
+    <complexType>
+     <sequence>
+      <element name="valueOfBalanceReturn" type="xsd:double"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="isValidRequest">
+
+      <wsdl:part element="impl:isValid" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="valueOfBalanceRequest">
+
+      <wsdl:part element="impl:valueOfBalance" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCurrencyRequest">
+
+      <wsdl:part element="impl:getCurrency" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="isValidResponse">
+
+      <wsdl:part element="impl:isValidResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="authorizedPaymentResponse">
+
+      <wsdl:part element="impl:authorizedPaymentResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCurrencyResponse">
+
+      <wsdl:part element="impl:getCurrencyResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="authorizedPaymentRequest">
+
+      <wsdl:part element="impl:authorizedPayment" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="depositRequest">
+
+      <wsdl:part element="impl:deposit" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="depositResponse">
+
+      <wsdl:part element="impl:depositResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="withdrawalRequest">
+
+      <wsdl:part element="impl:withdrawal" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="withdrawalResponse">
+
+      <wsdl:part element="impl:withdrawalResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="valueOfBalanceResponse">
+
+      <wsdl:part element="impl:valueOfBalanceResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="Account">
+
+      <wsdl:operation name="isValid">
+
+         <wsdl:input message="impl:isValidRequest" name="isValidRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:isValidResponse" name="isValidResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getCurrency">
+
+         <wsdl:input message="impl:getCurrencyRequest" name="getCurrencyRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getCurrencyResponse" name="getCurrencyResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deposit">
+
+         <wsdl:input message="impl:depositRequest" name="depositRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:depositResponse" name="depositResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="withdrawal">
+
+         <wsdl:input message="impl:withdrawalRequest" name="withdrawalRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:withdrawalResponse" name="withdrawalResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="authorizedPayment">
+
+         <wsdl:input message="impl:authorizedPaymentRequest" name="authorizedPaymentRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:authorizedPaymentResponse" name="authorizedPaymentResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="valueOfBalance">
+
+         <wsdl:input message="impl:valueOfBalanceRequest" name="valueOfBalanceRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:valueOfBalanceResponse" name="valueOfBalanceResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="AccountSoapBinding" type="impl:Account">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="isValid">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="isValidRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="isValidResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getCurrency">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getCurrencyRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getCurrencyResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="deposit">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="depositRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="depositResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="withdrawal">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="withdrawalRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="withdrawalResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="authorizedPayment">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="authorizedPaymentRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="authorizedPaymentResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="valueOfBalance">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="valueOfBalanceRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="valueOfBalanceResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="AccountService">
+
+      <wsdl:port binding="impl:AccountSoapBinding" name="Account">
+
+         <wsdlsoap:address location="http://tempuri.org/server/services/Account"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
