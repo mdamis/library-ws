@@ -35,6 +35,12 @@ public class LibraryClientScenario {
 				System.out.println(library.borrowBook(book, mperouma));
 			}
 			
+			for(Book book : books) {
+				System.out.println(library.returnBook(book, bcrochez));
+				System.out.println(library.returnBook(book, mdamis));
+				System.out.println(library.returnBook(book, mperouma));
+			}
+			
 			books = library.getAllBooks();
 			for (Book book : books) {
 				if(book.isSaleable()) {

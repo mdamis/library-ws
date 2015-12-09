@@ -84,7 +84,9 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 			ArrayBlockingQueue<User> queue = waitingLists.get(book.getISBN());
 			User user = queue.poll();
 			book.setPatron(user);
-			user.bookBorrowed(book);
+			if(user != null) {
+				user.bookBorrowed(book);
+			}
 		}
 	}
 
@@ -96,10 +98,12 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 			if (!user.equals(book.getPatron())) {
 				return false;
 			}
-			System.out.println(book.getPatron() + " is returning book " + book.getISBN());
+			System.out.println(book.getPatron().getUsername() + " is returning book " + book.getISBN());
 			updatePatron(book);
 			user.bookReturned(book);
-			System.out.println("new patron is " + book.getPatron());
+			if(book.getPatron() != null) {
+				System.out.println("new patron is " + book.getPatron().getUsername());
+			}
 			return true;
 		}
 		return false;
