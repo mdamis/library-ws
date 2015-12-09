@@ -12,5 +12,9 @@ public interface Library extends Remote {
 	public String borrowBook(Book book, User user) throws RemoteException;
 
 	public boolean returnBook(Book book, User user) throws RemoteException;
+	
+	public boolean addUser(User user) throws RemoteException;
+	
+	public User connect(String username) throws RemoteException;
 
 }

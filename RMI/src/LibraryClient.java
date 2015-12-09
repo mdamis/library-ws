@@ -8,12 +8,10 @@ import java.util.List;
 
 public class LibraryClient {
 	private final Library library;
-	private final User user;
+	private User user = null;
 
-	public LibraryClient(String user, String serviceName)
-			throws MalformedURLException, RemoteException, NotBoundException {
-		library = (Library) Naming.lookup(serviceName);
-		this.user = new UserImpl(user);
+	public LibraryClient() throws MalformedURLException, RemoteException, NotBoundException {
+		library = (Library) Naming.lookup("LibraryService");
 	}
 
 	public Library getLibrary() {
@@ -28,6 +26,10 @@ public class LibraryClient {
 		return user;
 	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
 	public String getUsername() {
 		try {
 			return user.getUsername();
@@ -55,9 +57,11 @@ public class LibraryClient {
 
 	public static void main(String[] args) {
 		try {
+			
 			Application.launch(GUI.class, args);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 }

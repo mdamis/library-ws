@@ -11,6 +11,7 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 
 	private final ConcurrentHashMap<String, Book> books = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String, ArrayBlockingQueue<User>> waitingLists = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
 
 	public LibraryImpl() throws RemoteException {
 		super();
@@ -102,6 +103,25 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean addUser(User user) throws RemoteException {
+		if(users.containsKey(user.getUsername())) {
+			return false;
+		} else {
+			users.put(user.getUsername(), user);
+			return true;
+		}
+	}
+
+	@Override
+	public User connect(String username) throws RemoteException {
+		if(users.containsKey(username)) {
+			System.out.println(username + " is now connected.");
+			return users.get(username);
+		}
+		return null;
 	}
 
 }

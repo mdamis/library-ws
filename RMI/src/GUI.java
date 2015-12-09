@@ -32,6 +32,12 @@ public class GUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		try {
+			client = new LibraryClient();
+		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		primaryStage.setTitle("MLV Library");
 		Scene scene = createSignInPage(primaryStage);
 		showScene(primaryStage, scene);
@@ -44,8 +50,8 @@ public class GUI extends Application {
 		scenetitle.setId("welcome-text");
 		grid.add(scenetitle, 0, 0, 2, 1);
 
-		TextField userTextField = addTextField(grid, "User name:", 0, 1);
-		
+		TextField userTextField = addTextField(grid, "Username:", 0, 1);
+
 		/*
 		 * Label pw = new Label("Password:"); grid.add(pw, 0, 2); PasswordField
 		 * pwBox = new PasswordField(); grid.add(pwBox, 1, 2);
@@ -59,7 +65,7 @@ public class GUI extends Application {
 
 		final Text actiontarget = new Text();
 		actiontarget.setId("actiontarget");
-		grid.add(actiontarget, 0, 6);
+		grid.add(actiontarget, 1, 1);
 		GridPane.setColumnSpan(actiontarget, 2);
 		GridPane.setHalignment(actiontarget, RIGHT);
 		actiontarget.setId("actiontarget");
@@ -73,35 +79,38 @@ public class GUI extends Application {
 		userTextField.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				if(event.getCode() == KeyCode.ENTER) {
+				if (event.getCode() == KeyCode.ENTER) {
 					connectionHandler(primaryStage, userTextField, actiontarget);
 				}
 			}
 		});
 
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
-		scene.getStylesheets().add(
-				GUI.class.getResource("style.css").toExternalForm());
+		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
 		return scene;
 	}
-	
-	private void connectionHandler(Stage primaryStage,
-								   TextField userTextField, final Text actiontarget) {
-		String user = userTextField.getText();
-		System.out.println("user: "+user);
-		if (user.equals("")) {
+
+	private void connectionHandler(Stage primaryStage, TextField userTextField, final Text actiontarget) {
+		String username = userTextField.getText();
+		System.out.println("user: " + username);
+		if (username.equals("")) {
 			actiontarget.setFill(Color.FIREBRICK);
 			actiontarget.setText("Enter a valid user name");
 		} else {
 			try {
-				client = new LibraryClient(user, "LibraryService");
-			} catch (MalformedURLException | RemoteException
-					| NotBoundException e1) {
-				e1.printStackTrace();
+				client.setUser(client.getLibrary().connect(username));
+			} catch (RemoteException e) {
+				e.printStackTrace();
 				// TODO create an error connection page
 			}
-			Scene scene = createIndexPage(primaryStage);
-			showScene(primaryStage, scene);
+			if (client.getUser() == null) {
+				actiontarget.setFill(Color.FIREBRICK);
+				actiontarget.setText("Enter a valid user name");
+			} else {
+				System.out.println("Connected as " + client.getUsername());
+				Scene scene = createIndexPage(primaryStage);
+				showScene(primaryStage, scene);
+			}
 		}
 	}
 
@@ -121,7 +130,7 @@ public class GUI extends Application {
 	@SuppressWarnings("unchecked")
 	private Scene createIndexPage(Stage stage) {
 
-		//Get Books from the Library
+		// Get Books from the Library
 
 		try {
 			books = client.getAllBooks();
@@ -129,33 +138,33 @@ public class GUI extends Application {
 			e.printStackTrace();
 		}
 
-		//Create an ObservableList from the ArrayList
+		// Create an ObservableList from the ArrayList
 		ObservableList<Book> observableBooks = FXCollections.observableArrayList(books);
 
-		//Create table
+		// Create table
 		TableView<Book> tableView = new TableView<>();
 		tableView.setEditable(false);
-		//Create columns
+		// Create columns
 		TableColumn<Book, String> isbnColumn = new TableColumn<>("ISBN");
 		TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
 		TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
-		//Link columns to the corresponding BookImpl properties
+		// Link columns to the corresponding BookImpl properties
 		isbnColumn.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
 		titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
 		authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
 
 		tableView.setItems(observableBooks);
 		tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn);
-		//Customize the TableView
+		// Customize the TableView
 		tableView.setPrefWidth(500);
 		tableView.setPrefHeight(400);
 		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-		//Handle double click on a table row
+		// Handle double click on a table row
 		tableView.setRowFactory(tv -> {
 			TableRow<Book> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
-				if(event.getClickCount() == 2 && (!row.isEmpty())) {
+				if (event.getClickCount() == 2 && (!row.isEmpty())) {
 					Book book = row.getItem();
 					Scene scene = createBookDetailsPage(stage, book);
 					showScene(stage, scene);
@@ -164,13 +173,13 @@ public class GUI extends Application {
 			return row;
 		});
 
-		//Create the grid
+		// Create the grid
 		GridPane grid = createGrid();
 
 		Text sceneTitle = new Text("Connected as " + client.getUsername());
 		sceneTitle.setId("user-name");
 		grid.add(sceneTitle, 0, 0);
-		
+
 		Button btnRefresh = new Button("Refresh");
 		grid.add(btnRefresh, 0, 1);
 		btnRefresh.setOnAction(new EventHandler<ActionEvent>() {
@@ -187,7 +196,7 @@ public class GUI extends Application {
 
 			@Override
 			public void handle(ActionEvent event) {
-				if(!isActive) {
+				if (!isActive) {
 					try {
 						books = client.getUser().getBorrowedBooks();
 					} catch (RemoteException e) {
@@ -205,7 +214,7 @@ public class GUI extends Application {
 				isActive = !isActive;
 			}
 		});
-		
+
 		Button btnAddBook = new Button("Add a book");
 		grid.add(btnAddBook, 2, 1);
 		btnAddBook.setOnAction(new EventHandler<ActionEvent>() {
@@ -215,7 +224,7 @@ public class GUI extends Application {
 				showScene(stage, scene);
 			}
 		});
-		
+
 		grid.add(tableView, 0, 2, 3, 1);
 
 		Button btnQuit = new Button("Quit");
@@ -241,8 +250,8 @@ public class GUI extends Application {
 			grid.add(new Text("Author : " + book.getAuthor()), 0, 2);
 			grid.add(new Text("Summary :\n" + book.getSummary()), 1, 0);
 			grid.add(new Text("Available : " + book.isAvailable()), 0, 3);
-			if(!book.isAvailable()) {
-				//grid.add(new Text("Patron : " + book.getPatron().getUsername()), 1, 3);
+			if (!book.isAvailable()) {
+				grid.add(new Text("Patron : " + book.getPatron().getUsername()), 1, 3);
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -266,15 +275,15 @@ public class GUI extends Application {
 
 	private Scene createAddBookPage(Stage stage) {
 		GridPane grid = createGrid();
-		
+
 		Text sceneTitle = new Text("Add a book");
 		sceneTitle.setId("welcome-text");
 		grid.add(sceneTitle, 0, 0);
-		
+
 		TextField isbnField = addTextField(grid, "ISBN:", 0, 1);
 		TextField titleField = addTextField(grid, "Title:", 0, 2);
 		TextField authorField = addTextField(grid, "Author:", 0, 3);
-		
+
 		Button btnSend = new Button("OK");
 		grid.add(btnSend, 0, 5);
 		btnSend.setOnAction(new EventHandler<ActionEvent>() {
@@ -283,7 +292,7 @@ public class GUI extends Application {
 				String isbn = isbnField.getText();
 				String title = titleField.getText();
 				String author = authorField.getText();
-				if(isbn.equals("") || title.equals("") || author.equals("")) {
+				if (isbn.equals("") || title.equals("") || author.equals("")) {
 					// TODO show error
 					System.err.println("invalid book");
 				} else {
@@ -293,7 +302,7 @@ public class GUI extends Application {
 				}
 			}
 		});
-		
+
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
 		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
 
@@ -304,7 +313,7 @@ public class GUI extends Application {
 		Label lab = new Label(label);
 		grid.add(lab, col, row);
 		TextField textField = new TextField();
-		grid.add(textField, col+1, row);
+		grid.add(textField, col + 1, row);
 		return textField;
 	}
 

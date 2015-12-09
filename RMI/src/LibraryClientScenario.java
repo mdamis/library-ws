@@ -6,9 +6,13 @@ public class LibraryClientScenario {
 		try {
 			Library library = (Library) Naming.lookup("LibraryService");
 			
-			User bcrochez = new UserImpl("bcrochez");
-			User mdamis = new UserImpl("mdamis");
-			User mperouma = new UserImpl("mperouma");
+			User bcrochez = library.connect("bcroche");
+			if(bcrochez == null) {
+				System.out.println("Authentication failed.");
+			}
+			bcrochez = library.connect("bcrochez");
+			User mdamis = library.connect("mdamis");
+			User mperouma = library.connect("mperouma");
 			
 			List<Book> books = library.getAllBooks();
 
