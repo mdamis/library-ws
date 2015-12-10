@@ -5,7 +5,7 @@
   <service name="Library" provider="java:RPC" style="wrapped" use="literal">
       <parameter name="wsdlTargetNamespace" value="http://library.upem.fr"/>
       <parameter name="wsdlServiceElement" value="LibraryService"/>
-      <parameter name="schemaQualified" value="http://library.upem.fr"/>
+      <parameter name="schemaQualified" value="http://book.upem.fr,http://library.upem.fr"/>
       <parameter name="wsdlServicePort" value="Library"/>
       <parameter name="className" value="fr.upem.library.Library"/>
       <parameter name="wsdlPortType" value="Library"/>
@@ -17,7 +17,7 @@
         <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:price" type="tns:float"/>
         <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:introductionDate" type="tns:string"/>
       </operation>
-      <operation xmlns:operNS="http://library.upem.fr" xmlns:retNS="http://library.upem.fr" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="getAllBooks" qname="operNS:getAllBooks" returnQName="retNS:getAllBooksReturn" returnType="rtns:anyType" soapAction="">
+      <operation xmlns:operNS="http://library.upem.fr" xmlns:retNS="http://library.upem.fr" xmlns:rtns="http://book.upem.fr" name="getAllBooks" qname="operNS:getAllBooks" returnQName="retNS:getAllBooksReturn" returnType="rtns:Book" soapAction="">
       </operation>
       <operation xmlns:operNS="http://library.upem.fr" name="sellBook" qname="operNS:sellBook" soapAction="">
         <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:isbn" type="tns:string"/>
@@ -25,11 +25,6 @@
       </operation>
       <parameter name="allowedMethods" value="add getAllBooks sellBook"/>
 
-      <arrayMapping xmlns:ns="http://library.upem.fr" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema" qname="ns:&gt;getAllBooksResponse" type="java:java.lang.Object[]" innerType="cmp-ns:anyType" encodingStyle=""/>
-      <typeMapping xmlns:ns="http://library.upem.fr" qname="ns:&gt;add" type="java:fr.upem.library.Add" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
-      <typeMapping xmlns:ns="http://library.upem.fr" qname="ns:&gt;addResponse" type="java:fr.upem.library.AddResponse" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
-      <typeMapping xmlns:ns="http://library.upem.fr" qname="ns:&gt;sellBookResponse" type="java:fr.upem.library.SellBookResponse" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
-      <typeMapping xmlns:ns="http://library.upem.fr" qname="ns:&gt;getAllBooks" type="java:fr.upem.library.GetAllBooks" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
-      <typeMapping xmlns:ns="http://library.upem.fr" qname="ns:&gt;sellBook" type="java:fr.upem.library.SellBook" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+      <typeMapping xmlns:ns="http://book.upem.fr" qname="ns:Book" type="java:fr.upem.book.Book" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
   </service>
 </deployment>

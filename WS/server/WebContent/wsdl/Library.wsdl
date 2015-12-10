@@ -25,7 +25,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
    <element name="getAllBooksResponse">
     <complexType>
      <sequence>
-      <element maxOccurs="unbounded" name="getAllBooksReturn" type="xsd:anyType"/>
+      <element maxOccurs="unbounded" name="getAllBooksReturn" type="tns1:Book"/>
      </sequence>
     </complexType>
    </element>
@@ -40,6 +40,22 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
    <element name="sellBookResponse">
     <complexType/>
    </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://book.upem.fr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <complexType name="Book">
+    <sequence>
+     <element name="ISBN" nillable="true" type="xsd:string"/>
+     <element name="author" nillable="true" type="xsd:string"/>
+     <element name="available" type="xsd:boolean"/>
+     <element name="currency" nillable="true" type="xsd:string"/>
+     <element name="exemplary" type="xsd:int"/>
+     <element name="price" type="xsd:float"/>
+     <element name="reviews" nillable="true" type="xsd:string"/>
+     <element name="saleable" type="xsd:boolean"/>
+     <element name="summary" nillable="true" type="xsd:string"/>
+     <element name="title" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
   </schema>
  </wsdl:types>
 

@@ -7,8 +7,8 @@
   <ns1:parameter name="dotNetSoapEncFix" value="true"/>
   <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
   <ns1:parameter name="sendXMLDeclaration" value="true"/>
-  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
   <ns1:parameter name="sendXsiTypes" value="true"/>
+  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
   <ns1:requestFlow>
    <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
     <ns1:parameter name="scope" value="session"/>
@@ -53,6 +53,29 @@
   <ns1:parameter name="wsdlTargetNamespace" value="http://user.upem.fr"/>
   <ns1:parameter name="wsdlPortType" value="UserManager"/>
   <ns1:parameter name="scope" value="application"/>
+ </ns1:service>
+ <ns1:service name="Library" provider="java:RPC" style="wrapped" use="literal">
+  <ns1:operation name="add" qname="ns4:add" soapAction="" xmlns:ns4="http://library.upem.fr">
+   <ns1:parameter qname="ns4:isbn" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns4:title" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns4:author" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns4:price" type="xsd:float" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns4:introductionDate" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="getAllBooks" qname="ns5:getAllBooks" returnQName="ns5:getAllBooksReturn" returnType="ns6:Book" soapAction="" xmlns:ns5="http://library.upem.fr" xmlns:ns6="http://book.upem.fr"/>
+  <ns1:operation name="sellBook" qname="ns7:sellBook" soapAction="" xmlns:ns7="http://library.upem.fr">
+   <ns1:parameter qname="ns7:isbn" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns7:exemplary" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:parameter name="allowedMethods" value="add getAllBooks sellBook"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="wsdlPortType" value="Library"/>
+  <ns1:parameter name="className" value="fr.upem.library.Library"/>
+  <ns1:parameter name="wsdlServicePort" value="Library"/>
+  <ns1:parameter name="schemaQualified" value="http://book.upem.fr,http://library.upem.fr"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://library.upem.fr"/>
+  <ns1:parameter name="wsdlServiceElement" value="LibraryService"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns8:Book" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:fr.upem.book.Book" xmlns:ns8="http://book.upem.fr"/>
  </ns1:service>
  <ns1:transport name="http">
   <ns1:requestFlow>
