@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 public class Book {
 
-	private String isbn;
-	private String title;
-	private String author;
-	private LocalDate introductionDate;
+	private final String isbn;
+	private final String title;
+	private final String author;
+	private final LocalDate introductionDate;
 	private final ArrayList<String> reviews = new ArrayList<String>();
 	//private final ArrayList<User> borrowList = new ArrayList<User>();
 	//private boolean hasBeenBorrowed = false;
@@ -26,7 +26,10 @@ public class Book {
 	 * Default constructor
 	 */
 	public Book() {
-		//
+		isbn = "0";
+		title = "newTitle";
+		author = "newAuthor";
+		introductionDate = LocalDate.now();
 	}
 
 	public Book(String isbn, String title, String author, float price, LocalDate introductionDate) {

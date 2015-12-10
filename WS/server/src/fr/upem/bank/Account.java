@@ -4,9 +4,9 @@ public class Account{
 
 	private double balance;
 	private int number;
-	private String name;
-	private String firstname;
-	private String currency;
+	private final String name;
+	private final String firstname;
+	private final String currency;
 
 	public Account() {
 		this.balance = 0;
@@ -95,20 +95,8 @@ public class Account{
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getFirstname() {
 		return firstname;
-	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
-	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
 	}
 
 	/*

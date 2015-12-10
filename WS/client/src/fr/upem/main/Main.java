@@ -58,9 +58,7 @@ public class Main {
 		Bank bank;
 		try {
 			bank = new BankServiceLocator().getBank();
-			System.out.println(bank.getSize());
 			int myBankId = bank.addAccount("peroumalle", "mourougan", "EUR");
-			System.out.println(bank.getSize());
 			System.out.println(myBankId);
 			String myCurrency = bank.getAccountCurrency(myBankId);
 			System.out.println(myCurrency);
@@ -68,11 +66,11 @@ public class Main {
 			bank.deposit(myBankId, 5*getConvertRate("EUR",myCurrency));
 			System.out.println(bank.getDetailAccount(myBankId));			
 			//deposit 10000 JPY
-			bank.deposit(myBankId,10000*getConvertRate("JPY",myCurrency));
+			bank.deposit(myBankId, 10000*getConvertRate("JPY",myCurrency));
 			System.out.println(bank.getDetailAccount(myBankId));
 			
 			//withdrawal 10 GBP
-			bank.deposit(myBankId,10*getConvertRate("GBP",myCurrency));
+			bank.deposit(myBankId, 10*getConvertRate("GBP",myCurrency));
 			System.out.println(bank.getDetailAccount(myBankId));
 			
 		} catch (ServiceException e) {

@@ -4,6 +4,43 @@
 Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema elementFormDefault="qualified" targetNamespace="http://bank.upem.fr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="getAccount">
+    <complexType>
+     <sequence>
+      <element name="accountNumber" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getAccountResponse">
+    <complexType>
+     <sequence>
+      <element name="getAccountReturn" type="impl:Account"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="Account">
+    <sequence>
+     <element name="balance" type="xsd:double"/>
+     <element name="currency" nillable="true" type="xsd:string"/>
+     <element name="firstname" nillable="true" type="xsd:string"/>
+     <element name="name" nillable="true" type="xsd:string"/>
+     <element name="number" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <element name="removeAccount">
+    <complexType>
+     <sequence>
+      <element name="accountNumber" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="removeAccountResponse">
+    <complexType>
+     <sequence>
+      <element name="removeAccountReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
    <element name="addAccount">
     <complexType>
      <sequence>
@@ -20,20 +57,6 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      </sequence>
     </complexType>
    </element>
-   <element name="removeAccount">
-    <complexType>
-     <sequence>
-      <element name="accountNumber" type="xsd:int"/>
-     </sequence>
-    </complexType>
-   </element>
-   <element name="removeAccountResponse">
-    <complexType>
-     <sequence>
-      <element name="removeAccountReturn" type="xsd:boolean"/>
-     </sequence>
-    </complexType>
-   </element>
    <element name="deposit">
     <complexType>
      <sequence>
@@ -46,6 +69,20 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
     <complexType>
      <sequence>
       <element name="depositReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDetailAccount">
+    <complexType>
+     <sequence>
+      <element name="accountId" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDetailAccountResponse">
+    <complexType>
+     <sequence>
+      <element name="getDetailAccountReturn" type="xsd:string"/>
      </sequence>
     </complexType>
    </element>
@@ -78,30 +115,6 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      </sequence>
     </complexType>
    </element>
-   <element name="getDetailAccount">
-    <complexType>
-     <sequence>
-      <element name="accountId" type="xsd:int"/>
-     </sequence>
-    </complexType>
-   </element>
-   <element name="getDetailAccountResponse">
-    <complexType>
-     <sequence>
-      <element name="getDetailAccountReturn" type="xsd:string"/>
-     </sequence>
-    </complexType>
-   </element>
-   <element name="getSize">
-    <complexType/>
-   </element>
-   <element name="getSizeResponse">
-    <complexType>
-     <sequence>
-      <element name="getSizeReturn" type="xsd:int"/>
-     </sequence>
-    </complexType>
-   </element>
   </schema>
  </wsdl:types>
 
@@ -129,9 +142,9 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
-   <wsdl:message name="getSizeResponse">
+   <wsdl:message name="getAccountRequest">
 
-      <wsdl:part element="impl:getSizeResponse" name="parameters">
+      <wsdl:part element="impl:getAccount" name="parameters">
 
       </wsdl:part>
 
@@ -169,6 +182,14 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
+   <wsdl:message name="getAccountResponse">
+
+      <wsdl:part element="impl:getAccountResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
    <wsdl:message name="addAccountResponse">
 
       <wsdl:part element="impl:addAccountResponse" name="parameters">
@@ -193,14 +214,6 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
-   <wsdl:message name="getSizeRequest">
-
-      <wsdl:part element="impl:getSize" name="parameters">
-
-      </wsdl:part>
-
-   </wsdl:message>
-
    <wsdl:message name="getAccountCurrencyResponse">
 
       <wsdl:part element="impl:getAccountCurrencyResponse" name="parameters">
@@ -219,13 +232,13 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    <wsdl:portType name="Bank">
 
-      <wsdl:operation name="addAccount">
+      <wsdl:operation name="getAccount">
 
-         <wsdl:input message="impl:addAccountRequest" name="addAccountRequest">
+         <wsdl:input message="impl:getAccountRequest" name="getAccountRequest">
 
        </wsdl:input>
 
-         <wsdl:output message="impl:addAccountResponse" name="addAccountResponse">
+         <wsdl:output message="impl:getAccountResponse" name="getAccountResponse">
 
        </wsdl:output>
 
@@ -243,6 +256,18 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="addAccount">
+
+         <wsdl:input message="impl:addAccountRequest" name="addAccountRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:addAccountResponse" name="addAccountResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
       <wsdl:operation name="deposit">
 
          <wsdl:input message="impl:depositRequest" name="depositRequest">
@@ -250,6 +275,18 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
        </wsdl:input>
 
          <wsdl:output message="impl:depositResponse" name="depositResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDetailAccount">
+
+         <wsdl:input message="impl:getDetailAccountRequest" name="getDetailAccountRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getDetailAccountResponse" name="getDetailAccountResponse">
 
        </wsdl:output>
 
@@ -279,47 +316,23 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="getDetailAccount">
-
-         <wsdl:input message="impl:getDetailAccountRequest" name="getDetailAccountRequest">
-
-       </wsdl:input>
-
-         <wsdl:output message="impl:getDetailAccountResponse" name="getDetailAccountResponse">
-
-       </wsdl:output>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="getSize">
-
-         <wsdl:input message="impl:getSizeRequest" name="getSizeRequest">
-
-       </wsdl:input>
-
-         <wsdl:output message="impl:getSizeResponse" name="getSizeResponse">
-
-       </wsdl:output>
-
-      </wsdl:operation>
-
    </wsdl:portType>
 
    <wsdl:binding name="BankSoapBinding" type="impl:Bank">
 
       <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
-      <wsdl:operation name="addAccount">
+      <wsdl:operation name="getAccount">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="addAccountRequest">
+         <wsdl:input name="getAccountRequest">
 
             <wsdlsoap:body use="literal"/>
 
          </wsdl:input>
 
-         <wsdl:output name="addAccountResponse">
+         <wsdl:output name="getAccountResponse">
 
             <wsdlsoap:body use="literal"/>
 
@@ -345,6 +358,24 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
+      <wsdl:operation name="addAccount">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="addAccountRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="addAccountResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
       <wsdl:operation name="deposit">
 
          <wsdlsoap:operation soapAction=""/>
@@ -356,6 +387,24 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
          </wsdl:input>
 
          <wsdl:output name="depositResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDetailAccount">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getDetailAccountRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getDetailAccountResponse">
 
             <wsdlsoap:body use="literal"/>
 
@@ -399,49 +448,13 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="getDetailAccount">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="getDetailAccountRequest">
-
-            <wsdlsoap:body use="literal"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="getDetailAccountResponse">
-
-            <wsdlsoap:body use="literal"/>
-
-         </wsdl:output>
-
-      </wsdl:operation>
-
-      <wsdl:operation name="getSize">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="getSizeRequest">
-
-            <wsdlsoap:body use="literal"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="getSizeResponse">
-
-            <wsdlsoap:body use="literal"/>
-
-         </wsdl:output>
-
-      </wsdl:operation>
-
    </wsdl:binding>
 
    <wsdl:service name="BankService">
 
       <wsdl:port binding="impl:BankSoapBinding" name="Bank">
 
-         <wsdlsoap:address location="http://localhost:8080/server/services/Bank"/>
+         <wsdlsoap:address location="http://localhost:8080/Library-WS/services/Bank"/>
 
       </wsdl:port>
 

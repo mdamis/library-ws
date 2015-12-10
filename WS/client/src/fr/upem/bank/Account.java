@@ -16,7 +16,7 @@ public class Account  implements java.io.Serializable {
 
     private java.lang.String name;
 
-    private long number;
+    private int number;
 
     public Account() {
     }
@@ -26,7 +26,7 @@ public class Account  implements java.io.Serializable {
            java.lang.String currency,
            java.lang.String firstname,
            java.lang.String name,
-           long number) {
+           int number) {
            this.balance = balance;
            this.currency = currency;
            this.firstname = firstname;
@@ -120,7 +120,7 @@ public class Account  implements java.io.Serializable {
      * 
      * @return number
      */
-    public long getNumber() {
+    public int getNumber() {
         return number;
     }
 
@@ -130,7 +130,7 @@ public class Account  implements java.io.Serializable {
      * 
      * @param number
      */
-    public void setNumber(long number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 
@@ -178,7 +178,7 @@ public class Account  implements java.io.Serializable {
         if (getName() != null) {
             _hashCode += getName().hashCode();
         }
-        _hashCode += new Long(getNumber()).hashCode();
+        _hashCode += getNumber();
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -216,7 +216,7 @@ public class Account  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("number");
         elemField.setXmlName(new javax.xml.namespace.QName("http://bank.upem.fr", "number"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
     }

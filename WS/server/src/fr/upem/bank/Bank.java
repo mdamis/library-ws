@@ -4,26 +4,18 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Bank {
-	public HashMap<Integer,Account> mapAccount = new HashMap<Integer,Account>();
-	
-	public HashMap<Integer, Account> getMapAccount() {
-		return mapAccount;
-	}
+	private final HashMap<Integer,Account> mapAccount = new HashMap<>();
 
-	public void setMapAccount(HashMap<Integer, Account> mapAccount) {
-		this.mapAccount = mapAccount;
-	}
-
+	/**
+	 * Default constructor
+	 */
 	public Bank(){
 		
 	}
 	
-	public int getSize(){
-		return mapAccount.size();
-	}
-	public int addAccount(String name,String firstname,String currency){
+	public int addAccount(String name,String firstname,String currency) {
 		int randomAccountId;
-	    do{
+	    do {
 	    	Random randomGenerator = new Random();
 		    randomAccountId = randomGenerator.nextInt(999999);
 	    }while(mapAccount.containsKey(randomAccountId));
@@ -40,13 +32,13 @@ public class Bank {
 		}
 		return false;
 	}
-	/*
-	public Account getAccount(int accountNumber){
+	
+	public Account getAccount(int accountNumber) {
 		return mapAccount.get(accountNumber);
 	}
-	*/
+	
 	public String getDetailAccount(int accountId){
-		Account account= mapAccount.get(accountId);
+		Account account = mapAccount.get(accountId);
 		if(account!= null){
 			return  account.getName()+" "+account.getFirstname()+"\nbalance :" + account.getBalance() + "\nCurrency :"+account.getCurrency()+"\n";
 		}else{
@@ -55,15 +47,15 @@ public class Bank {
 	}
 	public String getAccountCurrency(int accountId){
 		Account account= mapAccount.get(accountId);
-		if(account!= null){
+		if(account != null){
 			return account.getCurrency();
 		}else{
 			return null;
 		}
 	}
-	public boolean deposit(int accountId,double amount){
+	public boolean deposit(int accountId,double amount) {
 		Account account= mapAccount.get(accountId);
-		if(account!= null){
+		if(account!= null) {
 			return account.deposit(amount);
 		}else{
 			return false;
@@ -71,11 +63,11 @@ public class Bank {
 		
 	}
 
-	public boolean withdrawal(int accountId,double amount){
+	public boolean withdrawal(int accountId,double amount) {
 		Account account= mapAccount.get(accountId);
-		if(account!= null){
+		if(account!= null) {
 			return account.withdrawal(amount);
-		}else{
+		} else {
 			return false;
 		}
 	}
