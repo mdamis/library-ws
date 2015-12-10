@@ -67,10 +67,16 @@ public class GUI extends Application {
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().add(btn);
 		grid.add(hbBtn, 1, 4);
+		
+		Button btnQuit = new Button("Quit");
+		HBox hbBtnQuit = new HBox(10);
+		hbBtnQuit.setAlignment(Pos.BOTTOM_LEFT);
+		hbBtnQuit.getChildren().add(btnQuit);
+		grid.add(hbBtnQuit, 1, 4);
 
 		final Text actiontarget = new Text();
 		actiontarget.setId("actiontarget");
-		grid.add(actiontarget, 0, 4);
+		grid.add(actiontarget, 0, 5);
 		GridPane.setColumnSpan(actiontarget, 2);
 		GridPane.setHalignment(actiontarget, RIGHT);
 		actiontarget.setId("actiontarget");
@@ -79,6 +85,12 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				connectionHandler(primaryStage, userTextField, actiontarget);
+			}
+		});
+		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				primaryStage.close();
 			}
 		});
 		userTextField.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -313,14 +325,27 @@ public class GUI extends Application {
 
 		Text sceneTitle = new Text("Add a book");
 		sceneTitle.setId("welcome-text");
-		grid.add(sceneTitle, 0, 0);
+		grid.add(sceneTitle, 0, 0, 2, 1);
 
 		TextField isbnField = addTextField(grid, "ISBN:", 0, 1);
 		TextField titleField = addTextField(grid, "Title:", 0, 2);
 		TextField authorField = addTextField(grid, "Author:", 0, 3);
 
+		Button backButton = new Button("Back");
+		grid.add(backButton, 0, 5);
+		backButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Scene scene = createIndexPage(stage);
+				showScene(stage, scene);
+			}
+		});
+		
 		Button btnSend = new Button("OK");
-		grid.add(btnSend, 0, 5);
+		HBox hbBtnSend = new HBox(10);
+		hbBtnSend.setAlignment(Pos.BOTTOM_RIGHT);
+		hbBtnSend.getChildren().add(btnSend);
+		grid.add(hbBtnSend, 1, 5);
 		btnSend.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
