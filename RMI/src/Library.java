@@ -3,7 +3,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public interface Library extends Remote {
-	public void addBook(String isbn, String title, String author, String introductionDate) throws RemoteException;
+	public boolean addBook(String isbn, String title, String author, String introductionDate) throws RemoteException;
 
 	public void removeBook(Book book) throws RemoteException;
 
