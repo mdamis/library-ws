@@ -37,12 +37,6 @@ public class Account{
 	}
 
 	public boolean deposit(double amount){
-		/*
-		ICurrencyService iCurrency = new CurrencyServiceLocator().getBasicHttpBinding_ICurrencyService();
-		Currency c = iCurrency.getConversionRate(CurrencyCode.fromString(newCurency),
-				CurrencyCode.fromString(this.currency));
-		Double r = c.getRate();
-		*/
 		if (amount >= 0) {
 			balance += (amount);
 			return true;
@@ -53,11 +47,6 @@ public class Account{
 	}
 
 	public boolean withdrawal(double amount){
-		/*ICurrencyService iCurrency = new CurrencyServiceLocator().getBasicHttpBinding_ICurrencyService();
-		Currency c = iCurrency.getConversionRate(CurrencyCode.fromString(newCurency),
-				CurrencyCode.fromString(this.currency));
-		Double rate = c.getRate();
-		*/
 		if (authorizedPayment(amount)) {
 			balance -= (amount);
 			return true;

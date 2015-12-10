@@ -44,16 +44,16 @@ public class UserManagerProxy implements fr.upem.user.UserManager {
     return userManager;
   }
   
-  public void registerUser(java.lang.String user, java.lang.String password) throws java.rmi.RemoteException{
-    if (userManager == null)
-      _initUserManagerProxy();
-    userManager.registerUser(user, password);
-  }
-  
   public boolean disconnect(java.lang.String user) throws java.rmi.RemoteException{
     if (userManager == null)
       _initUserManagerProxy();
     return userManager.disconnect(user);
+  }
+  
+  public void registerUser(java.lang.String user, java.lang.String password) throws java.rmi.RemoteException{
+    if (userManager == null)
+      _initUserManagerProxy();
+    userManager.registerUser(user, password);
   }
   
   public boolean connect(java.lang.String user, java.lang.String password) throws java.rmi.RemoteException{

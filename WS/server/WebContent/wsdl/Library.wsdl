@@ -5,18 +5,15 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema elementFormDefault="qualified" targetNamespace="http://library.upem.fr" xmlns="http://www.w3.org/2001/XMLSchema">
    <import namespace="http://book.upem.fr"/>
-   <element name="add">
+   <element name="sellBook">
     <complexType>
      <sequence>
       <element name="isbn" type="xsd:string"/>
-      <element name="title" type="xsd:string"/>
-      <element name="author" type="xsd:string"/>
-      <element name="price" type="xsd:float"/>
-      <element name="introductionDate" type="xsd:string"/>
+      <element name="exemplary" type="xsd:int"/>
      </sequence>
     </complexType>
    </element>
-   <element name="addResponse">
+   <element name="sellBookResponse">
     <complexType/>
    </element>
    <element name="getAllBooks">
@@ -29,15 +26,18 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      </sequence>
     </complexType>
    </element>
-   <element name="sellBook">
+   <element name="add">
     <complexType>
      <sequence>
       <element name="isbn" type="xsd:string"/>
-      <element name="exemplary" type="xsd:int"/>
+      <element name="title" type="xsd:string"/>
+      <element name="author" type="xsd:string"/>
+      <element name="price" type="xsd:float"/>
+      <element name="introductionDate" type="xsd:string"/>
      </sequence>
     </complexType>
    </element>
-   <element name="sellBookResponse">
+   <element name="addResponse">
     <complexType/>
    </element>
   </schema>
@@ -109,13 +109,13 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    <wsdl:portType name="Library">
 
-      <wsdl:operation name="add">
+      <wsdl:operation name="sellBook">
 
-         <wsdl:input message="impl:addRequest" name="addRequest">
+         <wsdl:input message="impl:sellBookRequest" name="sellBookRequest">
 
        </wsdl:input>
 
-         <wsdl:output message="impl:addResponse" name="addResponse">
+         <wsdl:output message="impl:sellBookResponse" name="sellBookResponse">
 
        </wsdl:output>
 
@@ -133,13 +133,13 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="sellBook">
+      <wsdl:operation name="add">
 
-         <wsdl:input message="impl:sellBookRequest" name="sellBookRequest">
+         <wsdl:input message="impl:addRequest" name="addRequest">
 
        </wsdl:input>
 
-         <wsdl:output message="impl:sellBookResponse" name="sellBookResponse">
+         <wsdl:output message="impl:addResponse" name="addResponse">
 
        </wsdl:output>
 
@@ -151,17 +151,17 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
-      <wsdl:operation name="add">
+      <wsdl:operation name="sellBook">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="addRequest">
+         <wsdl:input name="sellBookRequest">
 
             <wsdlsoap:body use="literal"/>
 
          </wsdl:input>
 
-         <wsdl:output name="addResponse">
+         <wsdl:output name="sellBookResponse">
 
             <wsdlsoap:body use="literal"/>
 
@@ -187,17 +187,17 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       </wsdl:operation>
 
-      <wsdl:operation name="sellBook">
+      <wsdl:operation name="add">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="sellBookRequest">
+         <wsdl:input name="addRequest">
 
             <wsdlsoap:body use="literal"/>
 
          </wsdl:input>
 
-         <wsdl:output name="sellBookResponse">
+         <wsdl:output name="addResponse">
 
             <wsdlsoap:body use="literal"/>
 
@@ -211,7 +211,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       <wsdl:port binding="impl:LibrarySoapBinding" name="Library">
 
-         <wsdlsoap:address location="http://localhost:8080/Library-WS/services/Library"/>
+         <wsdlsoap:address location="http://localhost:8080/server/services/Library"/>
 
       </wsdl:port>
 

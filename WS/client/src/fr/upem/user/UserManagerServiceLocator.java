@@ -22,7 +22,7 @@ public class UserManagerServiceLocator extends org.apache.axis.client.Service im
     }
 
     // Use to get a proxy class for UserManager
-    private java.lang.String UserManager_address = "http://localhost:8080/Library-WS/services/UserManager";
+    private java.lang.String UserManager_address = "http://localhost:8080/server/services/UserManager";
 
     public java.lang.String getUserManagerAddress() {
         return UserManager_address;

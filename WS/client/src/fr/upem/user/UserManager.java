@@ -8,7 +8,7 @@
 package fr.upem.user;
 
 public interface UserManager extends java.rmi.Remote {
-    public void registerUser(java.lang.String user, java.lang.String password) throws java.rmi.RemoteException;
     public boolean disconnect(java.lang.String user) throws java.rmi.RemoteException;
+    public void registerUser(java.lang.String user, java.lang.String password) throws java.rmi.RemoteException;
     public boolean connect(java.lang.String user, java.lang.String password) throws java.rmi.RemoteException;
 }

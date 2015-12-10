@@ -9,6 +9,7 @@ import FaultContracts.GOTLServices._2008._01.DefaultFaultContract;
 import fr.upem.bank.Account;
 import fr.upem.bank.Bank;
 import fr.upem.bank.BankServiceLocator;
+import fr.upem.bank.BankSoapBindingStub;
 import fr.upem.user.UserManager;
 import fr.upem.user.UserManagerServiceLocator;
 import net.restfulwebservices.www.DataContracts._2008._01.Currency;
@@ -58,6 +59,7 @@ public class Main {
 		Bank bank;
 		try {
 			bank = new BankServiceLocator().getBank();
+			((BankSoapBindingStub)bank).setMaintainSession(true);
 			int myBankId = bank.addAccount("peroumalle", "mourougan", "EUR");
 			System.out.println(myBankId);
 			String myCurrency = bank.getAccountCurrency(myBankId);
@@ -70,7 +72,7 @@ public class Main {
 			System.out.println(bank.getDetailAccount(myBankId));
 			
 			//withdrawal 10 GBP
-			bank.deposit(myBankId, 10*getConvertRate("GBP",myCurrency));
+			bank.withdrawal(myBankId, 10*getConvertRate("GBP",myCurrency));
 			System.out.println(bank.getDetailAccount(myBankId));
 			
 		} catch (ServiceException e) {

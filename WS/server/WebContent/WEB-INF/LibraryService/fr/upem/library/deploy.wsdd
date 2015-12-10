@@ -10,18 +10,18 @@
       <parameter name="className" value="fr.upem.library.Library"/>
       <parameter name="wsdlPortType" value="Library"/>
       <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://library.upem.fr" name="sellBook" qname="operNS:sellBook" soapAction="">
+        <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:isbn" type="tns:string"/>
+        <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:exemplary" type="tns:int"/>
+      </operation>
+      <operation xmlns:operNS="http://library.upem.fr" xmlns:retNS="http://library.upem.fr" xmlns:rtns="http://book.upem.fr" name="getAllBooks" qname="operNS:getAllBooks" returnQName="retNS:getAllBooksReturn" returnType="rtns:Book" soapAction="">
+      </operation>
       <operation xmlns:operNS="http://library.upem.fr" name="add" qname="operNS:add" soapAction="">
         <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:isbn" type="tns:string"/>
         <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:title" type="tns:string"/>
         <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:author" type="tns:string"/>
         <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:price" type="tns:float"/>
         <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:introductionDate" type="tns:string"/>
-      </operation>
-      <operation xmlns:operNS="http://library.upem.fr" xmlns:retNS="http://library.upem.fr" xmlns:rtns="http://book.upem.fr" name="getAllBooks" qname="operNS:getAllBooks" returnQName="retNS:getAllBooksReturn" returnType="rtns:Book" soapAction="">
-      </operation>
-      <operation xmlns:operNS="http://library.upem.fr" name="sellBook" qname="operNS:sellBook" soapAction="">
-        <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:isbn" type="tns:string"/>
-        <parameter xmlns:pns="http://library.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:exemplary" type="tns:int"/>
       </operation>
       <parameter name="allowedMethods" value="add getAllBooks sellBook"/>
 

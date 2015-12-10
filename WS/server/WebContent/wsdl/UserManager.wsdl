@@ -4,17 +4,6 @@
 Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema elementFormDefault="qualified" targetNamespace="http://user.upem.fr" xmlns="http://www.w3.org/2001/XMLSchema">
-   <element name="registerUser">
-    <complexType>
-     <sequence>
-      <element name="user" type="xsd:string"/>
-      <element name="password" type="xsd:string"/>
-     </sequence>
-    </complexType>
-   </element>
-   <element name="registerUserResponse">
-    <complexType/>
-   </element>
    <element name="disconnect">
     <complexType>
      <sequence>
@@ -28,6 +17,17 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
       <element name="disconnectReturn" type="xsd:boolean"/>
      </sequence>
     </complexType>
+   </element>
+   <element name="registerUser">
+    <complexType>
+     <sequence>
+      <element name="user" type="xsd:string"/>
+      <element name="password" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="registerUserResponse">
+    <complexType/>
    </element>
    <element name="connect">
     <complexType>
@@ -97,18 +97,6 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    <wsdl:portType name="UserManager">
 
-      <wsdl:operation name="registerUser">
-
-         <wsdl:input message="impl:registerUserRequest" name="registerUserRequest">
-
-       </wsdl:input>
-
-         <wsdl:output message="impl:registerUserResponse" name="registerUserResponse">
-
-       </wsdl:output>
-
-      </wsdl:operation>
-
       <wsdl:operation name="disconnect">
 
          <wsdl:input message="impl:disconnectRequest" name="disconnectRequest">
@@ -116,6 +104,18 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
        </wsdl:input>
 
          <wsdl:output message="impl:disconnectResponse" name="disconnectResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="registerUser">
+
+         <wsdl:input message="impl:registerUserRequest" name="registerUserRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:registerUserResponse" name="registerUserResponse">
 
        </wsdl:output>
 
@@ -139,24 +139,6 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
-      <wsdl:operation name="registerUser">
-
-         <wsdlsoap:operation soapAction=""/>
-
-         <wsdl:input name="registerUserRequest">
-
-            <wsdlsoap:body use="literal"/>
-
-         </wsdl:input>
-
-         <wsdl:output name="registerUserResponse">
-
-            <wsdlsoap:body use="literal"/>
-
-         </wsdl:output>
-
-      </wsdl:operation>
-
       <wsdl:operation name="disconnect">
 
          <wsdlsoap:operation soapAction=""/>
@@ -168,6 +150,24 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
          </wsdl:input>
 
          <wsdl:output name="disconnectResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="registerUser">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="registerUserRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="registerUserResponse">
 
             <wsdlsoap:body use="literal"/>
 
@@ -199,7 +199,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       <wsdl:port binding="impl:UserManagerSoapBinding" name="UserManager">
 
-         <wsdlsoap:address location="http://localhost:8080/Library-WS/services/UserManager"/>
+         <wsdlsoap:address location="http://localhost:8080/server/services/UserManager"/>
 
       </wsdl:port>
 

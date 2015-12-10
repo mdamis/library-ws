@@ -32,11 +32,11 @@ public class Bank {
 		}
 		return false;
 	}
-	
+	/*
 	public Account getAccount(int accountNumber) {
 		return mapAccount.get(accountNumber);
 	}
-	
+	*/
 	public String getDetailAccount(int accountId){
 		Account account = mapAccount.get(accountId);
 		if(account!= null){
@@ -53,17 +53,16 @@ public class Bank {
 			return null;
 		}
 	}
-	public boolean deposit(int accountId,double amount) {
+	public boolean deposit(int accountId,double amount){
 		Account account= mapAccount.get(accountId);
 		if(account!= null) {
 			return account.deposit(amount);
 		}else{
 			return false;
 		}
-		
 	}
 
-	public boolean withdrawal(int accountId,double amount) {
+	public boolean withdrawal(int accountId,double amount){
 		Account account= mapAccount.get(accountId);
 		if(account!= null) {
 			return account.withdrawal(amount);

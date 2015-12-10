@@ -22,7 +22,7 @@ public class LibraryServiceLocator extends org.apache.axis.client.Service implem
     }
 
     // Use to get a proxy class for Library
-    private java.lang.String Library_address = "http://localhost:8080/Library-WS/services/Library";
+    private java.lang.String Library_address = "http://localhost:8080/server/services/Library";
 
     public java.lang.String getLibraryAddress() {
         return Library_address;

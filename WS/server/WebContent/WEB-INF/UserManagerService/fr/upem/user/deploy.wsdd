@@ -10,12 +10,12 @@
       <parameter name="className" value="fr.upem.user.UserManager"/>
       <parameter name="wsdlPortType" value="UserManager"/>
       <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://user.upem.fr" xmlns:retNS="http://user.upem.fr" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="disconnect" qname="operNS:disconnect" returnQName="retNS:disconnectReturn" returnType="rtns:boolean" soapAction="">
+        <parameter xmlns:pns="http://user.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:user" type="tns:string"/>
+      </operation>
       <operation xmlns:operNS="http://user.upem.fr" name="registerUser" qname="operNS:registerUser" soapAction="">
         <parameter xmlns:pns="http://user.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:user" type="tns:string"/>
         <parameter xmlns:pns="http://user.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:password" type="tns:string"/>
-      </operation>
-      <operation xmlns:operNS="http://user.upem.fr" xmlns:retNS="http://user.upem.fr" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="disconnect" qname="operNS:disconnect" returnQName="retNS:disconnectReturn" returnType="rtns:boolean" soapAction="">
-        <parameter xmlns:pns="http://user.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:user" type="tns:string"/>
       </operation>
       <operation xmlns:operNS="http://user.upem.fr" xmlns:retNS="http://user.upem.fr" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="connect" qname="operNS:connect" returnQName="retNS:connectReturn" returnType="rtns:boolean" soapAction="">
         <parameter xmlns:pns="http://user.upem.fr" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:user" type="tns:string"/>

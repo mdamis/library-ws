@@ -44,12 +44,6 @@ public class BankProxy implements fr.upem.bank.Bank {
     return bank;
   }
   
-  public fr.upem.bank.Account getAccount(int accountNumber) throws java.rmi.RemoteException{
-    if (bank == null)
-      _initBankProxy();
-    return bank.getAccount(accountNumber);
-  }
-  
   public boolean removeAccount(int accountNumber) throws java.rmi.RemoteException{
     if (bank == null)
       _initBankProxy();
@@ -62,28 +56,28 @@ public class BankProxy implements fr.upem.bank.Bank {
     return bank.addAccount(name, firstname, currency);
   }
   
-  public boolean deposit(int accountId, double amount) throws java.rmi.RemoteException{
-    if (bank == null)
-      _initBankProxy();
-    return bank.deposit(accountId, amount);
-  }
-  
   public java.lang.String getDetailAccount(int accountId) throws java.rmi.RemoteException{
     if (bank == null)
       _initBankProxy();
     return bank.getDetailAccount(accountId);
   }
   
-  public boolean withdrawal(int accountId, double amount) throws java.rmi.RemoteException{
-    if (bank == null)
-      _initBankProxy();
-    return bank.withdrawal(accountId, amount);
-  }
-  
   public java.lang.String getAccountCurrency(int accountId) throws java.rmi.RemoteException{
     if (bank == null)
       _initBankProxy();
     return bank.getAccountCurrency(accountId);
+  }
+  
+  public boolean deposit(int accountId, double amount) throws java.rmi.RemoteException{
+    if (bank == null)
+      _initBankProxy();
+    return bank.deposit(accountId, amount);
+  }
+  
+  public boolean withdrawal(int accountId, double amount) throws java.rmi.RemoteException{
+    if (bank == null)
+      _initBankProxy();
+    return bank.withdrawal(accountId, amount);
   }
   
   

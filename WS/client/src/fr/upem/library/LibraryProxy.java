@@ -44,10 +44,10 @@ public class LibraryProxy implements fr.upem.library.Library {
     return library;
   }
   
-  public void add(java.lang.String isbn, java.lang.String title, java.lang.String author, float price, java.lang.String introductionDate) throws java.rmi.RemoteException{
+  public void sellBook(java.lang.String isbn, int exemplary) throws java.rmi.RemoteException{
     if (library == null)
       _initLibraryProxy();
-    library.add(isbn, title, author, price, introductionDate);
+    library.sellBook(isbn, exemplary);
   }
   
   public fr.upem.book.Book[] getAllBooks() throws java.rmi.RemoteException{
@@ -56,10 +56,10 @@ public class LibraryProxy implements fr.upem.library.Library {
     return library.getAllBooks();
   }
   
-  public void sellBook(java.lang.String isbn, int exemplary) throws java.rmi.RemoteException{
+  public void add(java.lang.String isbn, java.lang.String title, java.lang.String author, float price, java.lang.String introductionDate) throws java.rmi.RemoteException{
     if (library == null)
       _initLibraryProxy();
-    library.sellBook(isbn, exemplary);
+    library.add(isbn, title, author, price, introductionDate);
   }
   
   
