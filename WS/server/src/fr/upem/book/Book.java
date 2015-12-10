@@ -10,23 +10,27 @@ public class Book {
 	private final String isbn;
 	private final String title;
 	private final String author;
-	private boolean available = true;
-	private int nbExemplary = 0;
-	//private String currentPatron = "";
-	private String summary = "No summary available";
 	private final LocalDate introductionDate;
-	//private boolean hasBeenBorrowed = false;
 	private final ArrayList<String> reviews = new ArrayList<String>();
 	//private final ArrayList<User> borrowList = new ArrayList<User>();
+	//private boolean hasBeenBorrowed = false;
+	private final String currency = "EUR";
 
-	private Book(String isbn, String title, String author, LocalDate introductionDate) {
+	//private boolean available = true;
+	//private String currentPatron = "";
+	private float price;
+	private int nbExemplary = 1;
+	private String summary = "No summary available";
+
+	public Book(String isbn, String title, String author, float price, LocalDate introductionDate) {
 		this.isbn = isbn;
 		this.title = title;
 		this.author = author;
+		this.price = price;
 		this.introductionDate = introductionDate;
 	}
 
-	public static Book create(String isbn, String title, String author, String introductionDate) {
+	public static Book create(String isbn, String title, String author, float price, String introductionDate) {
 		LocalDate date;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		try {
@@ -34,7 +38,7 @@ public class Book {
 		} catch(DateTimeParseException e) {
 			date = LocalDate.now();
 		}
-		return new Book(isbn, title, author, date);
+		return new Book(isbn, title, author, price, date);
 	}
 
 	public String getISBN() {
@@ -49,12 +53,20 @@ public class Book {
 		return author;
 	}
 	
-	public void addOneExemplary() {
-		nbExemplary++;
+	public void addExemplary(int exemplary) throws IllegalArgumentException {
+		if(exemplary <= 0) {
+			throw new IllegalArgumentException("Invalid number of exemplary to add");
+		} else {
+			nbExemplary += exemplary;
+		}
 	}
 	
-	public void removeOneExemplary() {
-		nbExemplary--;
+	public void removeExemplary(int exemplary) throws IllegalArgumentException {
+		if(exemplary > nbExemplary || exemplary <= 0) {
+			throw new IllegalArgumentException("Invalid number of exemplary to remove");
+		} else {
+			nbExemplary -= exemplary;
+		}
 	}
 
 	public boolean isAvailable() {
@@ -62,9 +74,9 @@ public class Book {
 		return nbExemplary > 0;
 	}
 
-	public void setAvailable(boolean available) {
+	/*public void setAvailable(boolean available) {
 		this.available = available;
-	}
+	}*/
 
 	/*public String getCurrentPatron() {
 		return currentPatron;
@@ -83,7 +95,7 @@ public class Book {
 	}
 
 	public String details() {
-		if (available) {
+		if (isAvailable()) {
 			return title + " written by " + author + " is available";
 		} else {
 			return title + " written by " + author + " is not available";
@@ -115,6 +127,22 @@ public class Book {
 
 	public void addReview(String review) {
 		reviews.add(review);
+	}
+	
+	public void setPrice(float newPrice) {
+		price = newPrice;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+	
+	public int getExemplary() {
+		return nbExemplary;
 	}
 
 	/*public void addToQueue(User requester) {

@@ -1,8 +1,6 @@
 package fr.upem.library;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import fr.upem.book.Book;
 
@@ -14,19 +12,33 @@ public class Library {
 		//
 	}
 
-	public void add(String isbn, String title, String author, String introductionDate) {
-		Book book = Book.create(isbn, title, author, introductionDate);
-		books.put(isbn, book);
+	public void add(String isbn, String title, String author, float price, String introductionDate) throws IllegalArgumentException {
+		if(books.containsKey(isbn)) {
+			Book book = books.get(isbn);
+			if(title.equals(book.getTitle()) && author.equals(book.getAuthor())) {
+				book.setPrice(price);
+				book.addExemplary(1);
+			} else {
+				throw new IllegalArgumentException("A book with the same ISBN already exists");
+			}
+		} else {
+			Book book = Book.create(isbn, title, author, price, introductionDate);
+			books.put(isbn, book);
+		}
 	}
-
-	public void delete(String isbn) {
-		if (books.containsKey(isbn)) {
-			books.remove(isbn);
+	
+	public void sellBook(String isbn, int exemplary) {
+		if(!books.containsKey(isbn)) {
+			throw new IllegalArgumentException("This book doesn't exist");
+		} else {
+			books.get(isbn).removeExemplary(exemplary);
 		}
 	}
 
-	public List<Book> getAllBooks() {
-		return new ArrayList<Book>(books.values());
+	public Book[] getAllBooks() {
+		Book[] arrayBook = new Book[books.values().size()];
+		books.values().toArray(arrayBook);
+		return arrayBook;
 	}
 
 	/*public String borrowBook(String isbn, User requester) {
