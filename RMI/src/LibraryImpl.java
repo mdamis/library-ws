@@ -18,10 +18,14 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 	}
 
 	@Override
-	public void addBook(String isbn, String title, String author, String introductionDate) throws RemoteException {
+	public boolean addBook(String isbn, String title, String author, String introductionDate) throws RemoteException {
+		if(books.containsKey(isbn)) {
+			return false;
+		}
 		Book book = BookImpl.create(isbn, title, author, introductionDate);
 		books.put(isbn, book);
 		waitingLists.put(isbn, new ArrayBlockingQueue<>(10));
+		return true;
 	}
 
 	@Override

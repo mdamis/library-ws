@@ -25,6 +25,10 @@ public class LibraryClientScenario {
 					System.out.println(book.getTitle() + " is not saleable.");
 				}
 			}
+			
+			if(!library.addBook("0451524934", "1984", "George Orwell", "2012-03-13")) {
+				System.out.println("There is already a book with an ISBN of 0451524934 in the library");
+			}
 			System.out.println("");
 
 			System.out.println(library.borrowBook(books.get(0), mdamis));
