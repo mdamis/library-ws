@@ -62,5 +62,17 @@ public class UserManagerProxy implements fr.upem.user.UserManager {
     return userManager.connect(user, password);
   }
   
+  public boolean exist(java.lang.String user, java.lang.String password) throws java.rmi.RemoteException{
+    if (userManager == null)
+      _initUserManagerProxy();
+    return userManager.exist(user, password);
+  }
+  
+  public java.lang.String getUsernameConnected() throws java.rmi.RemoteException{
+    if (userManager == null)
+      _initUserManagerProxy();
+    return userManager.getUsernameConnected();
+  }
+  
   
 }

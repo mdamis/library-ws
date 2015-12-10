@@ -18,6 +18,31 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
      </sequence>
     </complexType>
    </element>
+   <element name="exist">
+    <complexType>
+     <sequence>
+      <element name="user" type="xsd:string"/>
+      <element name="password" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="existResponse">
+    <complexType>
+     <sequence>
+      <element name="existReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getUsernameConnected">
+    <complexType/>
+   </element>
+   <element name="getUsernameConnectedResponse">
+    <complexType>
+     <sequence>
+      <element name="getUsernameConnectedReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
    <element name="registerUser">
     <complexType>
      <sequence>
@@ -71,6 +96,22 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
    </wsdl:message>
 
+   <wsdl:message name="getUsernameConnectedRequest">
+
+      <wsdl:part element="impl:getUsernameConnected" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="getUsernameConnectedResponse">
+
+      <wsdl:part element="impl:getUsernameConnectedResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
    <wsdl:message name="connectRequest">
 
       <wsdl:part element="impl:connect" name="parameters">
@@ -82,6 +123,22 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
    <wsdl:message name="disconnectRequest">
 
       <wsdl:part element="impl:disconnect" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="existResponse">
+
+      <wsdl:part element="impl:existResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="existRequest">
+
+      <wsdl:part element="impl:exist" name="parameters">
 
       </wsdl:part>
 
@@ -104,6 +161,30 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
        </wsdl:input>
 
          <wsdl:output message="impl:disconnectResponse" name="disconnectResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="exist">
+
+         <wsdl:input message="impl:existRequest" name="existRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:existResponse" name="existResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getUsernameConnected">
+
+         <wsdl:input message="impl:getUsernameConnectedRequest" name="getUsernameConnectedRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:getUsernameConnectedResponse" name="getUsernameConnectedResponse">
 
        </wsdl:output>
 
@@ -150,6 +231,42 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
          </wsdl:input>
 
          <wsdl:output name="disconnectResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="exist">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="existRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="existResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getUsernameConnected">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getUsernameConnectedRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getUsernameConnectedResponse">
 
             <wsdlsoap:body use="literal"/>
 

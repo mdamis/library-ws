@@ -23,6 +23,22 @@ public class UserManager {
 		
 	}
 	
+	public boolean exist(String user,String password) {
+		if(users.containsKey(user)) {
+			return password ==users.get(user).getPassword();
+		}
+		return false;
+	}
+	
+	public String getUsernameConnected() {
+		for(User u:users.values()) {
+			if(u.isConnected()) {
+				return u.getUser();
+			}
+		}
+		return null;
+	}
+	
 	public boolean connect(String user, String password) throws IllegalArgumentException {
 		if(!users.containsKey(user)) {
 			throw new IllegalArgumentException("This user doesn't exists");

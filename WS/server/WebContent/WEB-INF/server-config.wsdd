@@ -51,16 +51,15 @@
    <ns1:parameter qname="ns6:accountId" type="xsd:int"/>
    <ns1:parameter qname="ns6:amount" type="xsd:double"/>
   </ns1:operation>
-  <ns1:parameter name="allowedMethods" value="getAccountCurrency getDetailAccount deposit withdrawal removeAccount addAccount"/>
-  <ns1:parameter name="typeMappingVersion" value="1.2"/>
-  <ns1:parameter name="wsdlPortType" value="Bank"/>
-  <ns1:parameter name="className" value="fr.upem.bank.Bank"/>
   <ns1:parameter name="wsdlServicePort" value="Bank"/>
   <ns1:parameter name="schemaQualified" value="http://bank.upem.fr"/>
-  <ns1:parameter name="wsdlTargetNamespace" value="http://bank.upem.fr"/>
+  <ns1:parameter name="className" value="fr.upem.bank.Bank"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="allowedMethods" value="getAccountCurrency getDetailAccount deposit withdrawal removeAccount addAccount"/>
   <ns1:parameter name="wsdlServiceElement" value="BankService"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://bank.upem.fr"/>
+  <ns1:parameter name="wsdlPortType" value="Bank"/>
   <ns1:parameter name="scope" value="session"/>
-  
  </ns1:service>
  <ns1:service name="Version" provider="java:RPC">
   <ns1:parameter name="allowedMethods" value="getVersion"/>
@@ -70,15 +69,20 @@
   <ns1:operation name="disconnect" qname="ns7:disconnect" returnQName="ns7:disconnectReturn" returnType="xsd:boolean" soapAction="" xmlns:ns7="http://user.upem.fr" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
    <ns1:parameter qname="ns7:user" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="registerUser" qname="ns8:registerUser" soapAction="" xmlns:ns8="http://user.upem.fr">
-   <ns1:parameter qname="ns8:user" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   <ns1:parameter qname="ns8:password" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="exist" qname="ns8:exist" returnQName="ns8:existReturn" returnType="xsd:boolean" soapAction="" xmlns:ns8="http://user.upem.fr" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns8:user" type="xsd:string"/>
+   <ns1:parameter qname="ns8:password" type="xsd:string"/>
   </ns1:operation>
-  <ns1:operation name="connect" qname="ns9:connect" returnQName="ns9:connectReturn" returnType="xsd:boolean" soapAction="" xmlns:ns9="http://user.upem.fr" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-   <ns1:parameter qname="ns9:user" type="xsd:string"/>
-   <ns1:parameter qname="ns9:password" type="xsd:string"/>
+  <ns1:operation name="getUsernameConnected" qname="ns9:getUsernameConnected" returnQName="ns9:getUsernameConnectedReturn" returnType="xsd:string" soapAction="" xmlns:ns9="http://user.upem.fr" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="registerUser" qname="ns10:registerUser" soapAction="" xmlns:ns10="http://user.upem.fr">
+   <ns1:parameter qname="ns10:user" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns10:password" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
   </ns1:operation>
-  <ns1:parameter name="allowedMethods" value="disconnect registerUser connect"/>
+  <ns1:operation name="connect" qname="ns11:connect" returnQName="ns11:connectReturn" returnType="xsd:boolean" soapAction="" xmlns:ns11="http://user.upem.fr" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns11:user" type="xsd:string"/>
+   <ns1:parameter qname="ns11:password" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:parameter name="allowedMethods" value="exist disconnect registerUser getUsernameConnected connect"/>
   <ns1:parameter name="typeMappingVersion" value="1.2"/>
   <ns1:parameter name="wsdlPortType" value="UserManager"/>
   <ns1:parameter name="className" value="fr.upem.user.UserManager"/>
@@ -88,17 +92,17 @@
   <ns1:parameter name="wsdlServiceElement" value="UserManagerService"/>
  </ns1:service>
  <ns1:service name="Library" provider="java:RPC" style="wrapped" use="literal">
-  <ns1:operation name="sellBook" qname="ns10:sellBook" soapAction="" xmlns:ns10="http://library.upem.fr">
-   <ns1:parameter qname="ns10:isbn" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   <ns1:parameter qname="ns10:exemplary" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="sellBook" qname="ns12:sellBook" soapAction="" xmlns:ns12="http://library.upem.fr">
+   <ns1:parameter qname="ns12:isbn" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns12:exemplary" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
   </ns1:operation>
-  <ns1:operation name="getAllBooks" qname="ns11:getAllBooks" returnQName="ns11:getAllBooksReturn" returnType="ns12:Book" soapAction="" xmlns:ns11="http://library.upem.fr" xmlns:ns12="http://book.upem.fr"/>
-  <ns1:operation name="add" qname="ns13:add" soapAction="" xmlns:ns13="http://library.upem.fr">
-   <ns1:parameter qname="ns13:isbn" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   <ns1:parameter qname="ns13:title" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   <ns1:parameter qname="ns13:author" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   <ns1:parameter qname="ns13:price" type="xsd:float" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
-   <ns1:parameter qname="ns13:introductionDate" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  <ns1:operation name="getAllBooks" qname="ns13:getAllBooks" returnQName="ns13:getAllBooksReturn" returnType="ns14:Book" soapAction="" xmlns:ns13="http://library.upem.fr" xmlns:ns14="http://book.upem.fr"/>
+  <ns1:operation name="add" qname="ns15:add" soapAction="" xmlns:ns15="http://library.upem.fr">
+   <ns1:parameter qname="ns15:isbn" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns15:title" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns15:author" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns15:price" type="xsd:float" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns15:introductionDate" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
   </ns1:operation>
   <ns1:parameter name="allowedMethods" value="add getAllBooks sellBook"/>
   <ns1:parameter name="typeMappingVersion" value="1.2"/>
@@ -108,7 +112,7 @@
   <ns1:parameter name="schemaQualified" value="http://book.upem.fr,http://library.upem.fr"/>
   <ns1:parameter name="wsdlTargetNamespace" value="http://library.upem.fr"/>
   <ns1:parameter name="wsdlServiceElement" value="LibraryService"/>
-  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns14:Book" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:fr.upem.book.Book" xmlns:ns14="http://book.upem.fr"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns16:Book" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:fr.upem.book.Book" xmlns:ns16="http://book.upem.fr"/>
  </ns1:service>
  <ns1:transport name="http">
   <ns1:requestFlow>
