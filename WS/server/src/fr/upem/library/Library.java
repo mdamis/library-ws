@@ -36,9 +36,7 @@ public class Library {
 	}
 
 	public Book[] getAllBooks() {
-		Book[] arrayBook = new Book[books.values().size()];
-		books.values().toArray(arrayBook);
-		return arrayBook;
+		return books.values().toArray(new Book[books.size()]);
 	}
 
 	/*public String borrowBook(String isbn, User requester) {
