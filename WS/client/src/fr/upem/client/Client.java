@@ -47,8 +47,15 @@ public class Client {
 	}
 	
 	public List<Book> getAllBooks() throws RemoteException{
-		List<Book> books = (Arrays.asList(library.getAllBooks()));
-		return books;
+		System.out.println("we got maybe book");
+		try {
+			List<Book> books = (Arrays.asList(library.getAllBooks()));
+			System.out.println("maybbeee");
+			return books;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public String getUsername() throws RemoteException{

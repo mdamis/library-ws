@@ -2,6 +2,7 @@ package fr.upem.gui;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.rpc.ServiceException;
@@ -338,6 +339,7 @@ public class GUI extends Application {
 	}
 
 	public static void main(String[] args) {
+		HashMap<String, String> m = new HashMap<>();
 		try {
 			Application.launch(GUI.class, args);
 		} catch (Exception e) {
