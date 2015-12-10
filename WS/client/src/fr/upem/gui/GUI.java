@@ -217,7 +217,14 @@ public class GUI extends Application {
 		// Create the grid
 		GridPane grid = createGrid();
 
-		Text sceneTitle = new Text("Connected as " + client.getUsername());
+		Text sceneTitle;
+		try {
+			sceneTitle = new Text("Connected as " + client.getUsername());
+		} catch (RemoteException e) {
+			System.err.println("GUI.java, client.getUserName RemoteException :"+e);
+		} finally {
+			sceneTitle = new Text("Not Connected ");
+		}
 		sceneTitle.setId("user-name");
 		grid.add(sceneTitle, 0, 0);
 
@@ -230,70 +237,17 @@ public class GUI extends Application {
 			}
 		});
 
-		Button btnSwitchBorrowed = new Button("Borrowed Book(s)");
-		grid.add(btnSwitchBorrowed, 1, 1);
-		btnSwitchBorrowed.setOnAction(new EventHandler<ActionEvent>() {
-			private boolean isActive = false;
-
+		Button btnBuyBook = new Button("Buy the book");
+		grid.add(btnBuyBook, 2, 1);
+		btnBuyBook.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if (!isActive) {
-					try {
-						books = client.getUser().getBorrowedBooks();
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					}
-				} else {
-					try {
-						books = client.getAllBooks();
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					}
-				}
-				observableBooks.clear();
-				observableBooks.addAll(books);
-				isActive = !isActive;
-			}
-		});
-
-		Button btnAddBook = new Button("Add a book");
-		grid.add(btnAddBook, 2, 1);
-		btnAddBook.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Scene scene = createAddBookPage(stage);
+				Scene scene = createBuyBookPage(stage);
 				showScene(stage, scene);
 			}
 		});
-
-		Button btnBorrow = new Button("Borrow");
-		grid.add(btnBorrow, 5, 0);
-		btnBorrow.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Book book = tableView.getSelectionModel().getSelectedItem();
-				try {
-					client.getLibrary().borrowBook(book, client.getUser());
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
-		Button btnReturn = new Button("Return");
-		grid.add(btnReturn, 5, 1);
-		btnReturn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Book book = tableView.getSelectionModel().getSelectedItem();
-				try {
-					client.getLibrary().returnBook(book, client.getUser());
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-
+	
+	
 		grid.add(tableView, 0, 2, 3, 1);
 
 		Button btnQuit = new Button("Quit");
@@ -308,7 +262,7 @@ public class GUI extends Application {
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
 		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
 		return scene;
-		return null;
+		
 
 	}
 
@@ -325,118 +279,16 @@ public class GUI extends Application {
 		return grid;
 	}
 
+	private Scene createBuyBookPage(Stage stage){
+		//TODO createBuyBook
+		return null;
+	}
+	
+	private Scene createBookDetailsPage(Stage stage,Book book){
+		//TODO createBookDetail
+		return null;
+	}
 	/*
-	 * @SuppressWarnings("unchecked") private Scene createIndexPage(Stage stage)
-	 * {
-	 * 
-	 * // Get Books from the Library
-	 * 
-	 * try { books = client.getAllBooks(); } catch (RemoteException e) {
-	 * e.printStackTrace(); }
-	 * 
-	 * // Create an ObservableList from the ArrayList ObservableList<Book>
-	 * observableBooks = FXCollections.observableArrayList(books);
-	 * 
-	 * // Create table TableView<Book> tableView = new TableView<>();
-	 * tableView.setEditable(false); // Create columns TableColumn<Book, String>
-	 * isbnColumn = new TableColumn<>("ISBN"); TableColumn<Book, String>
-	 * titleColumn = new TableColumn<>("Title"); TableColumn<Book, String>
-	 * authorColumn = new TableColumn<>("Author"); TableColumn<Book, String>
-	 * patronColumn = new TableColumn<>("Patron"); // Link columns to the
-	 * corresponding BookImpl properties isbnColumn.setCellValueFactory(new
-	 * PropertyValueFactory<>("ISBN")); titleColumn.setCellValueFactory(new
-	 * PropertyValueFactory<>("title")); authorColumn.setCellValueFactory(new
-	 * PropertyValueFactory<>("author")); patronColumn.setCellValueFactory(new
-	 * PropertyValueFactory<>("patronUsername"));
-	 * 
-	 * tableView.setItems(observableBooks);
-	 * tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn,
-	 * patronColumn); // Customize the TableView tableView.setPrefWidth(600);
-	 * tableView.setPrefHeight(400);
-	 * tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-	 * 
-	 * // Handle double click on a table row tableView.setRowFactory(tv -> {
-	 * TableRow<Book> row = new TableRow<>(); row.setOnMouseClicked(event -> {
-	 * if (event.getClickCount() == 2 && (!row.isEmpty())) { Book book =
-	 * row.getItem(); Scene scene = createBookDetailsPage(stage, book);
-	 * showScene(stage, scene); } }); return row; });
-	 * 
-	 * // Create the grid GridPane grid = createGrid();
-	 * 
-	 * Text sceneTitle = new Text("Connected as " + client.getUsername());
-	 * sceneTitle.setId("user-name"); grid.add(sceneTitle, 0, 0);
-	 * 
-	 * Button btnRefresh = new Button("Refresh"); grid.add(btnRefresh, 0, 1);
-	 * btnRefresh.setOnAction(new EventHandler<ActionEvent>() { public void
-	 * handle(ActionEvent event) { Scene scene = createIndexPage(stage);
-	 * showScene(stage, scene); } });
-	 * 
-	 * Button btnSwitchBorrowed = new Button("Borrowed Book(s)");
-	 * grid.add(btnSwitchBorrowed, 1, 1); btnSwitchBorrowed.setOnAction(new
-	 * EventHandler<ActionEvent>() { private boolean isActive = false;
-	 * 
-	 * @Override public void handle(ActionEvent event) { if (!isActive) { try {
-	 * books = client.getUser().getBorrowedBooks(); } catch (RemoteException e)
-	 * { e.printStackTrace(); } } else { try { books = client.getAllBooks(); }
-	 * catch (RemoteException e) { e.printStackTrace(); } }
-	 * observableBooks.clear(); observableBooks.addAll(books); isActive =
-	 * !isActive; } });
-	 * 
-	 * Button btnAddBook = new Button("Add a book"); grid.add(btnAddBook, 2, 1);
-	 * btnAddBook.setOnAction(new EventHandler<ActionEvent>() {
-	 * 
-	 * @Override public void handle(ActionEvent event) { Scene scene =
-	 * createAddBookPage(stage); showScene(stage, scene); } });
-	 * 
-	 * Button btnBorrow = new Button("Borrow"); grid.add(btnBorrow, 5, 0);
-	 * btnBorrow.setOnAction(new EventHandler<ActionEvent>() {
-	 * 
-	 * @Override public void handle(ActionEvent event) { Book book =
-	 * tableView.getSelectionModel().getSelectedItem(); try {
-	 * client.getLibrary().borrowBook(book, client.getUser()); } catch
-	 * (RemoteException e) { e.printStackTrace(); } } });
-	 * 
-	 * Button btnReturn = new Button("Return"); grid.add(btnReturn, 5, 1);
-	 * btnReturn.setOnAction(new EventHandler<ActionEvent>() {
-	 * 
-	 * @Override public void handle(ActionEvent event) { Book book =
-	 * tableView.getSelectionModel().getSelectedItem(); try {
-	 * client.getLibrary().returnBook(book, client.getUser()); } catch
-	 * (RemoteException e) { e.printStackTrace(); } } });
-	 * 
-	 * grid.add(tableView, 0, 2, 3, 1);
-	 * 
-	 * Button btnQuit = new Button("Quit"); grid.add(btnQuit, 5, 3);
-	 * btnQuit.setOnAction(new EventHandler<ActionEvent>() {
-	 * 
-	 * @Override public void handle(ActionEvent event) { stage.close(); } });
-	 * 
-	 * Scene scene = new Scene(grid, WIDTH, HEIGHT);
-	 * scene.getStylesheets().add(GUI.class.getResource("style.css").
-	 * toExternalForm()); return scene; }
-	 * 
-	 * private Scene createBookDetailsPage(Stage stage, Book book) { GridPane
-	 * grid = createGrid();
-	 * 
-	 * try { grid.add(new Text(book.getTitle()), 0, 0); grid.add(new Text(
-	 * "ISBN : " + book.getISBN()), 0, 1); grid.add(new Text("Author : " +
-	 * book.getAuthor()), 0, 2); grid.add(new Text("Summary :\n" +
-	 * book.getSummary()), 1, 0); grid.add(new Text("Available : " +
-	 * book.isAvailable()), 0, 3); if (!book.isAvailable()) { grid.add(new Text(
-	 * "Patron : " + book.getPatron().getUsername()), 1, 3); } } catch
-	 * (RemoteException e) { e.printStackTrace(); }
-	 * 
-	 * Button backButton = new Button("Back"); grid.add(backButton, 0, 5);
-	 * backButton.setOnAction(new EventHandler<ActionEvent>() {
-	 * 
-	 * @Override public void handle(ActionEvent event) { Scene scene =
-	 * createIndexPage(stage); showScene(stage, scene); } });
-	 * 
-	 * Scene scene = new Scene(grid, WIDTH, HEIGHT);
-	 * scene.getStylesheets().add(GUI.class.getResource("style.css").
-	 * toExternalForm());
-	 * 
-	 * return scene; }
 	 * 
 	 * private Scene createAddBookPage(Stage stage) { GridPane grid =
 	 * createGrid();
