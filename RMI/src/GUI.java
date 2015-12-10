@@ -203,8 +203,13 @@ public class GUI extends Application {
 		grid.add(btnRefresh, 0, 1);
 		btnRefresh.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				Scene scene = createIndexPage(stage);
-				showScene(stage, scene);
+				try {
+					books = client.getAllBooks();
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+				observableBooks.clear();
+				observableBooks.addAll(books);
 			}
 		});
 
@@ -249,11 +254,16 @@ public class GUI extends Application {
 		btnBorrow.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Book book = tableView.getSelectionModel().getSelectedItem();
-				try {
-					client.getLibrary().borrowBook(book, client.getUser());
-				} catch (RemoteException e) {
-					e.printStackTrace();
+				if(tableView.getSelectionModel().getSelectedItem() != null) {
+					Book book = tableView.getSelectionModel().getSelectedItem();
+					try {
+						client.getLibrary().borrowBook(book, client.getUser());
+						books = client.getAllBooks();
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+					observableBooks.clear();
+					observableBooks.addAll(books);
 				}
 			}
 		});
@@ -263,11 +273,16 @@ public class GUI extends Application {
 		btnReturn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Book book = tableView.getSelectionModel().getSelectedItem();
-				try {
-					client.getLibrary().returnBook(book, client.getUser());
-				} catch (RemoteException e) {
-					e.printStackTrace();
+				if(tableView.getSelectionModel().getSelectedItem() != null) {
+					Book book = tableView.getSelectionModel().getSelectedItem();
+					try {
+						client.getLibrary().returnBook(book, client.getUser());
+						books = client.getAllBooks();
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+					observableBooks.clear();
+					observableBooks.addAll(books);
 				}
 			}
 		});
