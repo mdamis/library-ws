@@ -10,6 +10,15 @@ public class Library {
 	
 	public Library() {
 		//
+		initLibrary();
+	}
+
+	private void initLibrary() {
+		Book newBook = Book.create("1", "War and Peace", "Leo Tolstoy", 25, "03-01-1982");
+		books.put(newBook.getISBN(), newBook);
+		newBook = Book.create("2", "1984", "George Orwell", 10, "01-01-2010");
+		newBook.addExemplary(2);
+		books.put(newBook.getISBN(), newBook);
 	}
 
 	public void add(String isbn, String title, String author, float price, String introductionDate) throws IllegalArgumentException {
@@ -36,7 +45,8 @@ public class Library {
 	}
 
 	public Book[] getAllBooks() {
-		return books.values().toArray(new Book[books.size()]);
+		Book[] tmp = new Book[books.size()];
+		return books.values().toArray(tmp);
 	}
 
 	/*public String borrowBook(String isbn, User requester) {

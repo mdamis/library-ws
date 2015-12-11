@@ -19,8 +19,10 @@ public class LibraryServer {
 			Book firstBook = server.library.getAllBooks().get(0);
 			firstBook.setSummary("Summary available");
 			firstBook.addReview("Very good !");
-			firstBook.addReview("Totally love it <3");
+			firstBook.addReview("Totally\nLove\nit\n<3");
 			firstBook.addReview("meh");
+			firstBook.addReview("Another\nreview");
+			firstBook.addReview("And\na\nlast\none");
 
 			Naming.rebind("LibraryService", server.library);
 

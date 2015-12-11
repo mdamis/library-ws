@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BookImpl extends UnicastRemoteObject implements Book {
 
@@ -103,19 +104,8 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	}
 
 	@Override
-	public String getReviews() throws RemoteException {
-		if (reviews.size() == 0) {
-			return "No reviews for : " + title;
-		}
-
-		StringBuilder sb = new StringBuilder();
-		sb.append("Reviews for ").append(title).append(" : \n");
-
-		for (String review : reviews) {
-			sb.append(review).append("\n");
-		}
-
-		return sb.toString();
+	public List<String> getReviews() throws RemoteException {
+		return reviews;
 	}
 
 	@Override

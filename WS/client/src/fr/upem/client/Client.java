@@ -1,7 +1,6 @@
 package fr.upem.client;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,6 +18,7 @@ public class Client {
 	private final UserManager manager;
 	private final Library library;
 	private final Bank bank;
+	private String username;
 	
 	public Client() throws ServiceException {
 		manager = new UserManagerServiceLocator().getUserManager();
@@ -38,32 +38,56 @@ public class Client {
 		return bank;
 	}
 	
-	public boolean userExist(String username,String passwd)throws IllegalArgumentException, RemoteException {
-		return manager.exist(username,passwd);
+	public boolean userExist(String username, String passwd)throws IllegalArgumentException, RemoteException {
+		return manager.exist(username);
 	}
 	
-	public boolean signin(String username,String passwd) {
-		return true;
-	}
-	
-	public List<Book> getAllBooks() throws RemoteException{
-		System.out.println("we got maybe book");
+	public boolean signup(String username,String passwd) {
 		try {
-			List<Book> books = (Arrays.asList(library.getAllBooks()));
-			System.out.println("maybbeee");
-			return books;
+			manager.registerUser(username, passwd);
+			this.username = username;
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return false;
 		}
 	}
 	
-	public String getUsername() throws RemoteException{
-		String userName = manager.getUsernameConnected();
-		if(userName == null) {
-			throw new IllegalStateException("No user connected");
+
+	public boolean signin(String username, String passwd) {
+		try {
+			if(manager.connect(username, passwd)) {
+				this.username = username;
+				return true;
+			} else {
+				return false;
+			}
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
 		}
-		return userName;
+	}
+	
+	public List<Book> getAllBooks() throws RemoteException {
+		List<Book> books = (Arrays.asList(library.getAllBooks()));
+		return books;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public void disconnect() {
+		try {
+			if(manager.disconnect(username)) {
+				System.out.println(username + " has been disconnected");
+			} else {
+				System.err.println("Failed to disconnect");
+			}
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

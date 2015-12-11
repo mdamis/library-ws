@@ -8,59 +8,49 @@ public class UserManager {
 	
 	public UserManager() {
 		users = new HashMap<>();
+		users.put("bcrochez", new User("bcrochez", "abc"));
+		users.put("mdamis", new User("mdamis", "123"));
+		users.put("mperou", new User("mperou", "abc123"));
 	}
 	
-	private HashMap<String, User> getUsers() {
-		return users;
-	}
-	
-	public void registerUser(String user, String password) throws IllegalArgumentException {
+	public boolean registerUser(String user, String password) {
+		System.out.println(users.keySet());
 		if(users.containsKey(user)) {
-			throw new IllegalArgumentException("This user already exists");
+			return false;
 		} else {
-			users.put(user, new User(user, password));
+			User newUser = new User(user, password);
+			users.put(user, newUser);
+			newUser.setConnected(true);
+			return true;
 		}
-		
 	}
 	
-	public boolean exist(String user,String password) {
-		if(users.containsKey(user)) {
-			return password ==users.get(user).getPassword();
-		}
-		return false;
+	public boolean exist(String user) {
+		return users.containsKey(user);
 	}
 	
-	public String getUsernameConnected() {
-		for(User u:users.values()) {
-			if(u.isConnected()) {
-				return u.getUser();
-			}
-		}
-		return null;
-	}
-	
-	public boolean connect(String user, String password) throws IllegalArgumentException {
+	public boolean connect(String user, String password) {
 		if(!users.containsKey(user)) {
-			throw new IllegalArgumentException("This user doesn't exists");
+			return false;
 		}
 		User u = users.get(user);
 		if(!u.getPassword().equals(password)) {
-			throw new IllegalArgumentException("Wrong password");
+			return false;
 		} else if(u.isConnected()) {
-			throw new IllegalArgumentException("This user is already connected");
+			return false;
 		} else{
 			u.setConnected(true);
 			return true;
 		}
 	}
 	
-	public boolean disconnect(String user) throws IllegalArgumentException {
+	public boolean disconnect(String user) {
 		if(!users.containsKey(user)) {
-			throw new IllegalArgumentException("This user doesn't exist");
+			return false;
 		}
 		User u = users.get(user);
 		if(!u.isConnected()) {
-			throw new IllegalArgumentException("This user is not connected");
+			return false;
 		} else {
 			u.setConnected(false);
 			return true;

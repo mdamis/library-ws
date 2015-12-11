@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -25,6 +26,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -203,8 +205,13 @@ public class GUI extends Application {
 		grid.add(btnRefresh, 0, 1);
 		btnRefresh.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				Scene scene = createIndexPage(stage);
-				showScene(stage, scene);
+				try {
+					books = client.getAllBooks();
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+				observableBooks.clear();
+				observableBooks.addAll(books);
 			}
 		});
 
@@ -249,11 +256,16 @@ public class GUI extends Application {
 		btnBorrow.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Book book = tableView.getSelectionModel().getSelectedItem();
-				try {
-					client.getLibrary().borrowBook(book, client.getUser());
-				} catch (RemoteException e) {
-					e.printStackTrace();
+				if(tableView.getSelectionModel().getSelectedItem() != null) {
+					Book book = tableView.getSelectionModel().getSelectedItem();
+					try {
+						client.getLibrary().borrowBook(book, client.getUser());
+						books = client.getAllBooks();
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+					observableBooks.clear();
+					observableBooks.addAll(books);
 				}
 			}
 		});
@@ -263,11 +275,16 @@ public class GUI extends Application {
 		btnReturn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Book book = tableView.getSelectionModel().getSelectedItem();
-				try {
-					client.getLibrary().returnBook(book, client.getUser());
-				} catch (RemoteException e) {
-					e.printStackTrace();
+				if(tableView.getSelectionModel().getSelectedItem() != null) {
+					Book book = tableView.getSelectionModel().getSelectedItem();
+					try {
+						client.getLibrary().returnBook(book, client.getUser());
+						books = client.getAllBooks();
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+					observableBooks.clear();
+					observableBooks.addAll(books);
 				}
 			}
 		});
@@ -291,21 +308,45 @@ public class GUI extends Application {
 	private Scene createBookDetailsPage(Stage stage, Book book) {
 		GridPane grid = createGrid();
 
+		final VBox vBox = new VBox();
+		vBox.setSpacing(10);
+		vBox.setPrefSize(300, 300);
+		
 		try {
 			grid.add(new Text(book.getTitle()), 0, 0);
-			grid.add(new Text("ISBN : " + book.getISBN()), 0, 1);
-			grid.add(new Text("Author : " + book.getAuthor()), 0, 2);
-			grid.add(new Text("Summary :\n" + book.getSummary()), 1, 0);
-			grid.add(new Text("Available : " + book.isAvailable()), 0, 3);
-			if (!book.isAvailable()) {
-				grid.add(new Text("Patron : " + book.getPatron().getUsername()), 1, 3);
+			grid.add(new Text("by " + book.getAuthor()), 0, 1);
+			vBox.getChildren().add(new Text("ISBN : " + book.getISBN()));
+			vBox.getChildren().add(new Text("Summary :\n" + book.getSummary()));
+			if(book.isAvailable()) {
+				vBox.getChildren().add(new Text("Available"));
+			} else {
+				vBox.getChildren().add(new Text("Not available"));
+				vBox.getChildren().add(new Text("Borrowed by " + book.getPatron().getUsername()));
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
+		
+		grid.add(vBox, 0, 3);
 
+		List<String> reviews = new ArrayList<>();
+		try {
+			reviews = book.getReviews();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ObservableList<String> observableReviews = FXCollections.observableArrayList(reviews);
+		
+		ListView<String> listView = new ListView<>(observableReviews);
+		listView.setPrefSize(300, 300);
+		
+		grid.add(new Text("Reviews"), 1, 2);
+		grid.add(listView, 1, 3);
+		
 		Button backButton = new Button("Back");
-		grid.add(backButton, 0, 5);
+		grid.add(backButton, 0, 6);
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
