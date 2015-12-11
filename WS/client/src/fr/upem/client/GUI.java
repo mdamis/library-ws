@@ -2,6 +2,7 @@ package fr.upem.client;
 
 import static javafx.geometry.HPos.RIGHT;
 
+import java.awt.image.RasterFormatException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
@@ -30,6 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import net.restfulwebservices.www.DataContracts._2008._01.CurrencyCode;
 
 import javax.xml.rpc.ServiceException;
 
@@ -70,6 +73,18 @@ public class GUI extends Application {
 		return labField;
 	}
 
+	private ComboBox<String> addComboBoxCurrency(GridPane grid, String label, int col, int row) {
+		Label lab = new Label(label);
+		grid.add(lab, col, row);
+		ObservableList<String> options = 
+			    FXCollections.observableArrayList(
+			        "EUR","USD","JPY","GBP","INR","AUD","CAD","CHF","SGD","CNY"
+			       );
+		ComboBox<String> comboBox = new ComboBox<String>( options);
+	    comboBox.setValue("EUR");
+		grid.add(comboBox, col+1, row);
+		return comboBox;
+	}
 	private GridPane createGrid() {
 		return createGrid(10, 25);
 	}
@@ -323,9 +338,14 @@ public class GUI extends Application {
 		Button btnSignIn = new Button("Sign in");
 		Button btnSignUp = new Button("Sign up");
 		HBox hbBtn = new HBox(10);
-		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().addAll(btnSignIn, btnSignUp);
+		hbBtn.setAlignment(Pos.BOTTOM_LEFT);
+		hbBtn.getChildren().addAll(btnSignUp);
 		grid.add(hbBtn, 0, 3);
+		
+		hbBtn = new HBox(10);
+		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+		hbBtn.getChildren().addAll(btnSignIn);
+		grid.add(hbBtn, 1, 3);
 
 		Button btnQuit = new Button("Quit");
 		HBox hbBtnQuit = new HBox(10);
@@ -404,7 +424,7 @@ public class GUI extends Application {
 			
 		} catch (NumberFormatException e1) {
 			actiontarget.setFill(Color.FIREBRICK);
-			actiontarget.setText("Account Id must a number");
+			actiontarget.setText("Account Id is not a valid number");
 		}
 	}
 	
@@ -417,7 +437,7 @@ public class GUI extends Application {
 		
 		TextField nameLabel = addTextField(grid, "Name :", 0, 1);
 		TextField firstnameLabel = addTextField(grid, "Firstname :", 0, 2);
-		TextField currencyLabel = addTextField(grid, "Account currency :", 0, 3);
+		ComboBox<String> currencyCombobox = addComboBoxCurrency(grid, "Account currency :", 0, 3);
 		
 		Button btn = new Button("Create Account");
 		grid.add(btn, 1, 4);
@@ -434,7 +454,7 @@ public class GUI extends Application {
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				signupBankHandler(nameLabel,firstnameLabel,currencyLabel,message,stage,book);
+				signupBankHandler(nameLabel,firstnameLabel,currencyCombobox,message,stage,book);
 			}
 		});
 		
@@ -495,10 +515,10 @@ public class GUI extends Application {
 		return scene;
 	}
 	
-	private  void signupBankHandler(TextField nameLabel,TextField firstnameLabel,TextField currencyLabel,Text message,Stage stage,Book book) {
+	private  void signupBankHandler(TextField nameLabel,TextField firstnameLabel,ComboBox<String> currencyCombobox,Text message,Stage stage,Book book) {
 		String name = nameLabel.getText();
 		String firstname = firstnameLabel.getText();
-		String currency = currencyLabel.getText();
+		String currency = (String)currencyCombobox.getValue();
 		
 		if (name.equals("") && firstname.equals("") && currency.equals("")){
 			message.setFill(Color.FIREBRICK);
@@ -531,7 +551,21 @@ public class GUI extends Application {
 		Label balanceLabel = addLabelField(grid, "Account balance :", 0, 5);
 		Label labelBook = new Label(book.getTitle()+" : ");
 		grid.add( labelBook, 0, 6);
-		grid.add( new Label(Float.toString(book.getPrice())+" "+book.getCurrency()), 1, 6);
+		Text textPrice = new Text();
+		try {
+			if(!client.getAccountCurrency().equals(book.getCurrency())){
+				double rateToBook = Client.getConvertRate( book.getCurrency(),client.getAccountCurrency());
+				double valueConverted = book.getPrice() * rateToBook;
+				
+				textPrice.setText("Price : " + book.getPrice() + " " + book.getCurrency()+" / "+valueConverted+" "+client.getAccountCurrency());
+			} else {
+				textPrice.setText("Price : " + book.getPrice() + " " + book.getCurrency());
+			}
+		} catch (RemoteException | IllegalArgumentException | ServiceException e) {
+			System.err.println("Gui.java : client.getConvertRate error");
+			textPrice.setText("Price : " + book.getPrice() + " " + book.getCurrency());
+		}
+		grid.add(textPrice, 1, 6);
 		try {
 			updateBankDetail(idLabel,nameLabel,firstnamenameLabel,currencyLabel,balanceLabel);
 		} catch (RemoteException e2) {
@@ -540,15 +574,21 @@ public class GUI extends Application {
 		}
 
 		TextField moneyTextField = addTextField(grid, "Deposit money :", 0, 7);
+		ComboBox<String> currencyCombobox = addComboBoxCurrency(grid, "", 2, 7);
 		Button btnDeposit = new Button("Deposit");
-		grid.add(btnDeposit, 2, 7);
+		grid.add(btnDeposit, 4, 7);
 		Button btnConfirm = new Button("Confirm");
 		Button btnCancel = new Button("Cancel");
 	
 		HBox hbBtn = new HBox(10);
-		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().addAll(btnCancel, btnConfirm);
+		
+		hbBtn.setAlignment(Pos.BOTTOM_LEFT);
+		hbBtn.getChildren().addAll(btnCancel);
 		grid.add(hbBtn, 0, 9);
+		hbBtn = new HBox(10);
+		hbBtn.setAlignment(Pos.BOTTOM_LEFT);
+		hbBtn.getChildren().addAll(btnConfirm);
+		grid.add(hbBtn, 1, 9);
 
 		final Text message = new Text();
 		grid.add(message, 0, 8);
@@ -561,10 +601,9 @@ public class GUI extends Application {
 						try {
 							client.buyBook(book);
 						} catch (RemoteException | IllegalArgumentException | ServiceException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							message.setFill(Color.FIREBRICK);
+							message.setText("You can't buy this book it seems");
 						}
-						
 						Scene scene = createIndexPage(stage);
 						showScene(stage, scene);
 					} else {
@@ -593,7 +632,7 @@ public class GUI extends Application {
 				try {
 					Double ammount = Double.parseDouble(moneyTextField.getText());
 					try {
-						client.deposit(ammount,"EUR");
+						client.deposit(ammount,(String)currencyCombobox.getValue());
 						updateBankDetail(idLabel,nameLabel,firstnamenameLabel,currencyLabel,balanceLabel);
 					} catch (RemoteException e1) {
 						// TODO Auto-generated catch block
@@ -607,7 +646,7 @@ public class GUI extends Application {
 					}
 				} catch (NumberFormatException e1) {
 					message.setFill(Color.FIREBRICK);
-					message.setText("Account Id must a number");
+					message.setText("value not a number");
 				}
 			}
 		});
