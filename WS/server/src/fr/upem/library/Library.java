@@ -64,6 +64,10 @@ public class Library {
 		}
 	}
 
+	/**
+	 * get all the books in a Array of Book
+	 * @return an array of all the library's book
+	 */
 	public Book[] getAllBooks() {
 		Book[] tmp = new Book[books.size()];
 		return books.values().toArray(tmp);
