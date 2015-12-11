@@ -129,6 +129,7 @@ public class Client {
 		Double rate = getConvertRate(book.getCurrency(), bank.getAccountCurrency(currentAccount));
 		Double priceConverted = book.getPrice() * rate;
 		bank.withdrawal(currentAccount, priceConverted);
+		library.sellBook(book.getISBN(), 1);
 	}
 	
 	public void deposit(double amount,String newCurency) throws RemoteException, IllegalArgumentException, ServiceException{
@@ -146,7 +147,7 @@ public class Client {
 	}
 	
 	public String getAccountBalance() throws RemoteException{
-		return bank.getAccountName(currentAccount).toString();
+		return Double.toString(bank.getAccountBalance(currentAccount));
 	}
 	
 	public String getAccountId() throws RemoteException{

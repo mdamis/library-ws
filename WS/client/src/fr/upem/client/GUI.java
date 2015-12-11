@@ -4,7 +4,6 @@ import static javafx.geometry.HPos.RIGHT;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javafx.application.Application;
@@ -108,7 +107,7 @@ public class GUI extends Application {
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().addAll(btnSignIn, btnSignUp);
-		grid.add(hbBtn, 1, 4);
+		grid.add(hbBtn, 0, 3);
 
 		Button btnQuit = new Button("Quit");
 		HBox hbBtnQuit = new HBox(10);
@@ -423,6 +422,12 @@ public class GUI extends Application {
 		Button btn = new Button("Create Account");
 		grid.add(btn, 1, 4);
 		
+		Button btnQuit = new Button("Quit");
+		HBox hbBtnQuit = new HBox(10);
+		hbBtnQuit.setAlignment(Pos.BOTTOM_LEFT);
+		hbBtnQuit.getChildren().add(btnQuit);
+		grid.add(hbBtnQuit, 0, 4);
+		
 		final Text message = new Text();
 		grid.add(message, 0, 5);
 		
@@ -432,6 +437,15 @@ public class GUI extends Application {
 				signupBankHandler(nameLabel,firstnameLabel,currencyLabel,message,stage,book);
 			}
 		});
+		
+		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				Scene scene = createIndexPage(stage);
+				showScene(stage, scene);
+			}
+		});
+		
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
 		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
 		return scene;
@@ -506,7 +520,7 @@ public class GUI extends Application {
 	private Scene createCommandPage(Stage stage,Book book){
 		GridPane grid = createGrid();
 
-		Text scenetitle = new Text("Bank detail");
+		Text scenetitle = new Text("Commande du livre : "+book.getTitle());
 		scenetitle.setId("welcome-text");
 		grid.add(scenetitle, 0, 0, 2, 1);
 		
@@ -515,7 +529,9 @@ public class GUI extends Application {
 		Label firstnamenameLabel = addLabelField(grid, "Firstname :", 0, 3);
 		Label currencyLabel = addLabelField(grid, "Account currency :", 0, 4);
 		Label balanceLabel = addLabelField(grid, "Account balance :", 0, 5);
-		
+		Label labelBook = new Label(book.getTitle()+" : ");
+		grid.add( labelBook, 0, 6);
+		grid.add( new Label(Float.toString(book.getPrice())+" "+book.getCurrency()), 1, 6);
 		try {
 			updateBankDetail(idLabel,nameLabel,firstnamenameLabel,currencyLabel,balanceLabel);
 		} catch (RemoteException e2) {
@@ -523,19 +539,19 @@ public class GUI extends Application {
 			e2.printStackTrace();
 		}
 
-		TextField moneyTextField = addTextField(grid, "Deposit money :", 0, 6);
+		TextField moneyTextField = addTextField(grid, "Deposit money :", 0, 7);
 		Button btnDeposit = new Button("Deposit");
-		grid.add(btnDeposit, 2, 6);
+		grid.add(btnDeposit, 2, 7);
 		Button btnConfirm = new Button("Confirm");
 		Button btnCancel = new Button("Cancel");
 	
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().addAll(btnCancel, btnConfirm);
-		grid.add(hbBtn, 0, 8);
+		grid.add(hbBtn, 0, 9);
 
 		final Text message = new Text();
-		grid.add(message, 0, 7);
+		grid.add(message, 0, 8);
 		
 		btnConfirm.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -566,7 +582,8 @@ public class GUI extends Application {
 		btnCancel.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				createIndexPage(stage);
+				Scene scene = createIndexPage(stage);
+				showScene(stage, scene);
 			}
 		});
 		
