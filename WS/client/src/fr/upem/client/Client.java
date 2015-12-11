@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
+import FaultContracts.GOTLServices._2008._01.DefaultFaultContract;
 import fr.upem.bank.Bank;
 import fr.upem.bank.BankServiceLocator;
 import fr.upem.book.Book;
@@ -13,12 +14,18 @@ import fr.upem.library.Library;
 import fr.upem.library.LibraryServiceLocator;
 import fr.upem.user.UserManager;
 import fr.upem.user.UserManagerServiceLocator;
+import net.restfulwebservices.www.DataContracts._2008._01.Currency;
+import net.restfulwebservices.www.DataContracts._2008._01.CurrencyCode;
+import net.restfulwebservices.www.ServiceContracts._2008._01.CurrencyServiceLocator;
+import net.restfulwebservices.www.ServiceContracts._2008._01.ICurrencyService;
 
 public class Client {
 	private final UserManager manager;
 	private final Library library;
 	private final Bank bank;
 	private String username;
+	private int currentAccount;
+	
 	
 	public Client() throws ServiceException {
 		manager = new UserManagerServiceLocator().getUserManager();
@@ -26,6 +33,15 @@ public class Client {
 		bank = new BankServiceLocator().getBank();
 	}
 
+	public static double getConvertRate(String fromCurrency, String toCurrency)
+			throws ServiceException, DefaultFaultContract, RemoteException, IllegalArgumentException {
+		ICurrencyService iCurrency = new CurrencyServiceLocator().getBasicHttpBinding_ICurrencyService();
+		Currency c = iCurrency.getConversionRate(CurrencyCode.fromString(fromCurrency),
+				CurrencyCode.fromString(toCurrency));
+		Double r = c.getRate();
+		return r;
+	}
+	
 	public Library getLibrary() {
 		return library;
 	}
@@ -40,6 +56,11 @@ public class Client {
 	
 	public boolean userExist(String username, String passwd)throws IllegalArgumentException, RemoteException {
 		return manager.exist(username);
+		
+	}
+	
+	public boolean accountExist(int accountId) throws RemoteException{
+		return bank.exist(accountId);
 	}
 	
 	public boolean signup(String username,String passwd) {
@@ -77,7 +98,15 @@ public class Client {
 	public String getUsername() {
 		return username;
 	}
-
+	
+	public void setCurrentAccount(int accountId) {
+		this.currentAccount = accountId;
+	}
+	
+	public String getDetail() throws RemoteException {
+		return this.bank.getDetailAccount(this.currentAccount);
+	}
+	
 	public void disconnect() {
 		try {
 			if(manager.disconnect(username)) {
@@ -90,4 +119,45 @@ public class Client {
 		}
 	}
 	
+	public boolean isAbleToBuyBook(Book book) throws RemoteException, IllegalArgumentException, ServiceException {
+		Double rate = getConvertRate(book.getCurrency(), bank.getAccountCurrency(currentAccount));
+		Double priceConverted = book.getPrice() * rate;
+		return (bank.getAccountBalance(currentAccount) > priceConverted);
+	}
+	
+	public void buyBook(Book book) throws RemoteException, IllegalArgumentException, ServiceException {
+		Double rate = getConvertRate(book.getCurrency(), bank.getAccountCurrency(currentAccount));
+		Double priceConverted = book.getPrice() * rate;
+		bank.withdrawal(currentAccount, priceConverted);
+	}
+	
+	public void deposit(double amount,String newCurency) throws RemoteException, IllegalArgumentException, ServiceException{
+		Double rate = getConvertRate(newCurency, bank.getAccountCurrency(currentAccount));
+		Double depositAmmountConverted = amount * rate;
+		bank.deposit(currentAccount, depositAmmountConverted);
+	}
+	
+	public String getAccountName() throws RemoteException{
+		return bank.getAccountName(currentAccount);
+	}
+	
+	public String getAccountFirstname() throws RemoteException{
+		return bank.getAccountFirstName(currentAccount);
+	}
+	
+	public String getAccountBalance() throws RemoteException{
+		return bank.getAccountName(currentAccount).toString();
+	}
+	
+	public String getAccountId() throws RemoteException{
+		return Integer.toString(bank.getAccountId(currentAccount));
+	}
+	
+	public String getAccountCurrency() throws RemoteException{
+		return bank.getAccountCurrency(currentAccount);
+	}
+	
+	public int createAccount(String name,String firstname,String currency) throws RemoteException {
+		return bank.addAccount(name, firstname, currency);
+	}
 }

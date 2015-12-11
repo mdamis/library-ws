@@ -4,6 +4,7 @@ import static javafx.geometry.HPos.RIGHT;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.rpc.ServiceException;
@@ -59,6 +60,14 @@ public class GUI extends Application {
 		grid.add(textField, col + 1, row);
 		return textField;
 	}
+	
+	private Label addLabelField(GridPane grid, String label, int col, int row) {
+		Label lab = new Label(label);
+		grid.add(lab, col, row);
+		Label labField = new Label("");
+		grid.add(labField, col + 1, row);
+		return labField;
+	}
 
 	private GridPane createGrid() {
 		return createGrid(10, 25);
@@ -103,7 +112,7 @@ public class GUI extends Application {
 		HBox hbBtnQuit = new HBox(10);
 		hbBtnQuit.setAlignment(Pos.BOTTOM_LEFT);
 		hbBtnQuit.getChildren().add(btnQuit);
-		grid.add(hbBtnQuit, 0, 4);
+		grid.add(hbBtnQuit, 0, 6);
 
 		final Text message = new Text();
 		message.setId("actiontarget");
@@ -285,17 +294,6 @@ public class GUI extends Application {
 			}
 		});
 
-		Button btnBuyBook = new Button("Buy the book");
-		grid.add(btnBuyBook, 2, 1);
-		btnBuyBook.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Scene scene = createBuyBookPage(stage);
-				showScene(stage, scene);
-			}
-		});
-	
-	
 		grid.add(tableView, 0, 2, 3, 1);
 
 		Button btnQuit = new Button("Quit");
@@ -313,14 +311,258 @@ public class GUI extends Application {
 		return scene;
 	}
 	
-	private Scene createBuyBookPage(Stage stage){
-		//TODO createBuyBook
-		return null;
-	}
-	
 	private Scene createBookDetailsPage(Stage stage,Book book){
 		//TODO createBookDetail
 		return null;
 	}
+	
+	private Scene createBankSigninPage(Stage stage,Book book){
+		GridPane grid = createGrid();
 
+		Text scenetitle = new Text("Welcome to MLVLib Bank");
+		scenetitle.setId("welcome-text");
+		grid.add(scenetitle, 0, 0, 2, 1);
+
+		TextField userTextField = addTextField(grid, "Account ID:", 0, 1);
+		Button btnSignIn = new Button("Sign in");
+		Button btnSignUp = new Button("Sign up");
+		HBox hbBtn = new HBox(10);
+		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+		hbBtn.getChildren().addAll(btnSignIn, btnSignUp);
+		grid.add(hbBtn, 0, 3);
+
+		Button btnQuit = new Button("Quit");
+		HBox hbBtnQuit = new HBox(10);
+		hbBtnQuit.setAlignment(Pos.BOTTOM_LEFT);
+		hbBtnQuit.getChildren().add(btnQuit);
+		grid.add(hbBtnQuit, 0, 4);
+
+		final Text message = new Text();
+		message.setId("actiontarget");
+		grid.add(message, 0, 2);
+		GridPane.setColumnSpan(message, 2);
+		GridPane.setHalignment(message, RIGHT);
+		message.setId("actiontarget");
+		
+		btnSignIn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				try {
+					signinBankHandler(stage, userTextField, message,book);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		btnSignUp.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				Scene scene = createBankSignupPage(stage,book);
+				showScene(stage, scene);
+			}
+		});
+		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				//stage.close();
+				Scene scene = createBookDetailsPage(stage, book);
+				showScene(stage, scene);
+			}
+		});
+		userTextField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.ENTER) {
+					try {
+						signinBankHandler(stage, userTextField,
+								message,book);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+
+		Scene scene = new Scene(grid, WIDTH, HEIGHT);
+		scene.getStylesheets().add(
+				GUI.class.getResource("style.css").toExternalForm());
+		return scene;
+	}
+	
+	private void signinBankHandler(Stage primaryStage, TextField userTextField, final Text actiontarget, Book book) throws RemoteException {
+		String accountIdStr = userTextField.getText();
+		System.out.println("signin accountId: " + accountIdStr);
+		try {
+			int accountId = Integer.parseInt(accountIdStr);
+			if(client.accountExist(accountId)) {
+				client.setCurrentAccount(accountId);
+				Scene scene = createCommandPage(primaryStage,book);
+				showScene(primaryStage, scene);
+			} else {
+				actiontarget.setFill(Color.FIREBRICK);
+				actiontarget.setText("This Account does not exist");
+			}
+			
+		} catch (NumberFormatException e1) {
+			actiontarget.setFill(Color.FIREBRICK);
+			actiontarget.setText("Account Id must a number");
+		}
+	}
+	
+	private Scene createBankSignupPage(Stage stage,Book book){
+		GridPane grid = createGrid();
+
+		Text scenetitle = new Text("Signup Bank page");
+		scenetitle.setId("welcome-text");
+		grid.add(scenetitle, 0, 0, 2, 1);
+		
+		TextField nameLabel = addTextField(grid, "Name :", 0, 1);
+		TextField firstnameLabel = addTextField(grid, "Firstname :", 0, 2);
+		TextField currencyLabel = addTextField(grid, "Account currency :", 0, 3);
+		
+		Button btn = new Button("Create Account");
+		grid.add(btn, 1, 4);
+		
+		final Text message = new Text();
+		grid.add(message, 0, 5);
+		
+		btn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				signupBankHandler(nameLabel,firstnameLabel,currencyLabel,message,stage,book);
+			}
+		});
+		return null;
+	}
+	
+	private  void signupBankHandler(TextField nameLabel,TextField firstnameLabel,TextField currencyLabel,Text message,Stage stage,Book book) {
+		String name = nameLabel.getText();
+		String firstname = firstnameLabel.getText();
+		String currency = currencyLabel.getText();
+		
+		if (name.equals("") && firstname.equals("") && currency.equals("")){
+			message.setFill(Color.FIREBRICK);
+			message.setText("Please enter valid informations");
+		} else {
+			try {
+				int clientId = client.createAccount(name,firstname,currency);
+				client.setCurrentAccount(clientId);
+				Scene scene = createCommandPage(stage, book);
+				showScene(stage, scene);
+				
+				
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	private Scene createCommandPage(Stage stage,Book book){
+		GridPane grid = createGrid();
+
+		Text scenetitle = new Text("Bank detail");
+		scenetitle.setId("welcome-text");
+		grid.add(scenetitle, 0, 0, 2, 1);
+		
+		Label idLabel = addLabelField(grid, "Account id :", 0, 1);
+		Label nameLabel = addLabelField(grid, "Name :", 0, 2);
+		Label firstnamenameLabel = addLabelField(grid, "Firstname :", 0, 3);
+		Label currencyLabel = addLabelField(grid, "Account currency :", 0, 4);
+		Label balanceLabel = addLabelField(grid, "Account balance :", 0, 5);
+		
+		try {
+			updateBankDetail(idLabel,nameLabel,firstnamenameLabel,currencyLabel,balanceLabel);
+		} catch (RemoteException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+		TextField moneyTextField = addTextField(grid, "Deposit money :", 0, 6);
+		Button btnDeposit = new Button("Deposit");
+		grid.add(btnDeposit, 2, 6);
+		Button btnConfirm = new Button("Confirm");
+		Button btnCancel = new Button("Cancel");
+	
+		HBox hbBtn = new HBox(10);
+		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+		hbBtn.getChildren().addAll(btnCancel, btnConfirm);
+		grid.add(hbBtn, 0, 8);
+
+		final Text message = new Text();
+		grid.add(message, 0, 7);
+		
+		btnConfirm.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				try {
+					if(client.isAbleToBuyBook(book)) {
+						try {
+							client.buyBook(book);
+						} catch (RemoteException | IllegalArgumentException | ServiceException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						Scene scene = createIndexPage(stage);
+						showScene(stage, scene);
+					} else {
+						message.setFill(Color.FIREBRICK);
+						message.setText("Deposit more money");
+					}
+				} catch (RemoteException | IllegalArgumentException | ServiceException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+
+		btnCancel.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				createIndexPage(stage);
+			}
+		});
+		
+		btnDeposit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				try {
+					Double ammount = Double.parseDouble(moneyTextField.getText());
+					try {
+						client.deposit(ammount,"EUR");
+						updateBankDetail(idLabel,nameLabel,firstnamenameLabel,currencyLabel,balanceLabel);
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IllegalArgumentException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ServiceException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				} catch (NumberFormatException e1) {
+					message.setFill(Color.FIREBRICK);
+					message.setText("Account Id must a number");
+				}
+			}
+		});
+		
+		Scene scene = new Scene(grid, WIDTH, HEIGHT);
+		scene.getStylesheets().add(
+				GUI.class.getResource("style.css").toExternalForm());
+		return scene;
+	}
+	
+	private void updateBankDetail(Label idLabel,Label nameLabel,Label firstnameLabel,Label currencyLabel,Label balanceLabel) throws RemoteException {
+		idLabel.setText(client.getAccountId());
+		nameLabel.setText(client.getAccountName());
+		firstnameLabel.setText(client.getAccountFirstname());
+		currencyLabel.setText(client.getAccountCurrency());
+		balanceLabel.setText(client.getAccountBalance());
+	}
 }
