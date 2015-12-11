@@ -3,15 +3,18 @@ import javafx.application.Application;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.rmi.RMISecurityException;
+import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class LibraryClient {
 	private final Library library;
 	private User user = null;
 
 	public LibraryClient() throws MalformedURLException, RemoteException, NotBoundException {
-		library = (Library) Naming.lookup("LibraryService");
+		library = (Library) Naming.lookup("rmi://localhost:1099/LibraryService");
 	}
 
 	public Library getLibrary() {
@@ -57,8 +60,13 @@ public class LibraryClient {
 
 	public static void main(String[] args) {
 		try {
+			String codebase = "file:../server/";
+			System.setProperty("java.rmi.server.codebase", codebase);
+			System.setProperty("java.security.policy", "library.policy");
+			System.setSecurityManager(new RMISecurityManager());
 			
-			Application.launch(GUI.class, args);
+			
+			Application.launch(GUI.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

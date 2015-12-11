@@ -1,12 +1,14 @@
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.net.MalformedURLException;
 
 public class LibraryServer {
 	private final Library library;
 
-	private LibraryServer() throws RemoteException {
+	private LibraryServer() throws RemoteException, MalformedURLException {
 		library = new LibraryImpl();
+		Naming.rebind("rmi://localhost:1099/LibraryService", library);
 	}
 	
 	public static void main(String[] args) {
