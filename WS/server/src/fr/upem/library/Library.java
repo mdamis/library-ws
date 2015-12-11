@@ -17,6 +17,7 @@ public class Library {
 		Book newBook = Book.create("1", "War and Peace", "Leo Tolstoy", 25, "03-01-1982");
 		books.put(newBook.getISBN(), newBook);
 		newBook = Book.create("2", "1984", "George Orwell", 10, "01-01-2010");
+		newBook.addExemplary(2);
 		books.put(newBook.getISBN(), newBook);
 	}
 

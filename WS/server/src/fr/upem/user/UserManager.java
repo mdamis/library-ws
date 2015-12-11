@@ -8,10 +8,9 @@ public class UserManager {
 	
 	public UserManager() {
 		users = new HashMap<>();
-	}
-	
-	private HashMap<String, User> getUsers() {
-		return users;
+		users.put("bcrochez", new User("bcrochez", "abc"));
+		users.put("mdamis", new User("mdamis", "123"));
+		users.put("mperou", new User("mperou", "abc123"));
 	}
 	
 	public boolean registerUser(String user, String password) {

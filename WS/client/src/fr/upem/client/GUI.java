@@ -214,6 +214,7 @@ public class GUI extends Application {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private Scene createIndexPage(Stage stage) {
 		System.out.println("Creation en cours ...");
 
