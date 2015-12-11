@@ -29,6 +29,6 @@ public interface Book extends Remote {
 
 	public List<String> getReviews() throws RemoteException;
 
-	public void addReview(String review) throws RemoteException;
+	public void addReview(String review, User user) throws RemoteException;
 
 }

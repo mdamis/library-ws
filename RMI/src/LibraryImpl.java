@@ -132,4 +132,13 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 		return null;
 	}
 
+	@Override
+	public List<User> getAllUsers() throws RemoteException {
+		ArrayList<User> userList = new ArrayList<>();
+		for(String username : users.keySet()) {
+			userList.add(users.get(username));
+		}
+		return userList;
+	}
+
 }
