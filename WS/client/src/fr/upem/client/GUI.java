@@ -53,7 +53,7 @@ public class GUI extends Application {
 		Scene scene = createSignInPage(primaryStage);
 		showScene(primaryStage, scene);
 	}
-	
+
 	@Override
 	public void stop() {
 		client.disconnect();
@@ -110,9 +110,9 @@ public class GUI extends Application {
 
 		Button btnSignIn = new Button("Sign in");
 		Button btnSignUp = new Button("Sign up");
-		//HBox hbBtn = new HBox(10);
-		//hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		//hbBtn.getChildren().addAll(btnSignIn, btnSignUp);
+		// HBox hbBtn = new HBox(10);
+		// hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+		// hbBtn.getChildren().addAll(btnSignIn, btnSignUp);
 		GridPane.setHalignment(btnSignIn, RIGHT);
 		grid.add(btnSignIn, 1, 3);
 		grid.add(btnSignUp, 0, 3);
@@ -326,21 +326,28 @@ public class GUI extends Application {
 
 		Text scenetitle = new Text("Welcome to MLVLib Bank");
 		scenetitle.setId("welcome-text");
-		grid.add(scenetitle, 0, 0, 2, 1);
+		grid.add(scenetitle, 0, 0, 3, 1);
 
 		TextField userTextField = addTextField(grid, "Account ID:", 0, 1);
+		int account = client.getCurrentAccount();
+		if (account != 0) {
+			userTextField.setText(Integer.toString(account));
+		}
+
 		Button btnSignIn = new Button("Sign in");
 		Button btnSignUp = new Button("Sign up");
-		HBox hbBtn = new HBox(10);
-		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().addAll(btnSignIn, btnSignUp);
-		grid.add(hbBtn, 0, 3);
+		//HBox hbBtn = new HBox(10);
+		//hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+		//hbBtn.getChildren().addAll(btnSignIn, btnSignUp);
+		GridPane.setHalignment(btnSignIn, RIGHT);
+		grid.add(btnSignIn, 1, 3);
+		grid.add(btnSignUp, 0, 3);
 
-		Button btnQuit = new Button("Quit");
-		HBox hbBtnQuit = new HBox(10);
-		hbBtnQuit.setAlignment(Pos.BOTTOM_LEFT);
-		hbBtnQuit.getChildren().add(btnQuit);
-		grid.add(hbBtnQuit, 0, 4);
+		Button btnBack = new Button("Back");
+		HBox hbBtnBack = new HBox(10);
+		hbBtnBack.setAlignment(Pos.BOTTOM_LEFT);
+		hbBtnBack.getChildren().add(btnBack);
+		grid.add(hbBtnBack, 0, 4);
 
 		final Text message = new Text();
 		message.setId("actiontarget");
@@ -368,10 +375,9 @@ public class GUI extends Application {
 				showScene(stage, scene);
 			}
 		});
-		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
+		btnBack.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				// stage.close();
 				Scene scene = createBookDetailsPage(stage, book);
 				showScene(stage, scene);
 			}
@@ -431,11 +437,11 @@ public class GUI extends Application {
 		Button btn = new Button("Create Account");
 		grid.add(btn, 1, 4);
 
-		Button btnQuit = new Button("Quit");
-		HBox hbBtnQuit = new HBox(10);
-		hbBtnQuit.setAlignment(Pos.BOTTOM_LEFT);
-		hbBtnQuit.getChildren().add(btnQuit);
-		grid.add(hbBtnQuit, 0, 4);
+		Button btnBack = new Button("Back");
+		HBox hbBtnBack = new HBox(10);
+		hbBtnBack.setAlignment(Pos.BOTTOM_LEFT);
+		hbBtnBack.getChildren().add(btnBack);
+		grid.add(hbBtnBack, 0, 4);
 
 		final Text message = new Text();
 		grid.add(message, 0, 5);
@@ -448,7 +454,7 @@ public class GUI extends Application {
 			}
 		});
 
-		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
+		btnBack.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				Scene scene = createIndexPage(stage);

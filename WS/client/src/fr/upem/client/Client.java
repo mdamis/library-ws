@@ -103,6 +103,10 @@ public class Client {
 		this.currentAccount = accountId;
 	}
 	
+	public int getCurrentAccount() {
+		return currentAccount;
+	}
+	
 	public String getDetail() throws RemoteException {
 		return this.bank.getDetailAccount(this.currentAccount);
 	}
