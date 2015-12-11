@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.xml.rpc.ServiceException;
-
-import fr.upem.book.Book;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,9 +27,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import javax.xml.rpc.ServiceException;
+
+import fr.upem.book.Book;
 
 public class GUI extends Application {
 	private final static int WIDTH = 720;
@@ -310,12 +312,7 @@ public class GUI extends Application {
 		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
 		return scene;
 	}
-	
-	private Scene createBookDetailsPage(Stage stage,Book book){
-		//TODO createBookDetail
-		return null;
-	}
-	
+
 	private Scene createBankSigninPage(Stage stage,Book book){
 		GridPane grid = createGrid();
 
@@ -435,7 +432,53 @@ public class GUI extends Application {
 				signupBankHandler(nameLabel,firstnameLabel,currencyLabel,message,stage,book);
 			}
 		});
-		return null;
+		Scene scene = new Scene(grid, WIDTH, HEIGHT);
+		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		return scene;
+	}
+
+	private Scene createBookDetailsPage(Stage stage,Book book){
+		GridPane grid = createGrid();
+
+		final VBox vBox = new VBox();
+		vBox.setSpacing(10);
+		//vBox.setPrefSize(300, 300);
+		
+		grid.add(new Text(book.getTitle()), 0, 0);
+		grid.add(new Text("by " + book.getAuthor()), 0, 1);
+		vBox.getChildren().add(new Text("ISBN : " + book.getISBN()));
+		vBox.getChildren().add(new Text("Summary :\n" + book.getSummary()));
+		if(book.isAvailable()) {
+			vBox.getChildren().add(new Text("Available (" + book.getExemplary() + " exemplary left)"));
+		} else {
+			vBox.getChildren().add(new Text("Not available"));
+		}
+		vBox.getChildren().add(new Text("Price : " + book.getPrice() + " " + book.getCurrency()));
+		
+		grid.add(vBox, 0, 3);
+		
+		Button backButton = new Button("Back");
+		grid.add(backButton, 0, 6);
+		backButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Scene scene = createIndexPage(stage);
+				showScene(stage, scene);
+			}
+		});
+		Button buyButton = new Button("Buy");
+		grid.add(buyButton, 1, 6);
+		buyButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Scene scene = createBankSigninPage(stage,book);
+				showScene(stage, scene);
+			}
+		});
+
+		Scene scene = new Scene(grid, WIDTH, HEIGHT);
+		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		return scene;
 	}
 	
 	private  void signupBankHandler(TextField nameLabel,TextField firstnameLabel,TextField currencyLabel,Text message,Stage stage,Book book) {
