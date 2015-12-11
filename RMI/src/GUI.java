@@ -20,6 +20,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
@@ -345,6 +346,16 @@ public class GUI extends Application {
 		grid.add(new Text("Reviews"), 1, 2);
 		grid.add(listView, 1, 3);
 		
+		Button addReviewButton = new Button("Add review");
+		grid.add(addReviewButton, 1, 4);
+		addReviewButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Scene scene = createAddReviewPage(stage, book);
+				showScene(stage, scene);
+			}
+		});
+		
 		Button backButton = new Button("Back");
 		grid.add(backButton, 0, 6);
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -361,6 +372,60 @@ public class GUI extends Application {
 		return scene;
 	}
 
+	private Scene createAddReviewPage(Stage stage, Book book) {
+		GridPane grid = createGrid();
+				
+		Text sceneTitle = new Text("Add a review");
+		sceneTitle.setId("welcome-text");
+		HBox hBox = new HBox();
+		hBox.getChildren().add(sceneTitle);
+		hBox.setAlignment(Pos.CENTER);
+		grid.add(hBox, 0, 0);
+		
+		TextArea reviewTextArea = new TextArea();
+		reviewTextArea.setPrefSize(350, 150);
+		grid.add(reviewTextArea, 0, 2);
+		
+		Button backButton = new Button("Back");
+		backButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Scene scene = createBookDetailsPage(stage, book);
+				showScene(stage, scene);
+			}
+		});
+		
+		Button sendButton = new Button("Send");
+		sendButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String review = reviewTextArea.getText();
+				if (review.equals("")) {
+					System.err.println("empty review");
+				} else {
+					try {
+						book.addReview(review, client.getUser());
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+				}
+				Scene scene = createBookDetailsPage(stage, book);
+				showScene(stage, scene);
+			}
+		});
+		
+		hBox = new HBox();
+		hBox.setSpacing(40);
+		hBox.setAlignment(Pos.CENTER);
+		hBox.getChildren().addAll(sendButton, backButton);
+		grid.add(hBox, 0, 3);
+		
+		Scene scene = new Scene(grid, WIDTH, HEIGHT);
+		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+
+		return scene;
+	}
+	
 	private Scene createAddBookPage(Stage stage) {
 		GridPane grid = createGrid();
 
