@@ -48,10 +48,15 @@ public class GUI extends Application {
 		} catch (ServiceException e) {
 			System.err.println("Gui.java : start method failed");
 		}
-		
+
 		primaryStage.setTitle("MLV Store");
 		Scene scene = createSignInPage(primaryStage);
 		showScene(primaryStage, scene);
+	}
+	
+	@Override
+	public void stop() {
+		client.disconnect();
 	}
 
 	private TextField addTextField(GridPane grid, String label, int col, int row) {
@@ -61,7 +66,7 @@ public class GUI extends Application {
 		grid.add(textField, col + 1, row);
 		return textField;
 	}
-	
+
 	private Label addLabelField(GridPane grid, String label, int col, int row) {
 		Label lab = new Label(label);
 		grid.add(lab, col, row);
@@ -90,10 +95,11 @@ public class GUI extends Application {
 
 	private Scene createSignInPage(Stage primaryStage) {
 		GridPane grid = createGrid();
+		grid.setAlignment(Pos.CENTER);
 
 		Text scenetitle = new Text("Welcome to MLVLib Store");
 		scenetitle.setId("welcome-text");
-		grid.add(scenetitle, 0, 0, 2, 1);
+		grid.add(scenetitle, 0, 0, 3, 1);
 
 		TextField userTextField = addTextField(grid, "Username:", 0, 1);
 
@@ -104,32 +110,26 @@ public class GUI extends Application {
 
 		Button btnSignIn = new Button("Sign in");
 		Button btnSignUp = new Button("Sign up");
-		HBox hbBtn = new HBox(10);
-		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().addAll(btnSignIn, btnSignUp);
-		grid.add(hbBtn, 0, 3);
+		//HBox hbBtn = new HBox(10);
+		//hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
+		//hbBtn.getChildren().addAll(btnSignIn, btnSignUp);
+		GridPane.setHalignment(btnSignIn, RIGHT);
+		grid.add(btnSignIn, 1, 3);
+		grid.add(btnSignUp, 0, 3);
 
 		Button btnQuit = new Button("Quit");
 		HBox hbBtnQuit = new HBox(10);
 		hbBtnQuit.setAlignment(Pos.BOTTOM_LEFT);
 		hbBtnQuit.getChildren().add(btnQuit);
-		grid.add(hbBtnQuit, 0, 6);
+		grid.add(hbBtnQuit, 0, 5);
 
 		final Text message = new Text();
 		message.setId("actiontarget");
-		grid.add(message, 0, 5);
+		grid.add(message, 0, 4);
 		GridPane.setColumnSpan(message, 2);
 		GridPane.setHalignment(message, RIGHT);
 		message.setId("actiontarget");
 
-		/*btnSignIn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				connectionHandler(primaryStage, userTextField, pwBox,
-						message);
-			}
-		});*/
-		
 		btnSignIn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -153,8 +153,7 @@ public class GUI extends Application {
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode() == KeyCode.ENTER) {
-					signinHandler(primaryStage, userTextField, pwBox,
-							message);
+					signinHandler(primaryStage, userTextField, pwBox, message);
 				}
 			}
 		});
@@ -162,8 +161,7 @@ public class GUI extends Application {
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode() == KeyCode.ENTER) {
-					signinHandler(primaryStage, userTextField, pwBox,
-							message);
+					signinHandler(primaryStage, userTextField, pwBox, message);
 				}
 			}
 		});
@@ -173,27 +171,31 @@ public class GUI extends Application {
 				GUI.class.getResource("style.css").toExternalForm());
 		return scene;
 	}
-	
-	private void signinHandler(Stage primaryStage, TextField userTextField, PasswordField pb, final Text actiontarget) {
+
+	private void signinHandler(Stage primaryStage, TextField userTextField,
+			PasswordField pb, final Text actiontarget) {
 		String username = userTextField.getText();
 		String passwd = pb.getText();
 		System.out.println("signin user: " + username);
 		System.out.println("signin passwd: " + passwd);
 		try {
-			if (username.equals("") || passwd.equals("") || !client.userExist(username, passwd)) {
+			if (username.equals("") || passwd.equals("")
+					|| !client.userExist(username, passwd)) {
 				System.out.println("invalid param to sign in");
 				actiontarget.setFill(Color.FIREBRICK);
-				actiontarget.setText("Enter a valid username and passwd or signup");
+				actiontarget
+						.setText("Enter a valid username and passwd or signup");
 			} else {
 				System.out.println("try to connect");
-				if(client.signin(username, passwd)) {
+				if (client.signin(username, passwd)) {
 					System.out.println("Connected as " + username);
 					Scene scene = createIndexPage(primaryStage);
 					showScene(primaryStage, scene);
 				} else {
 					System.err.println("Failed to connect");
 					actiontarget.setFill(Color.FIREBRICK);
-					actiontarget.setText("Enter a valid username and passwd or signup");
+					actiontarget
+							.setText("Enter a valid username and passwd or signup");
 				}
 			}
 		} catch (RemoteException e) {
@@ -202,7 +204,8 @@ public class GUI extends Application {
 		}
 	}
 
-	private void signupHandler(Stage primaryStage, TextField userTextField, PasswordField pb, final Text actiontarget) {
+	private void signupHandler(Stage primaryStage, TextField userTextField,
+			PasswordField pb, final Text actiontarget) {
 		String username = userTextField.getText();
 		String passwd = pb.getText();
 		System.out.println("signup user: " + username);
@@ -223,7 +226,7 @@ public class GUI extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private Scene createIndexPage(Stage stage) {
 		System.out.println("Creation en cours ...");
@@ -234,7 +237,8 @@ public class GUI extends Application {
 			e.printStackTrace();
 		}
 		// Create an ObservableList from the ArrayList
-		ObservableList<Book> observableBooks = FXCollections.observableArrayList(books);
+		ObservableList<Book> observableBooks = FXCollections
+				.observableArrayList(books);
 
 		// Create table
 		TableView<Book> tableView = new TableView<>();
@@ -243,7 +247,8 @@ public class GUI extends Application {
 		TableColumn<Book, String> isbnColumn = new TableColumn<>("ISBN");
 		TableColumn<Book, String> titleColumn = new TableColumn<>("Title");
 		TableColumn<Book, String> authorColumn = new TableColumn<>("Author");
-		TableColumn<Book, Integer> exemplaryColumn = new TableColumn<>("Exemplary");
+		TableColumn<Book, Integer> exemplaryColumn = new TableColumn<>(
+				"Exemplary");
 		TableColumn<Book, Float> priceColumn = new TableColumn<>("Price");
 		TableColumn<Book, String> currencyColumn = new TableColumn<>("Currency");
 
@@ -251,12 +256,15 @@ public class GUI extends Application {
 		isbnColumn.setCellValueFactory(new PropertyValueFactory<>("ISBN"));
 		titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
 		authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
-		exemplaryColumn.setCellValueFactory(new PropertyValueFactory<>("exemplary"));
+		exemplaryColumn.setCellValueFactory(new PropertyValueFactory<>(
+				"exemplary"));
 		priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-		currencyColumn.setCellValueFactory(new PropertyValueFactory<>("currency"));
+		currencyColumn.setCellValueFactory(new PropertyValueFactory<>(
+				"currency"));
 
 		tableView.setItems(observableBooks);
-		tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn, exemplaryColumn, priceColumn, currencyColumn);
+		tableView.getColumns().addAll(isbnColumn, titleColumn, authorColumn,
+				exemplaryColumn, priceColumn, currencyColumn);
 		// Customize the TableView
 		tableView.setPrefWidth(600);
 		tableView.setPrefHeight(400);
@@ -298,21 +306,22 @@ public class GUI extends Application {
 		grid.add(tableView, 0, 2, 3, 1);
 
 		Button btnQuit = new Button("Quit");
-		grid.add(btnQuit, 5, 3);
+		GridPane.setHalignment(btnQuit, RIGHT);
+		grid.add(btnQuit, 2, 3);
 		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				client.disconnect();
 				stage.close();
 			}
 		});
 
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
-		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		scene.getStylesheets().add(
+				GUI.class.getResource("style.css").toExternalForm());
 		return scene;
 	}
 
-	private Scene createBankSigninPage(Stage stage,Book book){
+	private Scene createBankSigninPage(Stage stage, Book book) {
 		GridPane grid = createGrid();
 
 		Text scenetitle = new Text("Welcome to MLVLib Bank");
@@ -339,12 +348,12 @@ public class GUI extends Application {
 		GridPane.setColumnSpan(message, 2);
 		GridPane.setHalignment(message, RIGHT);
 		message.setId("actiontarget");
-		
+
 		btnSignIn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				try {
-					signinBankHandler(stage, userTextField, message,book);
+					signinBankHandler(stage, userTextField, message, book);
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -355,14 +364,14 @@ public class GUI extends Application {
 		btnSignUp.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				Scene scene = createBankSignupPage(stage,book);
+				Scene scene = createBankSignupPage(stage, book);
 				showScene(stage, scene);
 			}
 		});
 		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				//stage.close();
+				// stage.close();
 				Scene scene = createBookDetailsPage(stage, book);
 				showScene(stage, scene);
 			}
@@ -372,8 +381,7 @@ public class GUI extends Application {
 			public void handle(KeyEvent event) {
 				if (event.getCode() == KeyCode.ENTER) {
 					try {
-						signinBankHandler(stage, userTextField,
-								message,book);
+						signinBankHandler(stage, userTextField, message, book);
 					} catch (RemoteException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -387,57 +395,59 @@ public class GUI extends Application {
 				GUI.class.getResource("style.css").toExternalForm());
 		return scene;
 	}
-	
-	private void signinBankHandler(Stage primaryStage, TextField userTextField, final Text actiontarget, Book book) throws RemoteException {
+
+	private void signinBankHandler(Stage primaryStage, TextField userTextField,
+			final Text actiontarget, Book book) throws RemoteException {
 		String accountIdStr = userTextField.getText();
 		System.out.println("signin accountId: " + accountIdStr);
 		try {
 			int accountId = Integer.parseInt(accountIdStr);
-			if(client.accountExist(accountId)) {
+			if (client.accountExist(accountId)) {
 				client.setCurrentAccount(accountId);
-				Scene scene = createCommandPage(primaryStage,book);
+				Scene scene = createCommandPage(primaryStage, book);
 				showScene(primaryStage, scene);
 			} else {
 				actiontarget.setFill(Color.FIREBRICK);
 				actiontarget.setText("This Account does not exist");
 			}
-			
+
 		} catch (NumberFormatException e1) {
 			actiontarget.setFill(Color.FIREBRICK);
 			actiontarget.setText("Account Id must a number");
 		}
 	}
-	
-	private Scene createBankSignupPage(Stage stage,Book book){
+
+	private Scene createBankSignupPage(Stage stage, Book book) {
 		GridPane grid = createGrid();
 
 		Text scenetitle = new Text("Signup Bank page");
 		scenetitle.setId("welcome-text");
 		grid.add(scenetitle, 0, 0, 2, 1);
-		
+
 		TextField nameLabel = addTextField(grid, "Name :", 0, 1);
 		TextField firstnameLabel = addTextField(grid, "Firstname :", 0, 2);
 		TextField currencyLabel = addTextField(grid, "Account currency :", 0, 3);
-		
+
 		Button btn = new Button("Create Account");
 		grid.add(btn, 1, 4);
-		
+
 		Button btnQuit = new Button("Quit");
 		HBox hbBtnQuit = new HBox(10);
 		hbBtnQuit.setAlignment(Pos.BOTTOM_LEFT);
 		hbBtnQuit.getChildren().add(btnQuit);
 		grid.add(hbBtnQuit, 0, 4);
-		
+
 		final Text message = new Text();
 		grid.add(message, 0, 5);
-		
+
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				signupBankHandler(nameLabel,firstnameLabel,currencyLabel,message,stage,book);
+				signupBankHandler(nameLabel, firstnameLabel, currencyLabel,
+						message, stage, book);
 			}
 		});
-		
+
 		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -445,32 +455,37 @@ public class GUI extends Application {
 				showScene(stage, scene);
 			}
 		});
-		
+
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
-		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		scene.getStylesheets().add(
+				GUI.class.getResource("style.css").toExternalForm());
 		return scene;
 	}
 
-	private Scene createBookDetailsPage(Stage stage,Book book){
+	private Scene createBookDetailsPage(Stage stage, Book book) {
 		GridPane grid = createGrid();
 
 		final VBox vBox = new VBox();
 		vBox.setSpacing(10);
-		//vBox.setPrefSize(300, 300);
-		
+		// vBox.setPrefSize(300, 300);
+
 		grid.add(new Text(book.getTitle()), 0, 0);
 		grid.add(new Text("by " + book.getAuthor()), 0, 1);
 		vBox.getChildren().add(new Text("ISBN : " + book.getISBN()));
 		vBox.getChildren().add(new Text("Summary :\n" + book.getSummary()));
-		if(book.isAvailable()) {
-			vBox.getChildren().add(new Text("Available (" + book.getExemplary() + " exemplary left)"));
+		if (book.isAvailable()) {
+			vBox.getChildren().add(
+					new Text("Available (" + book.getExemplary()
+							+ " exemplary left)"));
 		} else {
 			vBox.getChildren().add(new Text("Not available"));
 		}
-		vBox.getChildren().add(new Text("Price : " + book.getPrice() + " " + book.getCurrency()));
-		
+		vBox.getChildren().add(
+				new Text("Price : " + book.getPrice() + " "
+						+ book.getCurrency()));
+
 		grid.add(vBox, 0, 3);
-		
+
 		Button backButton = new Button("Back");
 		grid.add(backButton, 0, 6);
 		backButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -480,60 +495,70 @@ public class GUI extends Application {
 				showScene(stage, scene);
 			}
 		});
-		Button buyButton = new Button("Buy");
-		grid.add(buyButton, 1, 6);
-		buyButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Scene scene = createBankSigninPage(stage,book);
-				showScene(stage, scene);
-			}
-		});
+		if (book.isAvailable()) {
+			Button buyButton = new Button("Buy");
+			grid.add(buyButton, 1, 6);
+			buyButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					Scene scene = createBankSigninPage(stage, book);
+					showScene(stage, scene);
+				}
+			});
+		} else {
+			grid.add(new Text("Book not available"), 1, 6);
+		}
 
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
-		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		scene.getStylesheets().add(
+				GUI.class.getResource("style.css").toExternalForm());
 		return scene;
 	}
-	
-	private  void signupBankHandler(TextField nameLabel,TextField firstnameLabel,TextField currencyLabel,Text message,Stage stage,Book book) {
+
+	private void signupBankHandler(TextField nameLabel,
+			TextField firstnameLabel, TextField currencyLabel, Text message,
+			Stage stage, Book book) {
 		String name = nameLabel.getText();
 		String firstname = firstnameLabel.getText();
 		String currency = currencyLabel.getText();
-		
-		if (name.equals("") && firstname.equals("") && currency.equals("")){
+
+		if (name.equals("") && firstname.equals("") && currency.equals("")) {
 			message.setFill(Color.FIREBRICK);
 			message.setText("Please enter valid informations");
 		} else {
 			try {
-				int clientId = client.createAccount(name,firstname,currency);
+				int clientId = client.createAccount(name, firstname, currency);
 				client.setCurrentAccount(clientId);
 				Scene scene = createCommandPage(stage, book);
 				showScene(stage, scene);
-				
-				
+
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-	private Scene createCommandPage(Stage stage,Book book){
+
+	private Scene createCommandPage(Stage stage, Book book) {
 		GridPane grid = createGrid();
 
-		Text scenetitle = new Text("Commande du livre : "+book.getTitle());
+		Text scenetitle = new Text("Commande du livre : " + book.getTitle());
 		scenetitle.setId("welcome-text");
 		grid.add(scenetitle, 0, 0, 2, 1);
-		
+
 		Label idLabel = addLabelField(grid, "Account id :", 0, 1);
 		Label nameLabel = addLabelField(grid, "Name :", 0, 2);
 		Label firstnamenameLabel = addLabelField(grid, "Firstname :", 0, 3);
 		Label currencyLabel = addLabelField(grid, "Account currency :", 0, 4);
 		Label balanceLabel = addLabelField(grid, "Account balance :", 0, 5);
-		Label labelBook = new Label(book.getTitle()+" : ");
-		grid.add( labelBook, 0, 6);
-		grid.add( new Label(Float.toString(book.getPrice())+" "+book.getCurrency()), 1, 6);
+		Label labelBook = new Label(book.getTitle() + " : ");
+		grid.add(labelBook, 0, 6);
+		grid.add(
+				new Label(Float.toString(book.getPrice()) + " "
+						+ book.getCurrency()), 1, 6);
 		try {
-			updateBankDetail(idLabel,nameLabel,firstnamenameLabel,currencyLabel,balanceLabel);
+			updateBankDetail(idLabel, nameLabel, firstnamenameLabel,
+					currencyLabel, balanceLabel);
 		} catch (RemoteException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -544,7 +569,7 @@ public class GUI extends Application {
 		grid.add(btnDeposit, 2, 7);
 		Button btnConfirm = new Button("Confirm");
 		Button btnCancel = new Button("Cancel");
-	
+
 		HBox hbBtn = new HBox(10);
 		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 		hbBtn.getChildren().addAll(btnCancel, btnConfirm);
@@ -552,30 +577,32 @@ public class GUI extends Application {
 
 		final Text message = new Text();
 		grid.add(message, 0, 8);
-		
+
 		btnConfirm.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				try {
-					if(client.isAbleToBuyBook(book)) {
+					if (client.isAbleToBuyBook(book)) {
 						try {
 							client.buyBook(book);
-						} catch (RemoteException | IllegalArgumentException | ServiceException e1) {
+						} catch (RemoteException | IllegalArgumentException
+								| ServiceException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						
+
 						Scene scene = createIndexPage(stage);
 						showScene(stage, scene);
 					} else {
 						message.setFill(Color.FIREBRICK);
 						message.setText("Deposit more money");
 					}
-				} catch (RemoteException | IllegalArgumentException | ServiceException e1) {
+				} catch (RemoteException | IllegalArgumentException
+						| ServiceException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+
 			}
 		});
 
@@ -586,15 +613,17 @@ public class GUI extends Application {
 				showScene(stage, scene);
 			}
 		});
-		
+
 		btnDeposit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				try {
-					Double ammount = Double.parseDouble(moneyTextField.getText());
+					Double ammount = Double.parseDouble(moneyTextField
+							.getText());
 					try {
-						client.deposit(ammount,"EUR");
-						updateBankDetail(idLabel,nameLabel,firstnamenameLabel,currencyLabel,balanceLabel);
+						client.deposit(ammount, "EUR");
+						updateBankDetail(idLabel, nameLabel,
+								firstnamenameLabel, currencyLabel, balanceLabel);
 					} catch (RemoteException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -611,14 +640,16 @@ public class GUI extends Application {
 				}
 			}
 		});
-		
+
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
 		scene.getStylesheets().add(
 				GUI.class.getResource("style.css").toExternalForm());
 		return scene;
 	}
-	
-	private void updateBankDetail(Label idLabel,Label nameLabel,Label firstnameLabel,Label currencyLabel,Label balanceLabel) throws RemoteException {
+
+	private void updateBankDetail(Label idLabel, Label nameLabel,
+			Label firstnameLabel, Label currencyLabel, Label balanceLabel)
+			throws RemoteException {
 		idLabel.setText(client.getAccountId());
 		nameLabel.setText(client.getAccountName());
 		firstnameLabel.setText(client.getAccountFirstname());
