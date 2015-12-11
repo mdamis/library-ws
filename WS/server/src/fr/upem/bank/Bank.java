@@ -58,91 +58,97 @@ public class Bank {
 	 * get string representation of the basic information of the account
 	 * @param accountId the account ID we get the detail from
 	 * @return a string representation of the basic information of the account
+	 * @throws IllegalStateException if account does not exist (recommended to used method exist before)
 	 */
 	public String getDetailAccount(int accountId){
 		Account account = mapAccount.get(accountId);
 		if(account!= null){
 			return  account.getName()+" "+account.getFirstname()+" " + account.getBalance() + " "+account.getCurrency();
 		}else{
-			return null;
+			throw new IllegalStateException("account does not exist");
 		}
 	}
 	
 	/**
 	 * get the currency of an account
 	 * @param accountId the accountID to seek
-	 * @return the currency of the Account, carefull it a blank String if no Currency was found
+	 * @return the currency of the Account
+	 * @throws IllegalStateException if account does not exist (recommended to used method exist before)
 	 */
 	public String getAccountCurrency(int accountId){
 		Account account= mapAccount.get(accountId);
 		if(account != null){
 			return account.getCurrency();
 		}else{
-			return "";
+			throw new IllegalStateException("account does not exist");
 		}
 	}
 	
 	/**
 	 * get the currency of an account
 	 * @param accountId the accountID to seek
-	 * @return the currency of the Account, carefull it return a blank String if no Currency was found
+	 * @return the currency of the Account
+	 * @throws IllegalStateException if account does not exist (recommended to used method exist before)
 	 */
 	public double getAccountBalance(int accountId){
 		Account account= mapAccount.get(accountId);
 		if(account != null){
 			return account.getBalance();
 		}else{
-			return 0;
+			throw new IllegalStateException("account does not exist");
 		}
 	}
 	
 	/**
 	 * get the account id of an account
 	 * @param accountId the accountID to seek
-	 * @return the id of the Account, carefull it return 0 if no account was found was found
+	 * @return the id of the Account
+	 * @throws IllegalStateException if account does not exist (recommended to used method exist before)
 	 */
 	public int getAccountId(int accountId){
 		Account account= mapAccount.get(accountId);
 		if(account != null){
 			return account.getNumber();
 		}else{
-			return 0;
+			throw new IllegalStateException("account does not exist");
 		}
 	}
 	
 	/**
 	 * get the name's owner of an account
 	 * @param accountId the accountID to seek
-	 * @return the name's owner of the Account, carefull it return null if no Account was found
+	 * @return the name's owner of the Account
+	 * @throws IllegalStateException if account does not exist (recommended to used method exist before)
 	 */
 	public String getAccountName(int accountId){
 		Account account= mapAccount.get(accountId);
 		if(account != null){
 			return account.getName();
 		}else{
-			return null;
+			throw new IllegalStateException("account does not exist");
 		}
 	}
 	
 	/**
 	 * get the owner's firstname of an account
 	 * @param accountId the accountID to seek
-	 * @return owner's firstname of the Account, carefull it return null if no Account was found
+	 * @return owner's firstname of the Account
+	 * @throws IllegalStateException if account does not exist (recommended to used method exist before)
 	 */
 	public String getAccountFirstName(int accountId){
 		Account account= mapAccount.get(accountId);
 		if(account != null){
 			return account.getFirstname();
 		}else{
-			return null;
+			throw new IllegalStateException("account does not exist");
 		}
 	}
 	
 	/**
 	 * Deposit the amount of money to the an account
 	 * @param accountId the account Id of the account wanted
-	 * @param amount the amount deposite
-	 * @return true if the function sucessfuly deposit else false
+	 * @param amount the amount deposit
+	 * @return true if the function sucessfully deposit else false
 	 */
 	public boolean deposit(int accountId,double amount){
 		Account account= mapAccount.get(accountId);
