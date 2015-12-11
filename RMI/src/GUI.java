@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -313,20 +314,37 @@ public class GUI extends Application {
 		vBox.setSpacing(10);
 		vBox.setPrefSize(300, 300);
 		
+		final ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setPrefSize(300, 150);
+		
 		try {
 			grid.add(new Text(book.getTitle()), 0, 0);
 			grid.add(new Text("by " + book.getAuthor()), 0, 1);
 			vBox.getChildren().add(new Text("ISBN : " + book.getISBN()));
-			vBox.getChildren().add(new Text("Summary :\n" + book.getSummary()));
 			if(book.isAvailable()) {
-				vBox.getChildren().add(new Text("Available"));
+				vBox.getChildren().add(new Text("This book is available"));
 			} else {
-				vBox.getChildren().add(new Text("Not available"));
+				vBox.getChildren().add(new Text("This book is not available"));
 				vBox.getChildren().add(new Text("Borrowed by " + book.getPatron().getUsername()));
 			}
+			vBox.getChildren().add(new Text("Summary :"));
+			Text summary = new Text(book.getSummary());
+			scrollPane.setContent(summary);
+			summary.setWrappingWidth(250);
+			vBox.getChildren().add(scrollPane);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
+		
+		Button editSummaryButton = new Button("Edit Summary");
+		editSummaryButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Scene scene = createUpdateSummaryPage(stage, book);
+				showScene(stage, scene);
+			}
+		});
+		vBox.getChildren().add(editSummaryButton);
 		
 		grid.add(vBox, 0, 3);
 
@@ -334,7 +352,6 @@ public class GUI extends Application {
 		try {
 			reviews = book.getReviews();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -366,6 +383,65 @@ public class GUI extends Application {
 			}
 		});
 
+		Scene scene = new Scene(grid, WIDTH, HEIGHT);
+		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+
+		return scene;
+	}
+	
+	private Scene createUpdateSummaryPage(Stage stage, Book book) {
+		GridPane grid = createGrid();
+		
+		Text sceneTitle = new Text("Update the summary");
+		sceneTitle.setId("welcome-text");
+		HBox hBox = new HBox();
+		hBox.getChildren().add(sceneTitle);
+		hBox.setAlignment(Pos.CENTER);
+		grid.add(hBox, 0, 0);
+		
+		TextArea summaryTextArea = new TextArea();
+		summaryTextArea.setPrefSize(350, 150);
+		try {
+			summaryTextArea.setText(book.getSummary());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		grid.add(summaryTextArea, 0, 2);
+		
+		Button backButton = new Button("Back");
+		backButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Scene scene = createBookDetailsPage(stage, book);
+				showScene(stage, scene);
+			}
+		});
+		
+		Button sendButton = new Button("Edit");
+		sendButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String summary = summaryTextArea.getText();
+				if (summary.equals("")) {
+					summary = "No summary available";
+				}
+				try {
+					book.setSummary(summary);
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+
+				Scene scene = createBookDetailsPage(stage, book);
+				showScene(stage, scene);
+			}
+		});
+		
+		hBox = new HBox();
+		hBox.setSpacing(40);
+		hBox.setAlignment(Pos.CENTER);
+		hBox.getChildren().addAll(sendButton, backButton);
+		grid.add(hBox, 0, 3);
+		
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
 		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
 
