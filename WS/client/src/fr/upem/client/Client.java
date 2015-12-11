@@ -4,8 +4,6 @@ import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
 
-import javafx.application.Application;
-
 import javax.xml.rpc.ServiceException;
 
 import fr.upem.bank.Bank;
@@ -79,13 +77,15 @@ public class Client {
 	public String getUsername() {
 		return username;
 	}
-	
 
-
-	public static void main(String[] args) {
+	public void disconnect() {
 		try {
-			Application.launch(GUI.class, args);
-		} catch (Exception e) {
+			if(manager.disconnect(username)) {
+				System.out.println(username + " has been disconnected");
+			} else {
+				System.err.println("Failed to disconnect");
+			}
+		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 	}

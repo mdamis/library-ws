@@ -302,6 +302,7 @@ public class GUI extends Application {
 		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				client.disconnect();
 				stage.close();
 			}
 		});

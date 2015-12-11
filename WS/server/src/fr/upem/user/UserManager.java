@@ -14,13 +14,16 @@ public class UserManager {
 		return users;
 	}
 	
-	public void registerUser(String user, String password) throws IllegalArgumentException {
+	public boolean registerUser(String user, String password) {
+		System.out.println(users.keySet());
 		if(users.containsKey(user)) {
-			throw new IllegalArgumentException("This user already exists");
+			return false;
 		} else {
-			users.put(user, new User(user, password));
+			User newUser = new User(user, password);
+			users.put(user, newUser);
+			newUser.setConnected(true);
+			return true;
 		}
-		
 	}
 	
 	public boolean exist(String user) {
@@ -42,13 +45,13 @@ public class UserManager {
 		}
 	}
 	
-	public boolean disconnect(String user) throws IllegalArgumentException {
+	public boolean disconnect(String user) {
 		if(!users.containsKey(user)) {
-			throw new IllegalArgumentException("This user doesn't exist");
+			return false;
 		}
 		User u = users.get(user);
 		if(!u.isConnected()) {
-			throw new IllegalArgumentException("This user is not connected");
+			return false;
 		} else {
 			u.setConnected(false);
 			return true;
