@@ -22,11 +22,29 @@ public class LibraryClientScenario {
 			User mdamis = library.connect("mdamis");
 			User mperouma = library.connect("mperouma");
 			
-			List<Book> books = library.getAllBooks();
-
+			List<Book> books = library.searchBook("");
+			
+			if (books.isEmpty()) {
+				System.out.println("No book corresponding to your query");
+			}
+			
+			books = library.searchBook("84");
+			System.out.println("Query : 84");
 			for (Book book : books) {
 				System.out.println(book.details());
 				System.out.println(book.getSummary());
+			}
+			
+			books = library.searchBook("st");
+			System.out.println("Query : st");
+			for (Book book : books) {
+				System.out.println(book.details());
+				System.out.println(book.getSummary());
+			}	
+			
+			books = library.getAllBooks();
+
+			for (Book book : books) {
 				if(book.isSaleable()) {
 					System.out.println(book.getTitle() + " is saleable.");
 				} else {
