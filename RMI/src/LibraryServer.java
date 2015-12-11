@@ -1,5 +1,6 @@
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public class LibraryServer {
 	private final Library library;
@@ -18,11 +19,10 @@ public class LibraryServer {
 			
 			Book firstBook = server.library.getAllBooks().get(0);
 			firstBook.setSummary("Summary available");
-			firstBook.addReview("Very good !");
-			firstBook.addReview("Totally\nLove\nit\n<3");
-			firstBook.addReview("meh");
-			firstBook.addReview("Another\nreview");
-			firstBook.addReview("And\na\nlast\none");
+			List<User> users = server.library.getAllUsers();
+			firstBook.addReview("Very good !", users.get(0));
+			firstBook.addReview("Totally\nLove\nit\n<3", users.get(2));
+			firstBook.addReview("meh", users.get(1));
 
 			Naming.rebind("LibraryService", server.library);
 

@@ -15,6 +15,8 @@ public interface Library extends Remote {
 	
 	public boolean addUser(User user) throws RemoteException;
 	
+	public List<User> getAllUsers() throws RemoteException;
+	
 	public User connect(String username) throws RemoteException;
 
 }

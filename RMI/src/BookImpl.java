@@ -109,8 +109,8 @@ public class BookImpl extends UnicastRemoteObject implements Book {
 	}
 
 	@Override
-	public void addReview(String review) throws RemoteException {
-		reviews.add(review);
+	public void addReview(String review, User user) throws RemoteException {
+		reviews.add(review + "\n\nBy " + user.getUsername() + " on " + LocalDate.now().toString());
 	}
 
 	@Override
