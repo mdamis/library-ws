@@ -13,6 +13,10 @@ public class Bank {
 		
 	}
 	
+	public boolean exist(int accountID){
+		return mapAccount.containsKey(accountID);
+	}
+	
 	public int addAccount(String name,String firstname,String currency) {
 		int randomAccountId;
 	    do {
@@ -40,11 +44,12 @@ public class Bank {
 	public String getDetailAccount(int accountId){
 		Account account = mapAccount.get(accountId);
 		if(account!= null){
-			return  account.getName()+" "+account.getFirstname()+"\nbalance :" + account.getBalance() + "\nCurrency :"+account.getCurrency()+"\n";
+			return  account.getName()+" "+account.getFirstname()+" " + account.getBalance() + " "+account.getCurrency();
 		}else{
 			return null;
 		}
 	}
+	
 	public String getAccountCurrency(int accountId){
 		Account account= mapAccount.get(accountId);
 		if(account != null){
@@ -53,6 +58,43 @@ public class Bank {
 			return null;
 		}
 	}
+	
+	public double getAccountBalance(int accountId){
+		Account account= mapAccount.get(accountId);
+		if(account != null){
+			return account.getBalance();
+		}else{
+			return 0;
+		}
+	}
+	
+	public int getAccountId(int accountId){
+		Account account= mapAccount.get(accountId);
+		if(account != null){
+			return account.getNumber();
+		}else{
+			return 0;
+		}
+	}
+	
+	public String getAccountName(int accountId){
+		Account account= mapAccount.get(accountId);
+		if(account != null){
+			return account.getName();
+		}else{
+			return null;
+		}
+	}
+	
+	public String getAccountFirstName(int accountId){
+		Account account= mapAccount.get(accountId);
+		if(account != null){
+			return account.getFirstname();
+		}else{
+			return null;
+		}
+	}
+	
 	public boolean deposit(int accountId,double amount){
 		Account account= mapAccount.get(accountId);
 		if(account!= null) {
