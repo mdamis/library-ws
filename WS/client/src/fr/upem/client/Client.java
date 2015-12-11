@@ -1,6 +1,9 @@
 package fr.upem.client;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -126,7 +129,7 @@ public class Client {
 	public boolean isAbleToBuyBook(Book book) throws RemoteException, IllegalArgumentException, ServiceException {
 		Double rate = getConvertRate(book.getCurrency(), bank.getAccountCurrency(currentAccount));
 		Double priceConverted = book.getPrice() * rate;
-		return (bank.getAccountBalance(currentAccount) > priceConverted);
+		return (bank.getAccountBalance(currentAccount) >= priceConverted);
 	}
 	
 	public void buyBook(Book book) throws RemoteException, IllegalArgumentException, ServiceException {
@@ -136,10 +139,19 @@ public class Client {
 		library.sellBook(book.getISBN(), 1);
 	}
 	
+	private static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = new BigDecimal(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
+	}
+	
 	public void deposit(double amount,String newCurency) throws RemoteException, IllegalArgumentException, ServiceException{
 		Double rate = getConvertRate(newCurency, bank.getAccountCurrency(currentAccount));
 		Double depositAmmountConverted = amount * rate;
-		bank.deposit(currentAccount, depositAmmountConverted);
+		
+		bank.deposit(currentAccount, round(depositAmmountConverted,2));
 	}
 	
 	public String getAccountName() throws RemoteException{
