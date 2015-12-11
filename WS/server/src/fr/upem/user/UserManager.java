@@ -23,31 +23,19 @@ public class UserManager {
 		
 	}
 	
-	public boolean exist(String user,String password) {
-		if(users.containsKey(user)) {
-			return password ==users.get(user).getPassword();
-		}
-		return false;
+	public boolean exist(String user) {
+		return users.containsKey(user);
 	}
 	
-	public String getUsernameConnected() {
-		for(User u:users.values()) {
-			if(u.isConnected()) {
-				return u.getUser();
-			}
-		}
-		return null;
-	}
-	
-	public boolean connect(String user, String password) throws IllegalArgumentException {
+	public boolean connect(String user, String password) {
 		if(!users.containsKey(user)) {
-			throw new IllegalArgumentException("This user doesn't exists");
+			return false;
 		}
 		User u = users.get(user);
 		if(!u.getPassword().equals(password)) {
-			throw new IllegalArgumentException("Wrong password");
+			return false;
 		} else if(u.isConnected()) {
-			throw new IllegalArgumentException("This user is already connected");
+			return false;
 		} else{
 			u.setConnected(true);
 			return true;
