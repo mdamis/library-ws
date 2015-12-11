@@ -8,11 +8,16 @@ public class Library {
 
 	private final HashMap<String, Book> books = new HashMap<String, Book>();
 	
+	/**
+	 * Default constructor
+	 */
 	public Library() {
-		//
 		initLibrary();
 	}
 
+	/**
+	 * Initialize the library with some books
+	 */
 	private void initLibrary() {
 		Book newBook = Book.create("1", "War and Peace", "Leo Tolstoy", 25, "03-01-1982");
 		books.put(newBook.getISBN(), newBook);
@@ -21,6 +26,16 @@ public class Library {
 		books.put(newBook.getISBN(), newBook);
 	}
 
+	/**
+	 * Add a book to the library
+	 * 
+	 * @param isbn book's isbn
+	 * @param title book's title
+	 * @param author book's author
+	 * @param price book's price
+	 * @param introductionDate 
+	 * @throws IllegalArgumentException
+	 */
 	public void add(String isbn, String title, String author, float price, String introductionDate) throws IllegalArgumentException {
 		if(books.containsKey(isbn)) {
 			Book book = books.get(isbn);
@@ -36,6 +51,11 @@ public class Library {
 		}
 	}
 	
+	/**
+	 * Sells the book specified by the isbn
+	 * @param isbn book's isbn
+	 * @param exemplary number of exemplary sold
+	 */
 	public void sellBook(String isbn, int exemplary) {
 		if(!books.containsKey(isbn)) {
 			throw new IllegalArgumentException("This book doesn't exist");

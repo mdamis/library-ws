@@ -528,11 +528,14 @@ public class GUI extends Application {
 		String firstname = firstnameLabel.getText();
 		String currency = currencyLabel.getText();
 
-		if (name.equals("") && firstname.equals("") && currency.equals("")) {
+		if (name.equals("") || firstname.equals("")) {
 			message.setFill(Color.FIREBRICK);
 			message.setText("Please enter valid informations");
 		} else {
 			try {
+				if(currency.equals("")) {
+					currency = "EUR";
+				}
 				int clientId = client.createAccount(name, firstname, currency);
 				client.setCurrentAccount(clientId);
 				Scene scene = createCommandPage(stage, book);
