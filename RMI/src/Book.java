@@ -1,5 +1,6 @@
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public interface Book extends Remote {
 	public String getISBN() throws RemoteException;
@@ -26,7 +27,7 @@ public interface Book extends Remote {
 
 	public void setSummary(String summary) throws RemoteException;
 
-	public String getReviews() throws RemoteException;
+	public List<String> getReviews() throws RemoteException;
 
 	public void addReview(String review) throws RemoteException;
 
