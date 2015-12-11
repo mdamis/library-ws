@@ -1,10 +1,18 @@
 import java.rmi.Naming;
+import java.rmi.RMISecurityManager;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class LibraryClientScenario {
 	public static void main(String[] args) {
 		try {
-			Library library = (Library) Naming.lookup("LibraryService");
+			String codebase = "file:../server/";
+			System.setProperty("java.rmi.server.codebase", codebase);
+			System.setProperty("java.security.policy", "library.policy");
+			System.setSecurityManager(new RMISecurityManager());
+			
+			Library library = (Library) Naming.lookup("rmi://localhost:1099/LibraryService");
+
 			
 			User bcrochez = library.connect("bcroche");
 			if(bcrochez == null) {
