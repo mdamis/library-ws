@@ -62,6 +62,14 @@ public class GUI extends Application {
 		client.disconnect();
 	}
 
+	/**
+	 * Add a couple label and textField and return the textField instance
+	 * @param grid 
+	 * @param label label of the first label placed
+	 * @param col collumn where the first label is placed
+	 * @param row row where the first label is placed
+	 * @return the TextField instance next to the first label inserted
+	 */
 	private TextField addTextField(GridPane grid, String label, int col, int row) {
 		Label lab = new Label(label);
 		grid.add(lab, col, row);
@@ -70,6 +78,14 @@ public class GUI extends Application {
 		return textField;
 	}
 
+	/**
+	 * Add a couple label and label and return the second label instance
+	 * @param grid 
+	 * @param label label of the first label placed
+	 * @param col column where the first label is placed
+	 * @param row row where the first label is placed
+	 * @return the label instance next to the first label inserted
+	 */
 	private Label addLabelField(GridPane grid, String label, int col, int row) {
 		Label lab = new Label(label);
 		grid.add(lab, col, row);
@@ -78,6 +94,14 @@ public class GUI extends Application {
 		return labField;
 	}
 
+	/**
+	 * Add a couple label and combobox with some principal currency and return the textField instance
+	 * @param grid 
+	 * @param label label of the first label placed
+	 * @param col column where the first label is placed
+	 * @param row row where the first label is placed
+	 * @return the comBoBox instance next to the first label inserted
+	 */
 	private ComboBox<String> addComboBoxCurrency(GridPane grid, String label, int col, int row) {
 		Label lab = new Label(label);
 		grid.add(lab, col, row);
@@ -90,10 +114,19 @@ public class GUI extends Application {
 		grid.add(comboBox, col+1, row);
 		return comboBox;
 	}
+	
+	/**
+	 * 
+	 * @return a grid 10 * 25
+	 */
 	private GridPane createGrid() {
 		return createGrid(10, 25);
 	}
 
+	/**
+	 * return a more complex grid with a gap and padding
+	 * @return a GridPane
+	 */
 	private GridPane createGrid(double gap, double padding) {
 		GridPane grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
@@ -103,11 +136,19 @@ public class GUI extends Application {
 		return grid;
 	}
 
+	/**
+	 * Show the new scene
+	 */
 	private void showScene(Stage stage, Scene scene) {
 		stage.setScene(scene);
 		stage.show();
 	}
 
+	/**
+	 * first page, the user is asked to give a username and password.
+	 * @param primaryStage
+	 * @return
+	 */
 	private Scene createSignInPage(Stage primaryStage) {
 		GridPane grid = createGrid();
 		grid.setAlignment(Pos.CENTER);
@@ -187,6 +228,13 @@ public class GUI extends Application {
 		return scene;
 	}
 
+	/**
+	 * handler of the button signin of the first page, it use the Client class to ask if the user can connect
+	 * @param primaryStage the previous stage
+	 * @param userTextField the textField where username is
+	 * @param pb  the passwordField where the password is
+	 * @param actiontarget a Text used to communicate error to the application's user
+	 */
 	private void signinHandler(Stage primaryStage, TextField userTextField,
 			PasswordField pb, final Text actiontarget) {
 		String username = userTextField.getText();
@@ -219,6 +267,13 @@ public class GUI extends Application {
 		}
 	}
 
+	/**
+	 * handler of the button signup of the first page, it use the Client class to ask if the user can register
+	 * @param primaryStage the previous stage
+	 * @param userTextField the textField where username is
+	 * @param pb  the passwordField where the password is
+	 * @param actiontarget a Text used to communicate error to the application's user
+	 */
 	private void signupHandler(Stage primaryStage, TextField userTextField,
 			PasswordField pb, final Text actiontarget) {
 		String username = userTextField.getText();
@@ -242,6 +297,12 @@ public class GUI extends Application {
 		}
 	}
 
+	
+	/**
+	 * create the Main scene where every book sellable are
+	 * @param stage the stage of this scene
+	 * @return a scene created with greed with all books and different options
+	 */
 	@SuppressWarnings("unchecked")
 	private Scene createIndexPage(Stage stage) {
 		System.out.println("Creation en cours ...");
@@ -336,6 +397,12 @@ public class GUI extends Application {
 		return scene;
 	}
 
+	/**
+	 * Create the scene where the application's user will connect/create the bank's account
+	 * @param stage the main stage
+	 * @param book the book the user want to buy
+	 * @return the scene created
+	 */
 	private Scene createBankSigninPage(Stage stage, Book book) {
 		GridPane grid = createGrid();
 
@@ -415,6 +482,14 @@ public class GUI extends Application {
 		return scene;
 	}
 
+	/**
+	 * handler function handling the connection to his account 
+	 * @param primaryStage the main stage
+	 * @param userTextField TextField containing the account Id
+	 * @param actiontarget the Text used to communicate error
+	 * @param book the book the user is interested in
+	 * @throws RemoteException
+	 */
 	private void signinBankHandler(Stage primaryStage, TextField userTextField,
 			final Text actiontarget, Book book) throws RemoteException {
 		String accountIdStr = userTextField.getText();
@@ -436,6 +511,12 @@ public class GUI extends Application {
 		}
 	}
 
+	/**
+	 * Create a sign up page to create an account with the Web service
+	 * @param stage the stage
+	 * @param book instance of book used when the quit button is used (get back to the book description
+	 * @return the scene created
+	 */
 	private Scene createBankSignupPage(Stage stage, Book book) {
 		GridPane grid = createGrid();
 
@@ -479,6 +560,12 @@ public class GUI extends Application {
 		return scene;
 	}
 
+	/**
+	 * Create a scene describing the book's details. This is also there that the user buy the book
+	 * @param stage the main stage
+	 * @param book the book where details come from
+	 * @return the scene created
+	 */
 	private Scene createBookDetailsPage(Stage stage, Book book) {
 		GridPane grid = createGrid();
 
@@ -532,6 +619,15 @@ public class GUI extends Application {
 		return scene;
 	}
 	
+	/**
+	 * handle the creation of a bank account.
+	 * @param nameLabel the name field
+	 * @param firstnameLabel the firstname field
+	 * @param currencyCombobox the currency combobobox
+	 * @param message Text used to communicate errors
+	 * @param stage the main stage
+	 * @param book the book the user choose
+	 */
 	private  void signupBankHandler(TextField nameLabel,TextField firstnameLabel,ComboBox<String> currencyCombobox,Text message,Stage stage,Book book) {
 		String name = nameLabel.getText();
 		String firstname = firstnameLabel.getText();
@@ -557,6 +653,11 @@ public class GUI extends Application {
 		}
 	}
 
+	/**
+	 * Last scene for confirming the buying.
+	 * The user can manage his account and deposit money in it (#fuckTheEconomy) 
+	 * @return the scene created
+	 */
 	private Scene createCommandPage(Stage stage, Book book) {
 		GridPane grid = createGrid();
 
@@ -682,6 +783,15 @@ public class GUI extends Application {
 		return scene;
 	}
 
+	/**
+	 * Update information of the bank account
+	 * @param idLabel account id
+	 * @param nameLabel account name
+	 * @param firstnameLabel account firstname
+	 * @param currencyLabel account's currency
+	 * @param balanceLabel account's balance
+	 * @throws RemoteException
+	 */
 	private void updateBankDetail(Label idLabel, Label nameLabel,
 			Label firstnameLabel, Label currencyLabel, Label balanceLabel)
 			throws RemoteException {
