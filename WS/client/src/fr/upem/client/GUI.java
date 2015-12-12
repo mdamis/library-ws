@@ -303,8 +303,6 @@ public class GUI extends Application {
 	 */
 	@SuppressWarnings("unchecked")
 	private Scene createIndexPage(Stage stage) {
-		System.out.println("Creation en cours ...");
-
 		try {
 			books = client.getAllBooks();
 		} catch (RemoteException e) {
@@ -376,6 +374,24 @@ public class GUI extends Application {
 				showScene(stage, scene);
 			}
 		});
+		
+		final Text cart;
+		if(client.getCart().isEmpty()) {
+			cart = new Text("Cart (empty)");
+			Button btnBuy = new Button("Buy");
+			GridPane.setHalignment(btnBuy, RIGHT);
+			grid.add(btnBuy, 2, 1);
+			
+			btnBuy.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					// TODO
+				}
+			});
+		} else {
+			cart = new Text("Cart ("+client.getCart().size()+" book(s))");
+		}
+		grid.add(cart, 2, 1);
 
 		grid.add(tableView, 0, 2, 3, 1);
 
@@ -597,13 +613,16 @@ public class GUI extends Application {
 				showScene(stage, scene);
 			}
 		});
-		if (book.isAvailable()) {
-			Button buyButton = new Button("Buy");
-			grid.add(buyButton, 1, 6);
-			buyButton.setOnAction(new EventHandler<ActionEvent>() {
+		if(client.isInCart(book.getISBN())) {
+			grid.add(new Text("Book already in cart"), 1, 6);
+		} else if (book.isAvailable()) {
+			Button addToCartButton = new Button("Add to cart");
+			grid.add(addToCartButton, 1, 6);
+			addToCartButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					Scene scene = createBankSigninPage(stage, book);
+					client.addToCart(book.getISBN());
+					Scene scene = createBookDetailsPage(stage, book);
 					showScene(stage, scene);
 				}
 			});

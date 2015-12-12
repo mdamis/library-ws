@@ -3,6 +3,7 @@ package fr.upem.client;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class Client {
 	private final Bank bank;
 	private String username;
 	private int currentAccount;
+	private final ArrayList<String> cart = new ArrayList<String>();
 	
 	
 	/**
@@ -138,6 +140,18 @@ public class Client {
 	public List<Book> getAllBooks() throws RemoteException {
 		List<Book> books = (Arrays.asList(library.getAllBooks()));
 		return books;
+	}
+	
+	public List<String> getCart() {
+		return cart;
+	}
+	
+	public void addToCart(String isbn) {
+		cart.add(isbn);
+	}
+
+	public boolean isInCart(String isbn) {
+		return cart.contains(isbn);
 	}
 	
 	/**
