@@ -3,24 +3,23 @@ package fr.upem.client;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
-import FaultContracts.GOTLServices._2008._01.DefaultFaultContract;
-import fr.upem.bank.Bank;
-import fr.upem.bank.BankServiceLocator;
-import fr.upem.book.Book;
-import fr.upem.library.Library;
-import fr.upem.library.LibraryServiceLocator;
-import fr.upem.user.UserManager;
-import fr.upem.user.UserManagerServiceLocator;
 import net.restfulwebservices.www.DataContracts._2008._01.Currency;
 import net.restfulwebservices.www.DataContracts._2008._01.CurrencyCode;
 import net.restfulwebservices.www.ServiceContracts._2008._01.CurrencyServiceLocator;
 import net.restfulwebservices.www.ServiceContracts._2008._01.ICurrencyService;
+import FaultContracts.GOTLServices._2008._01.DefaultFaultContract;
+import fr.upem.bank.Bank;
+import fr.upem.bank.BankServiceLocator;
+import fr.upem.library.Book;
+import fr.upem.library.Library;
+import fr.upem.library.LibraryServiceLocator;
+import fr.upem.user.UserManager;
+import fr.upem.user.UserManagerServiceLocator;
 
 public class Client {
 	private final UserManager manager;

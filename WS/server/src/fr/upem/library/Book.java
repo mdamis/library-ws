@@ -1,4 +1,4 @@
-package fr.upem.book;
+package fr.upem.library;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

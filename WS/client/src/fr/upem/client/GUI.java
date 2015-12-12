@@ -2,7 +2,6 @@ package fr.upem.client;
 
 import static javafx.geometry.HPos.RIGHT;
 
-import java.awt.image.RasterFormatException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +31,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import net.restfulwebservices.www.DataContracts._2008._01.CurrencyCode;
 
 import javax.xml.rpc.ServiceException;
 
-import fr.upem.book.Book;
+import fr.upem.library.Book;
 
 public class GUI extends Application {
 	private final static int WIDTH = 720;

@@ -2,8 +2,6 @@ package fr.upem.library;
 
 import java.util.HashMap;
 
-import fr.upem.book.Book;
-
 public class Library {
 
 	private final HashMap<String, Book> books = new HashMap<String, Book>();

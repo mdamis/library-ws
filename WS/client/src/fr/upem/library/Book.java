@@ -5,7 +5,7 @@
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package fr.upem.book;
+package fr.upem.library;
 
 public class Book  implements java.io.Serializable {
     private java.lang.String ISBN;
@@ -330,64 +330,64 @@ public class Book  implements java.io.Serializable {
         new org.apache.axis.description.TypeDesc(Book.class, true);
 
     static {
-        typeDesc.setXmlType(new javax.xml.namespace.QName("http://book.upem.fr", "Book"));
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://library.upem.fr", "Book"));
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("ISBN");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://book.upem.fr", "ISBN"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://library.upem.fr", "ISBN"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("author");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://book.upem.fr", "author"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://library.upem.fr", "author"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("available");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://book.upem.fr", "available"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://library.upem.fr", "available"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("currency");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://book.upem.fr", "currency"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://library.upem.fr", "currency"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("exemplary");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://book.upem.fr", "exemplary"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://library.upem.fr", "exemplary"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "int"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("price");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://book.upem.fr", "price"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://library.upem.fr", "price"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "float"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("reviews");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://book.upem.fr", "reviews"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://library.upem.fr", "reviews"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("saleable");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://book.upem.fr", "saleable"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://library.upem.fr", "saleable"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("summary");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://book.upem.fr", "summary"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://library.upem.fr", "summary"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("title");
-        elemField.setXmlName(new javax.xml.namespace.QName("http://book.upem.fr", "title"));
+        elemField.setXmlName(new javax.xml.namespace.QName("http://library.upem.fr", "title"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
