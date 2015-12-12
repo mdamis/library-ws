@@ -8,6 +8,8 @@ public interface Library extends Remote {
 	public void removeBook(Book book) throws RemoteException;
 
 	public List<Book> getAllBooks() throws RemoteException;
+	
+	public List<Book> searchBook(String query) throws RemoteException;
 
 	public String borrowBook(Book book, User user) throws RemoteException;
 

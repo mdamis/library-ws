@@ -202,7 +202,26 @@ public class GUI extends Application {
 		Text sceneTitle = new Text("Connected as " + client.getUsername());
 		sceneTitle.setId("user-name");
 		grid.add(sceneTitle, 0, 0);
-
+		
+		TextField searchTextField = new TextField();
+		searchTextField.setPromptText("Search a book, an author, ...");
+		grid.add(searchTextField, 2, 0);
+		
+		Button searchButton = new Button("Search");
+		grid.add(searchButton, 5, 0);
+		searchButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					books = client.getLibrary().searchBook(searchTextField.getText());
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+				observableBooks.clear();
+				observableBooks.addAll(books);
+			}
+		});
+		
 		Button btnRefresh = new Button("Refresh");
 		grid.add(btnRefresh, 0, 1);
 		btnRefresh.setOnAction(new EventHandler<ActionEvent>() {
@@ -254,7 +273,6 @@ public class GUI extends Application {
 		});
 
 		Button btnBorrow = new Button("Borrow");
-		grid.add(btnBorrow, 5, 0);
 		btnBorrow.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -273,7 +291,6 @@ public class GUI extends Application {
 		});
 		
 		Button btnReturn = new Button("Return");
-		grid.add(btnReturn, 5, 1);
 		btnReturn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -290,6 +307,11 @@ public class GUI extends Application {
 				}
 			}
 		});
+		
+		VBox vBox = new VBox();
+		vBox.setSpacing(25);
+		vBox.getChildren().addAll(btnBorrow, btnReturn);
+		grid.add(vBox, 5, 2);
 
 		grid.add(tableView, 0, 2, 3, 1);
 

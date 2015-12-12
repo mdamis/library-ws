@@ -38,6 +38,18 @@ public class LibraryImpl extends UnicastRemoteObject implements Library {
 	public List<Book> getAllBooks() {
 		return new ArrayList<>(books.values());
 	}
+	
+	@Override
+	public List<Book> searchBook(String query) throws RemoteException {
+		List<Book> searchResults = new ArrayList<>();
+		for(String isbn : books.keySet()) {
+			Book book = books.get(isbn);
+			if(book.getTitle().contains(query) || book.getAuthor().contains(query)) {
+				searchResults.add(book);
+			}
+		}
+		return searchResults;
+	}
 
 	@Override
 	public String borrowBook(Book requestedBook, User user) throws RemoteException {
