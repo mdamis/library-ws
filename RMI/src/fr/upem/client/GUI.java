@@ -223,7 +223,6 @@ public class GUI extends Application {
 		});
 		
 		Button btnRefresh = new Button("Refresh");
-		grid.add(btnRefresh, 0, 1);
 		btnRefresh.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				try {
@@ -237,7 +236,6 @@ public class GUI extends Application {
 		});
 
 		Button btnSwitchBorrowed = new Button("Borrowed Book(s)");
-		grid.add(btnSwitchBorrowed, 1, 1);
 		btnSwitchBorrowed.setOnAction(new EventHandler<ActionEvent>() {
 			private boolean isActive = false;
 
@@ -263,7 +261,6 @@ public class GUI extends Application {
 		});
 
 		Button btnAddBook = new Button("Add a book");
-		grid.add(btnAddBook, 2, 1);
 		btnAddBook.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -271,6 +268,11 @@ public class GUI extends Application {
 				showScene(stage, scene);
 			}
 		});
+		
+		HBox hBox = new HBox();
+		hBox.setSpacing(15);
+		hBox.getChildren().addAll(btnRefresh, btnSwitchBorrowed, btnAddBook);
+		grid.add(hBox, 0, 1);
 
 		Button btnBorrow = new Button("Borrow");
 		btnBorrow.setOnAction(new EventHandler<ActionEvent>() {
@@ -414,7 +416,7 @@ public class GUI extends Application {
 	private Scene createUpdateSummaryPage(Stage stage, Book book) {
 		GridPane grid = createGrid();
 		
-		Text sceneTitle = new Text("Update the summary");
+		Text sceneTitle = new Text("Edit summary");
 		sceneTitle.setId("welcome-text");
 		HBox hBox = new HBox();
 		hBox.getChildren().add(sceneTitle);
