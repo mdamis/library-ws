@@ -70,6 +70,14 @@ public class Library {
 		Book[] tmp = new Book[books.size()];
 		return books.values().toArray(tmp);
 	}
+	
+	public Book getBook(String isbn) {
+		if(books.containsKey(isbn)) {
+			return books.get(isbn);
+		} else {
+			throw new IllegalArgumentException("invalid isbn");
+		}
+	}
 
 	/*public String borrowBook(String isbn, User requester) {
 		System.out.println(requester.getUser() +" is requesting book "+isbn);

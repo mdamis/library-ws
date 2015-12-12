@@ -260,7 +260,6 @@ public class GUI extends Application {
 				}
 			}
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -290,7 +289,6 @@ public class GUI extends Application {
 				actiontarget.setText("You already have an account");
 			}
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -378,6 +376,8 @@ public class GUI extends Application {
 		final Text cart;
 		if(client.getCart().isEmpty()) {
 			cart = new Text("Cart (empty)");
+		} else {
+			cart = new Text("Cart ("+client.getCart().size()+" book(s))");
 			Button btnBuy = new Button("Buy");
 			GridPane.setHalignment(btnBuy, RIGHT);
 			grid.add(btnBuy, 2, 1);
@@ -385,11 +385,10 @@ public class GUI extends Application {
 			btnBuy.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO
+					Scene scene = createBankSigninPage(stage);
+					showScene(stage, scene);
 				}
 			});
-		} else {
-			cart = new Text("Cart ("+client.getCart().size()+" book(s))");
 		}
 		grid.add(cart, 2, 1);
 
@@ -417,7 +416,7 @@ public class GUI extends Application {
 	 * @param book the book the user want to buy
 	 * @return the scene created
 	 */
-	private Scene createBankSigninPage(Stage stage, Book book) {
+	private Scene createBankSigninPage(Stage stage) {
 		GridPane grid = createGrid();
 
 		Text scenetitle = new Text("Welcome to MLVLib Bank");
@@ -454,9 +453,8 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				try {
-					signinBankHandler(stage, userTextField, message, book);
+					signinBankHandler(stage, userTextField, message);
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -465,14 +463,14 @@ public class GUI extends Application {
 		btnSignUp.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				Scene scene = createBankSignupPage(stage, book);
+				Scene scene = createBankSignupPage(stage);
 				showScene(stage, scene);
 			}
 		});
 		btnBack.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Scene scene = createBookDetailsPage(stage, book);
+				Scene scene = createIndexPage(stage);
 				showScene(stage, scene);
 			}
 		});
@@ -481,9 +479,8 @@ public class GUI extends Application {
 			public void handle(KeyEvent event) {
 				if (event.getCode() == KeyCode.ENTER) {
 					try {
-						signinBankHandler(stage, userTextField, message, book);
+						signinBankHandler(stage, userTextField, message);
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -505,14 +502,14 @@ public class GUI extends Application {
 	 * @throws RemoteException
 	 */
 	private void signinBankHandler(Stage primaryStage, TextField userTextField,
-			final Text actiontarget, Book book) throws RemoteException {
+			final Text actiontarget) throws RemoteException {
 		String accountIdStr = userTextField.getText();
 		System.out.println("signin accountId: " + accountIdStr);
 		try {
 			int accountId = Integer.parseInt(accountIdStr);
 			if (client.accountExist(accountId)) {
 				client.setCurrentAccount(accountId);
-				Scene scene = createCommandPage(primaryStage, book);
+				Scene scene = createCommandPage(primaryStage);
 				showScene(primaryStage, scene);
 			} else {
 				actiontarget.setFill(Color.FIREBRICK);
@@ -531,7 +528,7 @@ public class GUI extends Application {
 	 * @param book instance of book used when the quit button is used (get back to the book description
 	 * @return the scene created
 	 */
-	private Scene createBankSignupPage(Stage stage, Book book) {
+	private Scene createBankSignupPage(Stage stage) {
 		GridPane grid = createGrid();
 
 		Text scenetitle = new Text("Signup Bank page");
@@ -556,7 +553,7 @@ public class GUI extends Application {
 		btn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				signupBankHandler(nameLabel,firstnameLabel,currencyCombobox,message,stage,book);
+				signupBankHandler(nameLabel,firstnameLabel,currencyCombobox,message,stage);
 			}
 		});
 
@@ -645,7 +642,7 @@ public class GUI extends Application {
 	 * @param stage the main stage
 	 * @param book the book the user choose
 	 */
-	private  void signupBankHandler(TextField nameLabel,TextField firstnameLabel,ComboBox<String> currencyCombobox,Text message,Stage stage,Book book) {
+	private  void signupBankHandler(TextField nameLabel,TextField firstnameLabel,ComboBox<String> currencyCombobox,Text message,Stage stage) {
 		String name = nameLabel.getText();
 		String firstname = firstnameLabel.getText();
 		String currency = (String)currencyCombobox.getValue();
@@ -660,11 +657,10 @@ public class GUI extends Application {
 				}
 				int clientId = client.createAccount(name, firstname, currency);
 				client.setCurrentAccount(clientId);
-				Scene scene = createCommandPage(stage, book);
+				Scene scene = createCommandPage(stage);
 				showScene(stage, scene);
 
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -675,10 +671,10 @@ public class GUI extends Application {
 	 * The user can manage his account and deposit money in it (#fuckTheEconomy) 
 	 * @return the scene created
 	 */
-	private Scene createCommandPage(Stage stage, Book book) {
+	private Scene createCommandPage(Stage stage) {
 		GridPane grid = createGrid();
 
-		Text scenetitle = new Text("Commande du livre : " + book.getTitle());
+		Text scenetitle = new Text("Command :");
 		scenetitle.setId("welcome-text");
 		grid.add(scenetitle, 0, 0, 2, 1);
 
@@ -687,28 +683,30 @@ public class GUI extends Application {
 		Label firstnamenameLabel = addLabelField(grid, "Firstname :", 0, 3);
 		Label currencyLabel = addLabelField(grid, "Account currency :", 0, 4);
 		Label balanceLabel = addLabelField(grid, "Account balance :", 0, 5);
-		Label labelBook = new Label(book.getTitle()+" : ");
+		Label labelBook = new Label(client.getCart().size()+" book(s) : ");
 		grid.add( labelBook, 0, 6);
+		
+		int totalAmount = client.getCartAmount();
+		String bookCurrency = books.get(0).getCurrency();
 		Text textPrice = new Text();
 		try {
-			if(!client.getAccountCurrency().equals(book.getCurrency())){
-				double rateToBook = Client.getConvertRate( book.getCurrency(),client.getAccountCurrency());
-				double valueConverted = book.getPrice() * rateToBook;
+			if(!client.getAccountCurrency().equals(bookCurrency)){
+				double rateToBook = Client.getConvertRate(bookCurrency, client.getAccountCurrency());
+				double valueConverted = totalAmount * rateToBook;
 				
-				textPrice.setText("Price : " + book.getPrice() + " " + book.getCurrency()+" / "+valueConverted+" "+client.getAccountCurrency());
+				textPrice.setText("Price : " + totalAmount + " " + bookCurrency+" / "+valueConverted+" "+client.getAccountCurrency());
 			} else {
-				textPrice.setText("Price : " + book.getPrice() + " " + book.getCurrency());
+				textPrice.setText("Price : " + totalAmount + " " + bookCurrency);
 			}
 		} catch (RemoteException | IllegalArgumentException | ServiceException e) {
 			System.err.println("Gui.java : client.getConvertRate error");
-			textPrice.setText("Price : " + book.getPrice() + " " + book.getCurrency());
+			textPrice.setText("Price : " + totalAmount + " " + bookCurrency);
 		}
 		grid.add(textPrice, 1, 6);
 		try {
 			updateBankDetail(idLabel, nameLabel, firstnamenameLabel,
 					currencyLabel, balanceLabel);
 		} catch (RemoteException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 
@@ -736,12 +734,12 @@ public class GUI extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				try {
-					if (client.isAbleToBuyBook(book)) {
+					if (client.isAbleToBuyCommand(totalAmount, bookCurrency)) {
 						try {
-							client.buyBook(book);
-						} catch (RemoteException | IllegalArgumentException | ServiceException e1) {
+							client.buyCart();
+						} catch (IllegalArgumentException e1) {
 							message.setFill(Color.FIREBRICK);
-							message.setText("You can't buy this book it seems");
+							message.setText("You can't buy these books it seems");
 						}
 
 						Scene scene = createIndexPage(stage);
@@ -752,7 +750,6 @@ public class GUI extends Application {
 					}
 				} catch (RemoteException | IllegalArgumentException
 						| ServiceException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
@@ -773,20 +770,14 @@ public class GUI extends Application {
 				try {
 					Double ammount = Double.parseDouble(moneyTextField
 							.getText());
-					try {
-						client.deposit(ammount,(String)currencyCombobox.getValue());
-						updateBankDetail(idLabel,nameLabel,firstnamenameLabel,currencyLabel,balanceLabel);
+						try {
+							client.deposit(ammount,(String)currencyCombobox.getValue());
+							updateBankDetail(idLabel,nameLabel,firstnamenameLabel,currencyLabel,balanceLabel);
+						} catch (RemoteException | IllegalArgumentException
+								| ServiceException e1) {
+							e1.printStackTrace();
+						}
 
-					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IllegalArgumentException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ServiceException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
 				} catch (NumberFormatException e1) {
 					message.setFill(Color.FIREBRICK);
 					message.setText("value not a number");
