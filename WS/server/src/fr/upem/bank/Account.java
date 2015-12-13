@@ -1,13 +1,13 @@
 package fr.upem.bank;
 
-public class Account{
+public class Account {
 
 	private double balance;
 	private int number;
 	private final String name;
 	private final String firstname;
 	private final String currency;
-	
+
 	/**
 	 * Default constructor
 	 */
@@ -21,6 +21,7 @@ public class Account{
 
 	/**
 	 * Constructor more developped
+	 * 
 	 * @param number the account id
 	 * @param name the name of the owner
 	 * @param firstname the firstname of the owner
@@ -33,21 +34,24 @@ public class Account{
 		this.firstname = firstname;
 		this.number = number;
 	}
-	
+
 	/**
-	 *  Factory method to create an Account
+	 * Factory method to create an Account
+	 * 
 	 * @param number the account id
 	 * @param name the name of the owner
 	 * @param firstname the firstname of the owner
 	 * @param currency the currency chosen for the account
 	 * @return an Account instance
 	 */
-	public static Account createAccount(int number, String name, String firstname, String currency){
+	public static Account createAccount(int number, String name,
+			String firstname, String currency) {
 		return new Account(number, name, firstname, currency);
 	}
 
 	/**
-	 *  Currency getter
+	 * Currency getter
+	 * 
 	 * @return String:currency
 	 */
 	public String getCurrency() {
@@ -55,22 +59,25 @@ public class Account{
 	}
 
 	/**
-	 *  test if the user exist
+	 * test if the user exist
+	 * 
 	 * @param number the account id
 	 * @param name the name of the owner
 	 * @param firstname the firstname of the owner
 	 * @return true of false
 	 */
 	public boolean isValid(long number, String name, String firstname) {
-		return (this.number == number && this.name.equals(name) && this.firstname.equals(firstname));
+		return (this.number == number && this.name.equals(name) && this.firstname
+				.equals(firstname));
 	}
 
 	/**
 	 * deposit an amount of money to the account
+	 * 
 	 * @param amount Double to deposit into account, must be positif
 	 * @return true if function sucessfully deposit else false
 	 */
-	public boolean deposit(double amount){
+	public boolean deposit(double amount) {
 		if (amount >= 0) {
 			balance += (amount);
 			return true;
@@ -82,13 +89,14 @@ public class Account{
 
 	/**
 	 * withdraw an amount of money from the account
+	 * 
 	 * @param amount Double to withdraw account, must be positif
 	 * @return true if function sucessfully withdraw else false
 	 */
-	public boolean withdrawal(double amount){
+	public boolean withdrawal(double amount) {
 		if (amount < 0) {
 			return false;
-		} 
+		}
 		if (authorizedPayment(amount)) {
 			balance -= (amount);
 			return true;
@@ -120,7 +128,7 @@ public class Account{
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
-	
+
 	/**
 	 * 
 	 * @return account ID

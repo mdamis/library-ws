@@ -17,7 +17,7 @@ public class User {
 		this.user = user;
 		this.password = password;
 	}
-	
+
 	/**
 	 * 
 	 * @return the user's id
@@ -25,7 +25,7 @@ public class User {
 	public String getUser() {
 		return user;
 	}
-	
+
 	/**
 	 * 
 	 * @return the user's password
@@ -33,7 +33,7 @@ public class User {
 	public String getPassword() {
 		return password;
 	}
-	
+
 	/**
 	 * 
 	 * @param password set new password
@@ -53,7 +53,7 @@ public class User {
 	public void setConnected(boolean isConnected) {
 		this.isConnected = isConnected;
 	}
-	
+
 	@Override
 	public String toString() {
 		return user + " : " + password;

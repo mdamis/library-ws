@@ -62,6 +62,7 @@ public class GUI extends Application {
 
 	/**
 	 * Add a couple label and textField and return the textField instance
+	 * 
 	 * @param grid 
 	 * @param label label of the first label placed
 	 * @param col collumn where the first label is placed
@@ -78,6 +79,7 @@ public class GUI extends Application {
 
 	/**
 	 * Add a couple label and label and return the second label instance
+	 * 
 	 * @param grid 
 	 * @param label label of the first label placed
 	 * @param col column where the first label is placed
@@ -94,6 +96,7 @@ public class GUI extends Application {
 
 	/**
 	 * Add a couple label and combobox with some principal currency and return the textField instance
+	 * 
 	 * @param grid 
 	 * @param label label of the first label placed
 	 * @param col column where the first label is placed
@@ -123,6 +126,7 @@ public class GUI extends Application {
 
 	/**
 	 * return a more complex grid with a gap and padding
+	 * 
 	 * @return a GridPane
 	 */
 	private GridPane createGrid(double gap, double padding) {
@@ -144,6 +148,7 @@ public class GUI extends Application {
 
 	/**
 	 * first page, the user is asked to give a username and password.
+	 * 
 	 * @param primaryStage
 	 * @return
 	 */
@@ -164,9 +169,6 @@ public class GUI extends Application {
 
 		Button btnSignIn = new Button("Sign in");
 		Button btnSignUp = new Button("Sign up");
-		// HBox hbBtn = new HBox(10);
-		// hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		// hbBtn.getChildren().addAll(btnSignIn, btnSignUp);
 		GridPane.setHalignment(btnSignIn, RIGHT);
 		grid.add(btnSignIn, 1, 3);
 		grid.add(btnSignUp, 0, 3);
@@ -228,6 +230,7 @@ public class GUI extends Application {
 
 	/**
 	 * handler of the button signin of the first page, it use the Client class to ask if the user can connect
+	 * 
 	 * @param primaryStage the previous stage
 	 * @param userTextField the textField where username is
 	 * @param pb  the passwordField where the password is
@@ -266,6 +269,7 @@ public class GUI extends Application {
 
 	/**
 	 * handler of the button signup of the first page, it use the Client class to ask if the user can register
+	 * 
 	 * @param primaryStage the previous stage
 	 * @param userTextField the textField where username is
 	 * @param pb  the passwordField where the password is
@@ -296,6 +300,7 @@ public class GUI extends Application {
 	
 	/**
 	 * create the Main scene where every book sellable are
+	 * 
 	 * @param stage the stage of this scene
 	 * @return a scene created with greed with all books and different options
 	 */
@@ -412,6 +417,7 @@ public class GUI extends Application {
 
 	/**
 	 * Create the scene where the application's user will connect/create the bank's account
+	 * 
 	 * @param stage the main stage
 	 * @param book the book the user want to buy
 	 * @return the scene created
@@ -495,6 +501,7 @@ public class GUI extends Application {
 
 	/**
 	 * handler function handling the connection to his account 
+	 * 
 	 * @param primaryStage the main stage
 	 * @param userTextField TextField containing the account Id
 	 * @param actiontarget the Text used to communicate error
@@ -524,6 +531,7 @@ public class GUI extends Application {
 
 	/**
 	 * Create a sign up page to create an account with the Web service
+	 * 
 	 * @param stage the stage
 	 * @param book instance of book used when the quit button is used (get back to the book description
 	 * @return the scene created
@@ -573,6 +581,7 @@ public class GUI extends Application {
 
 	/**
 	 * Create a scene describing the book's details. This is also there that the user buy the book
+	 * 
 	 * @param stage the main stage
 	 * @param book the book where details come from
 	 * @return the scene created
@@ -582,7 +591,6 @@ public class GUI extends Application {
 
 		final VBox vBox = new VBox();
 		vBox.setSpacing(10);
-		// vBox.setPrefSize(300, 300);
 
 		grid.add(new Text(book.getTitle()), 0, 0);
 		grid.add(new Text("by " + book.getAuthor()), 0, 1);
@@ -635,6 +643,7 @@ public class GUI extends Application {
 	
 	/**
 	 * handle the creation of a bank account.
+	 * 
 	 * @param nameLabel the name field
 	 * @param firstnameLabel the firstname field
 	 * @param currencyCombobox the currency combobobox
@@ -668,6 +677,7 @@ public class GUI extends Application {
 
 	/**
 	 * Last scene for confirming the buying.
+	 * 
 	 * The user can manage his account and deposit money in it (#fuckTheEconomy) 
 	 * @return the scene created
 	 */
@@ -793,6 +803,7 @@ public class GUI extends Application {
 
 	/**
 	 * Update information of the bank account
+	 * 
 	 * @param idLabel account id
 	 * @param nameLabel account name
 	 * @param firstnameLabel account firstname

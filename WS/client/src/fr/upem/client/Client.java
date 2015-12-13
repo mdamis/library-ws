@@ -44,12 +44,9 @@ public class Client {
 	/**
 	 * Get the convert rate between two currency with a distant web service
 	 * 
-	 * @param fromCurrency
-	 *            the original currency
-	 * @param toCurrency
-	 *            the resulting currency
-	 * @return a double representation of the convert rate from the original
-	 *         currency to the new currency
+	 * @param fromCurrency the original currency
+	 * @param toCurrency the resulting currency
+	 * @return a double representation of the convert rate from the original currency to the new currency
 	 * @throws ServiceException
 	 * @throws DefaultFaultContract
 	 * @throws RemoteException
@@ -82,10 +79,8 @@ public class Client {
 	/**
 	 * ask the usermanager webservice if a certain user exist
 	 * 
-	 * @param username
-	 *            the username of the user searched
-	 * @param passwd
-	 *            the password of the user searched
+	 * @param username the username of the user searched
+	 * @param passwd the password of the user searched
 	 * @return true if user exist else false
 	 * @throws IllegalArgumentException
 	 * @throws RemoteException
@@ -98,8 +93,7 @@ public class Client {
 	/**
 	 * ask the bank webservice if a certain account exist
 	 * 
-	 * @param accountId
-	 *            the account's id searched
+	 * @param accountId the account's id searched
 	 * @return true if account exist else false
 	 * @throws RemoteException
 	 */
@@ -110,12 +104,8 @@ public class Client {
 	/**
 	 * add a new user the user manager and connect the user
 	 * 
-	 * @param username
-	 *            the new user's username
-	 * @param passwd
-	 *            the n
-	 * 
-	 *            ew user's password
+	 * @param username the new user's username
+	 * @param passwd the new user's password
 	 * @return true if signup sucessfully worked else false
 	 */
 	public boolean signup(String username, String passwd) {
@@ -239,8 +229,7 @@ public class Client {
 	 * money is converted to the correct currency if needed with the converter
 	 * web service
 	 * 
-	 * @param book
-	 *            the book the user want to buy
+	 * @param book the book the user want to buy
 	 * @return true if the user can buy this book else false
 	 * @throws RemoteException
 	 * @throws IllegalArgumentException
@@ -267,8 +256,7 @@ public class Client {
 	 * Action of buying the book, withdraw money and remove some exemplary of
 	 * the book
 	 * 
-	 * @param book
-	 *            the book bought
+	 * @param book the book bought
 	 * @throws RemoteException
 	 * @throws IllegalArgumentException
 	 * @throws ServiceException
@@ -316,10 +304,8 @@ public class Client {
 	/**
 	 * deposit money the current connected bank account
 	 * 
-	 * @param amount
-	 *            the amount inserted
-	 * @param newCurency
-	 *            the currency of the amount of money
+	 * @param amount the amount inserted
+	 * @param newCurency the currency of the amount of money
 	 * @throws RemoteException
 	 * @throws IllegalArgumentException
 	 * @throws ServiceException

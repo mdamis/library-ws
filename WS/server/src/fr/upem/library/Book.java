@@ -12,16 +12,12 @@ public class Book {
 	private final String author;
 	private final LocalDate introductionDate;
 	private final ArrayList<String> reviews = new ArrayList<String>();
-	//private final ArrayList<User> borrowList = new ArrayList<User>();
-	//private boolean hasBeenBorrowed = false;
 	private final String currency = "EUR";
 
-	//private boolean available = true;
-	//private String currentPatron = "";
 	private float price;
 	private int nbExemplary = 1;
 	private String summary = "No summary available";
-	
+
 	/**
 	 * Default constructor
 	 */
@@ -40,7 +36,8 @@ public class Book {
 	 * @param price the book's price
 	 * @param introductionDate the book's introductionDate
 	 */
-	public Book(String isbn, String title, String author, float price, LocalDate introductionDate) {
+	public Book(String isbn, String title, String author, float price,
+			LocalDate introductionDate) {
 		this.isbn = isbn;
 		this.title = title;
 		this.author = author;
@@ -57,17 +54,18 @@ public class Book {
 	 * @param introductionDate the book's introductionDate
 	 * @return an instance of Book
 	 */
-	public static Book create(String isbn, String title, String author, float price, String introductionDate) {
+	public static Book create(String isbn, String title, String author,
+			float price, String introductionDate) {
 		LocalDate date;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		try {
 			date = LocalDate.parse(introductionDate, formatter);
-		} catch(DateTimeParseException e) {
+		} catch (DateTimeParseException e) {
 			date = LocalDate.now();
 		}
 		return new Book(isbn, title, author, price, date);
 	}
-	
+
 	/**
 	 * 
 	 * @return the book's isbn
@@ -91,28 +89,32 @@ public class Book {
 	public String getAuthor() {
 		return author;
 	}
-	
+
 	/**
 	 * Add exemplary of this book
+	 * 
 	 * @param exemplary number of book added
 	 * @throws IllegalArgumentException when the number to add is invalid
 	 */
 	public void addExemplary(int exemplary) throws IllegalArgumentException {
-		if(exemplary <= 0) {
-			throw new IllegalArgumentException("Invalid number of exemplary to add");
+		if (exemplary <= 0) {
+			throw new IllegalArgumentException(
+					"Invalid number of exemplary to add");
 		} else {
 			nbExemplary += exemplary;
 		}
 	}
-	
+
 	/**
 	 * removed some exemplary of this book
+	 * 
 	 * @param exemplary the number of exemplary removed
 	 * @throws IllegalArgumentException when exemplary is invalid
 	 */
 	public void removeExemplary(int exemplary) throws IllegalArgumentException {
-		if(exemplary > nbExemplary || exemplary <= 0) {
-			throw new IllegalArgumentException("Invalid number of exemplary to remove");
+		if (exemplary > nbExemplary || exemplary <= 0) {
+			throw new IllegalArgumentException(
+					"Invalid number of exemplary to remove");
 		} else {
 			nbExemplary -= exemplary;
 		}
@@ -120,39 +122,25 @@ public class Book {
 
 	/**
 	 * test if an exemplary is still available
+	 * 
 	 * @return true if book is available else false
 	 */
 	public boolean isAvailable() {
-		//return available;
 		return nbExemplary > 0;
 	}
 
-	/*public void setAvailable(boolean available) {
-		this.available = available;
-	}*/
-
-	/*public String getCurrentPatron() {
-		return currentPatron;
-	}*/
-
-	/*public void setCurrentPatron(String currentPatron) {
-		this.currentPatron = currentPatron;
-	}*/
-
-	/*public void setHasBeenBorrowed(boolean hasBeenBorrowed) {
-		this.hasBeenBorrowed = hasBeenBorrowed;
-	}*/
-
 	/**
-	 *  test if we can sell this book
+	 * test if we can sell this book
+	 * 
 	 * @return true if this book is sellable else false
 	 */
 	public boolean isSaleable() {
-		return /*hasBeenBorrowed && LocalDate.now().getYear() -*/ introductionDate.getYear() >= 2;
+		return /* hasBeenBorrowed && LocalDate.now().getYear() - */introductionDate.getYear() >= 2;
 	}
 
 	/**
 	 * Get information of this book
+	 * 
 	 * @return a string representation describing the book
 	 */
 	public String details() {
@@ -184,14 +172,14 @@ public class Book {
 	 * @return a String representation of all the review
 	 */
 	public String getReviews() {
-		if(reviews.size() == 0) {
+		if (reviews.size() == 0) {
 			return "No reviews for : " + title;
 		}
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("Reviews for ").append(title).append(" : \n");
 
-		for(String review : reviews) {
+		for (String review : reviews) {
 			sb.append(review).append("\n");
 		}
 
@@ -205,7 +193,7 @@ public class Book {
 	public void addReview(String review) {
 		reviews.add(review);
 	}
-	
+
 	/**
 	 * 
 	 * @param newPrice set a newPrice
@@ -229,7 +217,7 @@ public class Book {
 	public String getCurrency() {
 		return currency;
 	}
-	
+
 	/**
 	 * 
 	 * @return the numbre of exemplary of this book
@@ -237,27 +225,5 @@ public class Book {
 	public int getExemplary() {
 		return nbExemplary;
 	}
-
-	/*public void addToQueue(User requester) {
-		for(User user : borrowList) {
-			if(user.getUser().equals(requester.getUser())) {
-				System.out.println(requester.getUser() +" already in the queue");
-				return;
-			}
-		}
-		System.out.println(requester.getUser() +" added to the queue");
-		borrowList.add(requester);
-	}*/
-
-	/*public void setCurrentPatron() {
-		if(!borrowList.isEmpty()) {
-			System.out.println("borrow list is not empty");
-			User user = borrowList.remove(0);
-			currentPatron = user.getUser();
-			user.bookBorrowed(this);
-		} else {
-			currentPatron = "";
-		}
-	}*/
 
 }
