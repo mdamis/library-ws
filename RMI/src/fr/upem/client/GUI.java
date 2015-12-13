@@ -30,6 +30,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -66,28 +68,22 @@ public class GUI extends Application {
 		 * pwBox = new PasswordField(); grid.add(pwBox, 1, 2);
 		 */
 
-		Button btn = new Button("Sign in");
-		HBox hbBtn = new HBox(10);
-		hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-		hbBtn.getChildren().add(btn);
-		grid.add(hbBtn, 1, 4);
+		Button btnSignIn = new Button("Sign in");
+		HBox hBox = new HBox(25);
 		
 		Button btnQuit = new Button("Quit");
 		HBox hbBtnQuit = new HBox(10);
-		hbBtnQuit.setAlignment(Pos.BOTTOM_LEFT);
-		hbBtnQuit.getChildren().add(btnQuit);
-		grid.add(hbBtnQuit, 1, 4);
+		hBox.getChildren().addAll(btnQuit, btnSignIn);
+		grid.add(hBox, 1, 5);
 
 		final Text actiontarget = new Text();
 		actiontarget.setId("actiontarget");
-		grid.add(actiontarget, 0, 5);
-		GridPane.setColumnSpan(actiontarget, 2);
+		grid.add(actiontarget, 0, 3, 2, 1);
 		GridPane.setHalignment(actiontarget, RIGHT);
-		actiontarget.setId("actiontarget");
 
-		btn.setOnAction(new EventHandler<ActionEvent>() {
+		btnSignIn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent e) {
+			public void handle(ActionEvent event) {
 				connectionHandler(primaryStage, userTextField, actiontarget);
 			}
 		});
@@ -342,8 +338,13 @@ public class GUI extends Application {
 		scrollPane.setPrefSize(300, 150);
 		
 		try {
-			grid.add(new Text(book.getTitle()), 0, 0);
-			grid.add(new Text("by " + book.getAuthor()), 0, 1);
+			Text title = new Text(book.getTitle());
+			title.setId("title");
+			grid.add(title, 0, 0);
+			Text author = new Text("by " + book.getAuthor());
+			author.setFont(Font.font("Helvetica", FontPosture.ITALIC, 12));
+			author.setId("author");
+			grid.add(author, 0, 1);
 			vBox.getChildren().add(new Text("ISBN : " + book.getISBN()));
 			if(book.isAvailable()) {
 				vBox.getChildren().add(new Text("This book is available"));
