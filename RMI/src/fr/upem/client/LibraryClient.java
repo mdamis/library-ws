@@ -12,6 +12,7 @@ import java.util.List;
 public class LibraryClient {
 	private final Library library;
 	private User user = null;
+	private String styleSheetPath = "styleA.css";
 
 	public LibraryClient() throws MalformedURLException, RemoteException, NotBoundException {
 		library = (Library) Naming.lookup("rmi://localhost:1099/LibraryService");
@@ -27,6 +28,18 @@ public class LibraryClient {
 
 	public User getUser() {
 		return user;
+	}
+	
+	public String getStyleSheetPath() {
+		return styleSheetPath;
+	}
+	
+	public void switchStyleSheet() {
+		if(styleSheetPath.equals("styleA.css")) {
+			styleSheetPath = "styleB.css";
+		} else {
+			styleSheetPath = "styleA.css";
+		}
 	}
 
 	public void setUser(User user) {

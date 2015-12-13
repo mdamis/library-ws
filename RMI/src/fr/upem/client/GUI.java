@@ -103,7 +103,7 @@ public class GUI extends Application {
 		});
 
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
-		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		scene.getStylesheets().add(GUI.class.getResource(client.getStyleSheetPath()).toExternalForm());
 		return scene;
 	}
 
@@ -313,6 +313,17 @@ public class GUI extends Application {
 
 		grid.add(tableView, 0, 2, 3, 1);
 
+		Button switchStyleButton = new Button("Switch Style");
+		grid.add(switchStyleButton, 0, 3);
+		switchStyleButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				client.switchStyleSheet();
+				Scene scene = createIndexPage(stage);
+				showScene(stage, scene);
+			}
+		});
+		
 		Button btnQuit = new Button("Quit");
 		grid.add(btnQuit, 5, 3);
 		btnQuit.setOnAction(new EventHandler<ActionEvent>() {
@@ -323,7 +334,7 @@ public class GUI extends Application {
 		});
 
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
-		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		scene.getStylesheets().add(GUI.class.getResource(client.getStyleSheetPath()).toExternalForm());
 		return scene;
 	}
 
@@ -409,7 +420,7 @@ public class GUI extends Application {
 		});
 
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
-		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		scene.getStylesheets().add(GUI.class.getResource(client.getStyleSheetPath()).toExternalForm());
 
 		return scene;
 	}
@@ -468,7 +479,7 @@ public class GUI extends Application {
 		grid.add(hBox, 0, 3);
 		
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
-		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		scene.getStylesheets().add(GUI.class.getResource(client.getStyleSheetPath()).toExternalForm());
 
 		return scene;
 	}
@@ -522,7 +533,7 @@ public class GUI extends Application {
 		grid.add(hBox, 0, 3);
 		
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
-		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		scene.getStylesheets().add(GUI.class.getResource(client.getStyleSheetPath()).toExternalForm());
 
 		return scene;
 	}
@@ -571,7 +582,7 @@ public class GUI extends Application {
 		});
 
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
-		scene.getStylesheets().add(GUI.class.getResource("style.css").toExternalForm());
+		scene.getStylesheets().add(GUI.class.getResource(client.getStyleSheetPath()).toExternalForm());
 
 		return scene;
 	}
