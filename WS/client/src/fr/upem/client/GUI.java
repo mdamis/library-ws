@@ -4,13 +4,16 @@ import static javafx.geometry.HPos.RIGHT;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -382,23 +385,20 @@ public class GUI extends Application {
 		if(client.getCart().isEmpty()) {
 			cart = new Text("Cart (empty)");
 		} else {
-			int exempl = 0;
-			for(int i : client.getCart().values()) {
-				exempl += i;
-			}
-			cart = new Text("Cart ("+ exempl +" book(s))");
-			Button btnBuy = new Button("Buy");
-			GridPane.setHalignment(btnBuy, RIGHT);
-			grid.add(btnBuy, 2, 1);
+			cart = new Text("Cart ("+ client.getNumberOfBooksInCart() +" book(s))");
+			Button btnCart = new Button("View cart");
+			GridPane.setHalignment(btnCart, RIGHT);
+			grid.add(btnCart, 2, 1);
 			
-			btnBuy.setOnAction(new EventHandler<ActionEvent>() {
+			btnCart.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					Scene scene = createBankSigninPage(stage);
+					Scene scene = createCartPage(stage);
 					showScene(stage, scene);
 				}
 			});
 		}
+		GridPane.setHalignment(cart, HPos.CENTER);
 		grid.add(cart, 2, 1);
 
 		grid.add(tableView, 0, 2, 3, 1);
@@ -413,6 +413,69 @@ public class GUI extends Application {
 			}
 		});
 
+		Scene scene = new Scene(grid, WIDTH, HEIGHT);
+		scene.getStylesheets().add(
+				GUI.class.getResource("style.css").toExternalForm());
+		return scene;
+	}
+
+	private Scene createCartPage(Stage stage) {
+		GridPane grid = createGrid();
+		
+		Text scenetitle = new Text("Your cart");
+		scenetitle.setId("welcome-text");
+		grid.add(scenetitle, 0, 0, 3, 1);
+		
+		HashMap<String, Integer> cart = client.getCart();
+		
+		int position = 2;
+		
+		for(Entry<String, Integer> entry : cart.entrySet()) {
+			Book book;
+			try {
+				book = client.getBook(entry.getKey());
+				Text text = new Text(book.getTitle() + " by " + book.getAuthor() +
+						" ("+book.getPrice() + " " + book.getCurrency() + ") : " +
+						entry.getValue() + " exemplary");
+				grid.add(text, 0, position);
+				
+				Button removeBtn = new Button("Remove");
+				grid.add(removeBtn, 1, position++);
+				removeBtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						client.removeFromCart(entry.getKey(), entry.getValue());
+						Scene scene = createCartPage(stage);
+						showScene(stage, scene);
+					}
+				});
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		Button backBtn = new Button("Back");
+		grid.add(backBtn, 0, position);
+		backBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Scene scene = createIndexPage(stage);
+				showScene(stage, scene);
+			}
+		});		
+		
+		if(!cart.isEmpty()) {
+			Button buyBtn  = new Button("Buy");
+			grid.add(buyBtn, 1, position);
+			buyBtn.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					Scene scene = createBankSigninPage(stage);
+					showScene(stage, scene);
+				}
+			});
+		}
+		
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
 		scene.getStylesheets().add(
 				GUI.class.getResource("style.css").toExternalForm());
@@ -632,6 +695,7 @@ public class GUI extends Application {
 			grid.add(new Text("All exemplaries are already in cart"), 2, 6);
 		} else {
 			Text exemplaryToAdd = new Text("0");
+			GridPane.setHalignment(exemplaryToAdd, HPos.CENTER);
 			grid.add(exemplaryToAdd, 2, 4);
 			
 			Button minusButton = new Button("-");
@@ -658,8 +722,11 @@ public class GUI extends Application {
 				}
 			});
 			
-			grid.add(new Text(client.getExemplaryInCart(book.getISBN())+" exemplary in cart"), 2, 5);
+			Text exemplInCart = new Text(client.getExemplaryInCart(book.getISBN())+" exemplary in cart");
+			grid.add(exemplInCart, 2, 5);
+			GridPane.setHalignment(exemplInCart, HPos.CENTER);
 			Button addToCartButton = new Button("Add to cart");
+			GridPane.setHalignment(addToCartButton, HPos.CENTER);
 			grid.add(addToCartButton, 2, 6);
 			addToCartButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
@@ -729,7 +796,7 @@ public class GUI extends Application {
 		Label firstnamenameLabel = addLabelField(grid, "Firstname :", 0, 3);
 		Label currencyLabel = addLabelField(grid, "Account currency :", 0, 4);
 		Label balanceLabel = addLabelField(grid, "Account balance :", 0, 5);
-		Label labelBook = new Label(client.getCart().size()+" book(s) : ");
+		Label labelBook = new Label(client.getNumberOfBooksInCart()+" book(s) : ");
 		grid.add( labelBook, 0, 6);
 		
 		int totalAmount = client.getCartAmount();

@@ -135,6 +135,10 @@ public class Client {
 	public List<Book> getAllBooks() throws RemoteException {
 		return (Arrays.asList(library.getAllBooks()));
 	}
+	
+	public Book getBook(String isbn) throws RemoteException {
+		return library.getBook(isbn);
+	}
 
 	public HashMap<String, Integer> getCart() {
 		return cart;
@@ -177,6 +181,14 @@ public class Client {
 		} else {
 			return 0;
 		}
+	}
+	
+	public int getNumberOfBooksInCart() {
+		int exempl = 0;
+		for(int i : cart.values()) {
+			exempl += i;
+		}
+		return exempl;
 	}
 
 	/**
