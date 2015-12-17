@@ -136,18 +136,42 @@ public class Client {
 		return (Arrays.asList(library.getAllBooks()));
 	}
 	
+	/**
+	 * Returns a book given his isbn
+	 * 
+	 * @param isbn book's isbn
+	 * @return
+	 * @throws RemoteException
+	 */
 	public Book getBook(String isbn) throws RemoteException {
 		return library.getBook(isbn);
 	}
 
+	/**
+	 * Returns the cart
+	 * 
+	 * @return
+	 */
 	public HashMap<String, Integer> getCart() {
 		return cart;
 	}
 
+	/**
+	 * Adds a book to the cart with the number of exemplary added
+	 * 
+	 * @param isbn book's isbn
+	 * @param exemplary 
+	 */
 	public void addToCart(String isbn, int exemplary) {
 		cart.compute(isbn, (k, v) -> v == null ? exemplary : v+exemplary);
 	}
 	
+	/**
+	 * Removes a book from the cart with the number of exemplary to remove
+	 * 
+	 * @param isbn book's isbn
+	 * @param exemplary the number of exemplary to remove
+	 */
 	public void removeFromCart(String isbn, int exemplary) {
 		if(cart.containsKey(isbn)) {
 			int exempInCart = cart.get(isbn);
@@ -163,6 +187,11 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Gets the total amount of the cart
+	 * 
+	 * @return
+	 */
 	public int getCartAmount() {
 		int amount = 0;
 		for (String isbn : cart.keySet()) {
@@ -175,6 +204,12 @@ public class Client {
 		return amount;
 	}
 
+	/**
+	 * Gets the number of exemplary of a book  wich is in the cart
+	 * 
+	 * @param isbn
+	 * @return
+	 */
 	public int getExemplaryInCart(String isbn) {
 		if(cart.containsKey(isbn)) {
 			return cart.get(isbn);
@@ -183,6 +218,11 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * Returns the total number of books present in the cart
+	 * 
+	 * @return
+	 */
 	public int getNumberOfBooksInCart() {
 		int exempl = 0;
 		for(int i : cart.values()) {

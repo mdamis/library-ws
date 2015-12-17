@@ -419,6 +419,12 @@ public class GUI extends Application {
 		return scene;
 	}
 
+	/**
+	 * Create a page to show the cart
+	 * 
+	 * @param stage
+	 * @return
+	 */
 	private Scene createCartPage(Stage stage) {
 		GridPane grid = createGrid();
 		
@@ -444,7 +450,7 @@ public class GUI extends Application {
 				removeBtn.setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
-						client.removeFromCart(entry.getKey(), entry.getValue());
+						client.removeFromCart(entry.getKey(), 1);
 						Scene scene = createCartPage(stage);
 						showScene(stage, scene);
 					}
