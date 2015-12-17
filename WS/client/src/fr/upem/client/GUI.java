@@ -626,7 +626,7 @@ public class GUI extends Application {
 			addToCartButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					client.addToCart(book.getISBN());
+					client.addToCart(book.getISBN(), 1);
 					Scene scene = createBookDetailsPage(stage, book);
 					showScene(stage, scene);
 				}

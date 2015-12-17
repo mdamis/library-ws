@@ -41,7 +41,7 @@ public class MainScenario {
 			if (book.isAvailable()) {
 				System.out.println(book.getISBN() + " : " + book.getTitle()
 						+ " par " + book.getAuthor() + " ajoute au panier");
-				clientA.addToCart(book.getISBN());
+				clientA.addToCart(book.getISBN(), 1);
 			} else {
 				System.out.println(book.getISBN() + " : " + book.getTitle()
 						+ " par " + book.getAuthor() + " non disponible");
@@ -67,7 +67,7 @@ public class MainScenario {
 			if (book.isAvailable()) {
 				System.out.println(book.getISBN() + " : " + book.getTitle()
 						+ " par " + book.getAuthor() + " ajoute au panier");
-				clientB.addToCart(book.getISBN());
+				clientB.addToCart(book.getISBN(), 1);
 			} else {
 				System.out.println(book.getISBN() + " : " + book.getTitle()
 						+ " par " + book.getAuthor() + " non disponible");

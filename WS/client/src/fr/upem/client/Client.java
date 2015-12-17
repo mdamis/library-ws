@@ -3,8 +3,8 @@ package fr.upem.client;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.rpc.ServiceException;
@@ -28,7 +28,7 @@ public class Client {
 	private final Bank bank;
 	private String username;
 	private int currentAccount;
-	private final ArrayList<String> cart = new ArrayList<String>();
+	private final HashMap<String, Integer> cart = new HashMap<>();
 
 	/**
 	 * retrieve the manager, library and bank with the web service
@@ -62,18 +62,6 @@ public class Client {
 				CurrencyCode.fromString(toCurrency));
 		Double r = c.getRate();
 		return r;
-	}
-
-	public Library getLibrary() {
-		return library;
-	}
-
-	public UserManager getManager() {
-		return manager;
-	}
-
-	public Bank getBank() {
-		return bank;
 	}
 
 	/**
@@ -148,19 +136,34 @@ public class Client {
 		return (Arrays.asList(library.getAllBooks()));
 	}
 
-	public List<String> getCart() {
+	public HashMap<String, Integer> getCart() {
 		return cart;
 	}
 
-	public void addToCart(String isbn) {
-		cart.add(isbn);
+	public void addToCart(String isbn, int exemplary) {
+		cart.compute(isbn, (k, v) -> v == null ? exemplary : v+exemplary);
+	}
+	
+	public void removeFromCart(String isbn, int exemplary) {
+		if(cart.containsKey(isbn)) {
+			int exempInCart = cart.get(isbn);
+			if(exemplary > exempInCart) {
+				throw new IllegalArgumentException("wrong number of exemplary to remove from cart");
+			} else if (exemplary == exempInCart) {
+				cart.remove(isbn);
+			} else {
+				cart.put(isbn, exempInCart - exemplary);
+			}
+		} else {
+			throw new IllegalArgumentException("wrong isbn");
+		}
 	}
 
 	public int getCartAmount() {
 		int amount = 0;
-		for (String isbn : cart) {
+		for (String isbn : cart.keySet()) {
 			try {
-				amount += library.getBook(isbn).getPrice();
+				amount += library.getBook(isbn).getPrice() * cart.get(isbn);
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
@@ -169,7 +172,7 @@ public class Client {
 	}
 
 	public boolean isInCart(String isbn) {
-		return cart.contains(isbn);
+		return cart.containsKey(isbn);
 	}
 
 	/**
@@ -274,7 +277,7 @@ public class Client {
 	 * Buy all the books in the cart
 	 */
 	public void buyCart() {
-		for (String isbn : cart) {
+		for (String isbn : cart.keySet()) {
 			try {
 				buyBook(library.getBook(isbn));
 			} catch (RemoteException | IllegalArgumentException
