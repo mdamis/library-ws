@@ -171,8 +171,12 @@ public class Client {
 		return amount;
 	}
 
-	public boolean isInCart(String isbn) {
-		return cart.containsKey(isbn);
+	public int getExemplaryInCart(String isbn) {
+		if(cart.containsKey(isbn)) {
+			return cart.get(isbn);
+		} else {
+			return 0;
+		}
 	}
 
 	/**
@@ -260,17 +264,18 @@ public class Client {
 	 * the book
 	 * 
 	 * @param book the book bought
+	 * @param exemplary 
 	 * @throws RemoteException
 	 * @throws IllegalArgumentException
 	 * @throws ServiceException
 	 */
-	public void buyBook(Book book) throws RemoteException,
+	public void buyBook(Book book, int exemplary) throws RemoteException,
 			IllegalArgumentException, ServiceException {
 		Double rate = getConvertRate(book.getCurrency(),
 				bank.getAccountCurrency(currentAccount));
-		Double priceConverted = book.getPrice() * rate;
+		Double priceConverted = book.getPrice() * exemplary * rate;
 		bank.withdrawal(currentAccount, priceConverted);
-		library.sellBook(book.getISBN(), 1);
+		library.sellBook(book.getISBN(), exemplary);
 	}
 
 	/**
@@ -279,7 +284,7 @@ public class Client {
 	public void buyCart() {
 		for (String isbn : cart.keySet()) {
 			try {
-				buyBook(library.getBook(isbn));
+				buyBook(library.getBook(isbn), cart.get(isbn));
 			} catch (RemoteException | IllegalArgumentException
 					| ServiceException e) {
 				e.printStackTrace();

@@ -382,7 +382,11 @@ public class GUI extends Application {
 		if(client.getCart().isEmpty()) {
 			cart = new Text("Cart (empty)");
 		} else {
-			cart = new Text("Cart ("+client.getCart().size()+" book(s))");
+			int exempl = 0;
+			for(int i : client.getCart().values()) {
+				exempl += i;
+			}
+			cart = new Text("Cart ("+ exempl +" book(s))");
 			Button btnBuy = new Button("Buy");
 			GridPane.setHalignment(btnBuy, RIGHT);
 			grid.add(btnBuy, 2, 1);
@@ -596,18 +600,21 @@ public class GUI extends Application {
 		grid.add(new Text("by " + book.getAuthor()), 0, 1);
 		vBox.getChildren().add(new Text("ISBN : " + book.getISBN()));
 		vBox.getChildren().add(new Text("Summary :\n" + book.getSummary()));
+		grid.add(vBox, 0, 3);
+		
+		final VBox shopBox = new VBox();
+		vBox.setSpacing(10);
 		if (book.isAvailable()) {
-			vBox.getChildren().add(
+			shopBox.getChildren().add(
 					new Text("Available (" + book.getExemplary()
 							+ " exemplary left)"));
 		} else {
-			vBox.getChildren().add(new Text("Not available"));
+			shopBox.getChildren().add(new Text("Not available"));
 		}
-		vBox.getChildren().add(
+		shopBox.getChildren().add(
 				new Text("Price : " + book.getPrice() + " "
 						+ book.getCurrency()));
-
-		grid.add(vBox, 0, 3);
+		grid.add(shopBox, 2, 3);
 
 		Button backButton = new Button("Back");
 		grid.add(backButton, 0, 6);
@@ -618,23 +625,52 @@ public class GUI extends Application {
 				showScene(stage, scene);
 			}
 		});
-		if(client.isInCart(book.getISBN())) {
-			grid.add(new Text("Book already in cart"), 1, 6);
-		} else if (book.isAvailable()) {
+		
+		if(!book.isAvailable()) {
+			grid.add(new Text("Book not available"), 2, 6);
+		} else if(client.getExemplaryInCart(book.getISBN()) == book.getExemplary()) {
+			grid.add(new Text("All exemplaries are already in cart"), 2, 6);
+		} else {
+			Text exemplaryToAdd = new Text("0");
+			grid.add(exemplaryToAdd, 2, 4);
+			
+			Button minusButton = new Button("-");
+			grid.add(minusButton, 1, 4);
+			minusButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					int exempl = Integer.parseInt(exemplaryToAdd.getText());
+					if(exempl != 0) {
+						exemplaryToAdd.setText(Integer.toString(exempl-1));
+					}
+				}
+			});
+			
+			Button plusButton = new Button("+");
+			grid.add(plusButton, 3, 4);
+			plusButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					int exempl = Integer.parseInt(exemplaryToAdd.getText());
+					if(exempl < book.getExemplary() - client.getExemplaryInCart(book.getISBN())) {
+						exemplaryToAdd.setText(Integer.toString(exempl+1));
+					}
+				}
+			});
+			
+			grid.add(new Text(client.getExemplaryInCart(book.getISBN())+" exemplary in cart"), 2, 5);
 			Button addToCartButton = new Button("Add to cart");
-			grid.add(addToCartButton, 1, 6);
+			grid.add(addToCartButton, 2, 6);
 			addToCartButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					client.addToCart(book.getISBN(), 1);
+					client.addToCart(book.getISBN(), Integer.parseInt(exemplaryToAdd.getText()));
 					Scene scene = createBookDetailsPage(stage, book);
 					showScene(stage, scene);
 				}
 			});
-		} else {
-			grid.add(new Text("Book not available"), 1, 6);
 		}
-
+		
 		Scene scene = new Scene(grid, WIDTH, HEIGHT);
 		scene.getStylesheets().add(
 				GUI.class.getResource("style.css").toExternalForm());
